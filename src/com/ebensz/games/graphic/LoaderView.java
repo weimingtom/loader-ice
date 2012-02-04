@@ -68,17 +68,4 @@ public class LoaderView extends GameView {
         //gl.glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     }
 
-
-    private static void setupMaterial(GL11 gl) {
-        float ambientMaterial[] = {0.6f, 0.6f, 0.6f, 1.0f};  //环境光为白色材质
-        float diffuseMaterial[] = {1.0f, 1.0f, 1.0f, 1.0f};   //散射光为白色材质
-        float specularMaterial[] = {1.0f, 1.0f, 1.0f, 1.0f};  //高光材质为白色
-        float[] emission = {0.2f, 0.2f, 0.2f, 1.0f};  //自发光
-
-        gl.glMaterialfv(GL_FRONT, GL_AMBIENT, ambientMaterial, 0);
-        gl.glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial, 0);
-        gl.glMaterialfv(GL_FRONT, GL_SPECULAR, specularMaterial, 0);
-        //gl.glMaterialfv(GL_FRONT, GL_EMISSION, emission, 0);
-    }
-
 }
