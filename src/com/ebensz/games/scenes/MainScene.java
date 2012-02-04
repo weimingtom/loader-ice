@@ -1,14 +1,11 @@
 package com.ebensz.games.scenes;
 
-import android.graphics.Bitmap;
 import com.ebensz.games.R;
 import com.ebensz.games.scenes.dialogs.ServiceDialog;
-import ice.engine.EngineContext;
 import ice.engine.Scene;
 import ice.node.widget.RadioButton;
 import ice.node.widget.RadioGroup;
 import ice.node.widget.TextureGrid;
-import ice.res.Res;
 
 /**
  * User: Jason
@@ -17,21 +14,14 @@ import ice.res.Res;
  */
 public class MainScene extends Scene {
 
-
     public MainScene() {
-        int appWidth = EngineContext.getAppWidth();
-        int appHeight = EngineContext.getAppHeight();
-
-        TextureGrid background = new TextureGrid(appWidth, appHeight, R.drawable.bg);
-        background.setPos(0, appHeight);
-        addChild(background);
+        setupComponents();
     }
 
+    private void setupComponents() {
 
-    private void init() {
-
-        TextureGrid background = new TextureGrid(R.drawable.bg);
-        background.setPos(-20, -20);
+        TextureGrid background = new TextureGrid(getWidth(), getHeight(), R.drawable.bg);
+        background.setPos(0, getHeight());
 
         ControllerBar controllerBar = new ControllerBar();
 
@@ -44,25 +34,26 @@ public class MainScene extends Scene {
 
     private void addEntries() {
 
-        int width = getWidth();
-        int height = getHeight();
+        float width = getWidth();
+        float height = getHeight();
 
-        Bitmap normal = Res.getBitmap(R.drawable.normal_entry);
-        Bitmap pressed = Res.getBitmap(R.drawable.normal_entry_press);
-        Bitmap hover = Res.getBitmap(R.drawable.normal_entry_hover);
-        normalEntry = new RadioButton(normal, pressed, null);
+        normalEntry = new RadioButton(
+                R.drawable.normal_entry,
+                R.drawable.normal_entry_press,
+                0
+        );
 
-        normal = Res.getBitmap(R.drawable.loader_entry);
-        pressed = Res.getBitmap(R.drawable.loader_entry_press);
-        hover = Res.getBitmap(R.drawable.loader_entry_hover);
-        Bitmap disable = Res.getBitmap(R.drawable.loader_entry_disable);
-        loaderEntry = new RadioButton(normal, pressed, disable);
+        loaderEntry = new RadioButton(
+                R.drawable.loader_entry,
+                R.drawable.loader_entry_press,
+                R.drawable.loader_entry_disable
+        );
 
-        normal = Res.getBitmap(R.drawable.super_entry);
-        pressed = Res.getBitmap(R.drawable.super_entry_press);
-        hover = Res.getBitmap(R.drawable.super_entry_hover);
-        disable = Res.getBitmap(R.drawable.super_entry_disable);
-        superEntry = new RadioButton(normal, pressed, disable);
+        superEntry = new RadioButton(
+                R.drawable.super_entry,
+                R.drawable.super_entry_press,
+                R.drawable.super_entry_disable
+        );
 
 
         int margin = 150;
@@ -84,6 +75,7 @@ public class MainScene extends Scene {
         );
 
         radioGroup = new RadioGroup(normalEntry, loaderEntry, superEntry);
+
         addChildren(radioGroup);
     }
 
@@ -114,6 +106,4 @@ public class MainScene extends Scene {
     private RadioButton normalEntry;
     private RadioButton loaderEntry;
     private RadioButton superEntry;
-
-
 }
