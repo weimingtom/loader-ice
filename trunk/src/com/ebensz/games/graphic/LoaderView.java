@@ -38,7 +38,7 @@ public class LoaderView extends GameView {
 
             @Override
             protected void onInit(GL11 gl) {
-                gl.glEnable(GL_DEPTH_TEST);
+                // gl.glEnable(GL_DEPTH_TEST);
                 setupLight(gl);
                 //setupMaterial(gl);
             }

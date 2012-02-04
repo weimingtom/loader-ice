@@ -1,6 +1,12 @@
 package com.ebensz.games.scenes;
 
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import com.ebensz.games.R;
+import ice.engine.EngineContext;
 import ice.node.Drawable;
+import ice.node.DrawableParent;
+import ice.node.widget.Button;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -9,9 +15,36 @@ import javax.microedition.khronos.opengles.GL11;
  * Date: 12-2-4
  * Time: 下午4:05
  */
-public class ControllerBar extends Drawable {
-    @Override
-    protected void onDraw(GL11 gl) {
-        //To change body of implemented methods use File | Settings | File Templates.
+public class ControllerBar extends DrawableParent<Drawable> {
+
+
+    public ControllerBar() {
+
+        serviceBtn = new Button(R.drawable.service, R.drawable.service);
+
+        soundBtn = new Button(R.drawable.sound, R.drawable.sound);
+        soundBtn.setPos(100, 0);
+
+        exitBtn = new Button(R.drawable.exit, R.drawable.exit);
+        soundBtn.setPos(200, 0);
+
+        addChildren(serviceBtn, soundBtn, exitBtn);
+
+        setPos(
+                0.7f * EngineContext.getAppWidth(),
+                EngineContext.getAppHeight() - 50
+        );
     }
+
+    public Button getExitBtn() {
+        return exitBtn;
+    }
+
+    public Button getSoundBtn() {
+        return soundBtn;
+    }
+
+    private Button serviceBtn;
+    private Button soundBtn;
+    private Button exitBtn;
 }
