@@ -26,13 +26,13 @@ public class ControllerBar extends DrawableParent<Drawable> {
         soundBtn.setPos(100, 0);
 
         exitBtn = new Button(R.drawable.exit, R.drawable.exit);
-        soundBtn.setPos(200, 0);
+        exitBtn.setPos(200, 0);
 
         addChildren(serviceBtn, soundBtn, exitBtn);
 
         setPos(
-                0.7f * EngineContext.getAppWidth(),
-                EngineContext.getAppHeight() - 50
+                0.5f * EngineContext.getAppWidth(),
+                EngineContext.getAppHeight()
         );
     }
 

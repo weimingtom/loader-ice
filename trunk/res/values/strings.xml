@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Loader Ice</string>
+    <string name="app_name">Loader</string>
+    <string name="choose_email_client">choose_email_client</string>
+
+    <string name="welcome">欢迎来到E本斗地主！我是您的游戏秘书 "小蜜"</string>
+
+    <string name="normal_game_desc">普通场无进场条件，是传统的斗地主玩法哦 ！</string>
+
+    <string name="loader_game_desc">地主场，每把都当地主！</string>
+
+    <string name="super_game_desc">极限场，每把输赢分值都加倍！</string>
+
 </resources>

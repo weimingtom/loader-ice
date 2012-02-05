@@ -1,11 +1,13 @@
 package com.ebensz.games.scenes;
 
+import android.graphics.Bitmap;
 import com.ebensz.games.R;
 import com.ebensz.games.scenes.dialogs.ServiceDialog;
 import ice.engine.Scene;
 import ice.node.widget.RadioButton;
 import ice.node.widget.RadioGroup;
 import ice.node.widget.TextureGrid;
+import ice.res.Res;
 
 /**
  * User: Jason
@@ -37,19 +39,26 @@ public class MainScene extends Scene {
         float width = getWidth();
         float height = getHeight();
 
-        normalEntry = new RadioButton(
+        Bitmap bitmap = Res.getBitmap(R.drawable.normal_entry);
+
+        int halfWidth = bitmap.getWidth() / 2;
+        int halfHeight = bitmap.getHeight() / 2;
+        normalEntry = new RadioButton(halfWidth, halfHeight);
+        normalEntry.setBitmaps(
                 R.drawable.normal_entry,
                 R.drawable.normal_entry_press,
                 0
         );
 
-        loaderEntry = new RadioButton(
+        loaderEntry = new RadioButton(halfWidth, halfHeight);
+        loaderEntry.setBitmaps(
                 R.drawable.loader_entry,
                 R.drawable.loader_entry_press,
                 R.drawable.loader_entry_disable
         );
 
-        superEntry = new RadioButton(
+        superEntry = new RadioButton(halfWidth, halfHeight);
+        superEntry.setBitmaps(
                 R.drawable.super_entry,
                 R.drawable.super_entry_press,
                 R.drawable.super_entry_disable
@@ -58,23 +67,23 @@ public class MainScene extends Scene {
 
         int margin = 150;
 
-        normalEntry.setPos(
-                width / 2 - margin - normalEntry.getWidth(),
-                (height - normalEntry.getHeight()) / 2
+        this.normalEntry.setPos(
+                width / 2 - margin - this.normalEntry.getWidth(),
+                (height + this.normalEntry.getHeight()) / 2
         );
 
 
         loaderEntry.setPos(
                 (width - loaderEntry.getWidth()) / 2,
-                (height - loaderEntry.getHeight()) / 2
+                (height + loaderEntry.getHeight()) / 2
         );
 
         superEntry.setPos(
                 width / 2 + margin,
-                (height - superEntry.getHeight()) / 2
+                (height + superEntry.getHeight()) / 2
         );
 
-        radioGroup = new RadioGroup(normalEntry, loaderEntry, superEntry);
+        radioGroup = new RadioGroup(this.normalEntry, loaderEntry, superEntry);
 
         addChildren(radioGroup);
     }
