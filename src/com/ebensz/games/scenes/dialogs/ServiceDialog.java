@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import com.ebensz.games.R;
 import ice.animation.Animation;
+import ice.animation.FadeInAnimation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.node.Drawable;
@@ -31,7 +32,7 @@ public class ServiceDialog extends ConfirmDialog {
     }
 
     public void showMsg(String oneLine) {
-        // comesMoreTextBox.setText(oneLine);
+        comesMoreTextBox.setTexts(new String[]{oneLine});
     }
 
     public void showMsg(String[] lines) {
@@ -44,11 +45,11 @@ public class ServiceDialog extends ConfirmDialog {
         float height = getHeight();
         colorBg = new ColorBlock(Color.RED, width, height);
 
-        comesMoreTextBox = new ComesMoreTextBox(800, 30, 1000);
+        comesMoreTextBox = new ComesMoreTextBox(800, 20, 1000);
 
         comesMoreTextBox.setPos(
-                200,
-                50
+                100,
+                0
         );
 
         Bitmap girlBitmap = Res.getBitmap(R.drawable.service_girl);
@@ -73,8 +74,8 @@ public class ServiceDialog extends ConfirmDialog {
         translate.setListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Drawable tile) {
-//                comesMoreTextBox.setText(welcomeText);
-//                comesMoreTextBox.startAnimation(new FadeInAnimation());
+                comesMoreTextBox.setTexts(new String[]{welcomeText});
+                comesMoreTextBox.startAnimation(new FadeInAnimation());
             }
         });
 

@@ -32,39 +32,8 @@ public class LoaderView extends GameView {
                 Loader.Z_FAR
         );
 
-        return new GlRenderer(projection) {
-
-
-            @Override
-            protected void onInit(GL11 gl) {
-                // gl.glEnable(GL_DEPTH_TEST);
-                setupLight(gl);
-                //setupMaterial(gl);
-            }
-
-        };
-
+        return new GlRenderer(projection);
     }
 
-
-    private static void setupLight(GL11 gl) {
-        float[] lightAmbient = {0.5f, 0.5f, 0.5f, 1.0f}; // ['æmbiənt] 环境光
-        float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};  //[di'fju:s] 漫射光
-        float[] specularParams = {0.4f, 0.4f, 0.4f, 1.0f}; //镜面光设置
-
-        int height = EngineContext.getInstance().getApp().getHeight();
-        float[] lightPosition = {0, height >> 1, -100f, 1.0f};
-
-
-        gl.glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient, 0);
-        gl.glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse, 0);
-        gl.glLightfv(GL_LIGHT1, GL_SPECULAR, specularParams, 0);
-        gl.glLightfv(GL_LIGHT1, GL_POSITION, lightPosition, 0);
-        gl.glEnable(GL_LIGHT1);
-        gl.glEnable(GL_LIGHTING);
-
-        gl.glEnable(GL_COLOR_MATERIAL);
-        //gl.glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    }
 
 }

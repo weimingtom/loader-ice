@@ -29,11 +29,7 @@ public class MainScene extends Scene {
 
         ControllerBar controllerBar = new ControllerBar();
 
-        TextGrid textGrid = new TextGrid(200, 100);
-        textGrid.setText(Res.getText(R.string.app_name), Color.RED, 20);
-        textGrid.setPos(0, getHeight());
-
-        addChildren(background, controllerBar, textGrid);
+        addChildren(background, controllerBar);
 
         addEntries();
 
