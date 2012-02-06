@@ -3,20 +3,16 @@ package com.ebensz.games.scenes.dialogs;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import com.ebensz.games.R;
-import com.ebensz.games.scenes.AnimationTextBox;
 import ice.animation.Animation;
-import ice.animation.FadeInAnimation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
-import ice.engine.EngineContext;
 import ice.node.Drawable;
 import ice.node.widget.Button;
 import ice.node.widget.ColorBlock;
 import ice.node.widget.ConfirmDialog;
 import ice.node.widget.TextureGrid;
+import ice.practical.ComesMoreTextBox;
 import ice.res.Res;
-
-import java.util.List;
 
 /**
  * User: jason
@@ -35,11 +31,11 @@ public class ServiceDialog extends ConfirmDialog {
     }
 
     public void showMsg(String oneLine) {
-        animationTextBox.setText(oneLine);
+        // comesMoreTextBox.setText(oneLine);
     }
 
-    public void showMsg(List<String> lines) {
-        animationTextBox.setTexts(lines, 20);
+    public void showMsg(String[] lines) {
+        comesMoreTextBox.setTexts(lines, 20);
     }
 
     @Override
@@ -48,9 +44,9 @@ public class ServiceDialog extends ConfirmDialog {
         float height = getHeight();
         colorBg = new ColorBlock(Color.RED, width, height);
 
-        animationTextBox = new AnimationTextBox(800, 30, 1000);
+        comesMoreTextBox = new ComesMoreTextBox(800, 30, 1000);
 
-        animationTextBox.setPos(
+        comesMoreTextBox.setPos(
                 200,
                 50
         );
@@ -67,7 +63,7 @@ public class ServiceDialog extends ConfirmDialog {
 
         confirmButton.setVisible(false);
 
-        addChildren(colorBg, animationTextBox, girl, confirmButton);
+        addChildren(colorBg, comesMoreTextBox, girl, confirmButton);
     }
 
     public void startEntryAnimation(final String welcomeText) {
@@ -77,8 +73,8 @@ public class ServiceDialog extends ConfirmDialog {
         translate.setListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Drawable tile) {
-                animationTextBox.setText(welcomeText);
-                animationTextBox.startAnimation(new FadeInAnimation());
+//                comesMoreTextBox.setText(welcomeText);
+//                comesMoreTextBox.startAnimation(new FadeInAnimation());
             }
         });
 
@@ -93,5 +89,5 @@ public class ServiceDialog extends ConfirmDialog {
 
     private TextureGrid girl;
     private ColorBlock colorBg;
-    private AnimationTextBox animationTextBox;
+    private ComesMoreTextBox comesMoreTextBox;
 }
