@@ -19,7 +19,6 @@ import static javax.microedition.khronos.opengles.GL10.*;
  */
 public class LoaderView extends GameView {
 
-
     public LoaderView(Context context) {
         super(context, createRender());
     }
