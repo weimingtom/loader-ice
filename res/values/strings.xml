@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Loader</string>
+    <string name="app_name">斗地主</string>
     <string name="choose_email_client">choose_email_client</string>
 
     <string name="welcome">欢迎来到E本斗地主！我是您的游戏秘书 "小蜜"</string>

@@ -1,11 +1,13 @@
 package com.ebensz.games.scenes;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import com.ebensz.games.R;
 import com.ebensz.games.scenes.dialogs.ServiceDialog;
 import ice.engine.Scene;
 import ice.node.widget.RadioButton;
 import ice.node.widget.RadioGroup;
+import ice.node.widget.TextGrid;
 import ice.node.widget.TextureGrid;
 import ice.res.Res;
 
@@ -27,7 +29,11 @@ public class MainScene extends Scene {
 
         ControllerBar controllerBar = new ControllerBar();
 
-        addChildren(background, controllerBar);
+        TextGrid textGrid = new TextGrid(200, 100);
+        textGrid.setText(Res.getText(R.string.app_name), Color.RED, 20);
+        textGrid.setPos(0, getHeight());
+
+        addChildren(background, controllerBar, textGrid);
 
         addEntries();
 
