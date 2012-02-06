@@ -11,8 +11,6 @@ import ice.graphic.projection.PerspectiveProjection;
 import javax.microedition.khronos.opengles.GL11;
 
 import static javax.microedition.khronos.opengles.GL10.*;
-import static javax.microedition.khronos.opengles.GL10.GL_FRONT;
-import static javax.microedition.khronos.opengles.GL10.GL_SPECULAR;
 
 /**
  * User: Jason
@@ -20,6 +18,8 @@ import static javax.microedition.khronos.opengles.GL10.GL_SPECULAR;
  * Time: 下午3:07
  */
 public class LoaderView extends GameView {
+
+
     public LoaderView(Context context) {
         super(context, createRender());
     }
