@@ -3,8 +3,8 @@ package com.ebensz.games.scenes.dialogs;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import com.ebensz.games.R;
+import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
-import ice.animation.FadeInAnimation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.node.Drawable;
@@ -75,7 +75,7 @@ public class ServiceDialog extends ConfirmDialog {
             @Override
             public void onAnimationEnd(Drawable tile) {
                 comesMoreTextBox.setTexts(new String[]{welcomeText});
-                comesMoreTextBox.startAnimation(new FadeInAnimation());
+                comesMoreTextBox.startAnimation(AlphaAnimation.createFadeIn(1000));
             }
         });
 
