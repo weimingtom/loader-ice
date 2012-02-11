@@ -25,12 +25,7 @@ public class LoaderView extends GameView {
 
     private static GlRenderer createRender() {
 
-        PerspectiveProjection projection = new PerspectiveProjection(
-                new GLU(),
-                60,
-                Loader.Z_NEAR,
-                Loader.Z_FAR
-        );
+        PerspectiveProjection projection = new PerspectiveProjection(new GLU(), 60);
 
         return new GlRenderer(projection);
     }
