@@ -1,0 +1,547 @@
+package com.ebensz.games.scenes;
+
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.view.MotionEvent;
+import com.ebensz.games.R;
+import com.ebensz.games.logic.interactive.Message;
+import com.ebensz.games.logic.settle.SettleTool;
+import com.ebensz.games.logic.story.Game;
+import com.ebensz.games.model.Dir;
+import com.ebensz.games.model.RobLoaderScore;
+import com.ebensz.games.model.Role.Role;
+import com.ebensz.games.model.hand.ColoredHand;
+import com.ebensz.games.model.poker.ColoredPoker;
+import com.ebensz.games.res.LoadRes;
+import com.ebensz.games.ui.widget.*;
+import com.ebensz.games.utils.SleepUtils;
+import ice.animation.AlphaAnimation;
+import ice.animation.Animation;
+import ice.node.Drawable;
+import ice.node.widget.Button;
+import ice.node.widget.TextureGrid;
+import ice.res.Res;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static com.ebensz.games.logic.interactive.Message.*;
+
+/**
+ * User: Mike.Hu
+ * Date: 11-11-14
+ * Time: 下午3:14
+ */
+public abstract class GameScene extends GameSceneBase {
+
+    private static final int WIDTH = 1024;
+    private static final int HEIGHT = 768;
+
+    protected GameScene(Game game) {
+        this.game = game;
+        msg = new Message();
+
+        addChild(sliceTile = new SliceTile());
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+
+        if (settleBoard != null) {
+            settleBoard.setRemovable(true);
+            settleBoard = null;
+        }
+
+        passBtn = null;
+        oneBtn = null;
+        twoBtn = null;
+        threeBtn = null;
+
+        d_g_fBtn = null;
+
+        d_g_fPassBtn = null;
+        chuPaiBtn = null;
+        chuPaiPassBtn = null;
+        suggestBtn = null;
+    }
+
+    public void update(Message msg) {
+        this.msg = msg;
+    }
+
+
+    @Override
+    protected boolean onDispatchTouch(Drawable child, MotionEvent event) {
+        if (child instanceof PokerTile || child == sliceTile) { //避免一次touch 被分发两次
+            return false;
+        }
+
+        return super.onDispatchTouch(child, event);
+    }
+
+    @Override
+    public boolean onTouch(MotionEvent event) {
+
+        sliceTile.onTouchEvent(event);
+
+        boolean chu_or_jie = msg.what == SELECT_CHU_PAI || msg.what == SELECT_JIE_PAI;
+
+        if (chu_or_jie) {
+
+            if (onSlideTouch(event)) {
+                outsidePokers.clearSelectedPokers();
+                return true;
+            }
+
+        }
+
+        outsidePokers.handlerSelectPokers(event);
+
+        if (chu_or_jie)
+            game.onPokersSelected();
+
+        return super.onTouchEvent(event);
+    }
+
+    private boolean onSlideTouch(MotionEvent event) {
+        boolean flag = outsidePokers.handlerSlidePokers(event);
+        if (flag == true)
+            game.tryPostChuOrJie();
+        return flag;
+    }
+
+    public void showPlayers(Map<Dir, Role> roleMap) {
+
+        if (roleInfoLeft == null) {
+            Role role = roleMap.get(Dir.Left);
+            roleInfoLeft = new RoleTile(Dir.Left, role);
+
+            role = roleMap.get(Dir.Right);
+            roleInfoRight = new RoleTile(Dir.Right, role);
+
+            role = roleMap.get(Dir.Outside);
+            roleInfoOutside = new RoleTile(Dir.Outside, role);
+
+            addChildren(roleInfoLeft, roleInfoRight, roleInfoOutside);
+        }
+    }
+
+    public void showRobLoader(Dir dir, RobLoaderScore score) {
+        Bitmap scoreBitmap;
+        if (score == RobLoaderScore.Pass) {
+            scoreBitmap = LoadRes.getBitmap(R.drawable.point0);
+        }
+        else {
+            scoreBitmap = LoadRes.createDigitBitmap(score.getMultiple(), false);
+        }
+
+        PointF pos = new PointF();
+        switch (dir) {
+            case Left:
+                pos.set(100, 100);
+                break;
+            case Outside:
+                pos.set(500, 500);
+                break;
+            case Right:
+                pos.set(900, 100);
+                break;
+        }
+
+        TextureGrid scoreTile = new TextureGrid(scoreBitmap, pos);
+        addChild(scoreTile);
+        scoreTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+        SleepUtils.sleep(1500);
+    }
+
+    public void showDao(Dir loaderXiaJia) {
+
+        Bitmap daoBitmap = LoadRes.getBitmap(R.drawable.dao_zi);
+        PointF pos = new PointF();
+        switch (loaderXiaJia) {
+            case Left:
+                pos.set(100, 100);
+                break;
+            case Outside:
+                pos.set(500, 500);
+                break;
+            case Right:
+                pos.set(900, 100);
+                break;
+        }
+        TextureGrid daoTile = new TextureGrid(daoBitmap, pos);
+        addChild(daoTile);
+        daoTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+        SleepUtils.sleep(1500);
+    }
+
+    public void showGen(Dir loaderShangJia) {
+
+        Bitmap genBitmap = LoadRes.getBitmap(R.drawable.gen_zi);
+        PointF pos = new PointF();
+        switch (loaderShangJia) {
+            case Left:
+                pos.set(100, 100);
+                break;
+            case Outside:
+                pos.set(500, 500);
+                break;
+            case Right:
+                pos.set(900, 100);
+                break;
+        }
+        TextureGrid genTile = new TextureGrid(genBitmap, pos);
+        addChild(genTile);
+        genTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+        SleepUtils.sleep(1500);
+    }
+
+    public void showFan(Dir loaderDir) {
+
+        Bitmap fanBitmap = LoadRes.getBitmap(R.drawable.fan_zi);
+        PointF pos = new PointF();
+        switch (loaderDir) {
+            case Left:
+                pos.set(100, 100);
+                break;
+            case Outside:
+                pos.set(500, 500);
+                break;
+            case Right:
+                pos.set(900, 100);
+                break;
+        }
+        TextureGrid fanTile = new TextureGrid(fanBitmap, pos);
+        addChild(fanTile);
+        fanTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+        SleepUtils.sleep(1500);
+    }
+
+    public void showRobLoaderFail() {
+        Bitmap bitmap = LoadRes.getBitmap(R.drawable.nobody_callscore);
+        PointF pos = new PointF(
+                (WIDTH - bitmap.getWidth()) / 2,
+                (HEIGHT - bitmap.getHeight()) / 2
+        );
+        TextureGrid bitmapTile = new TextureGrid(bitmap, pos);
+        addChild(bitmapTile);
+        bitmapTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+        SleepUtils.sleep(1500);
+    }
+
+    public void showFaPai(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
+        packOfCardTiles = new PackOfCardTiles(order, shouPaiMap, leftThree);
+        packOfCardTiles.show(this);
+
+        for (int i = 0; i < 17; i++) {
+            for (Dir dir : order) {
+                PokerTile pokerTile = packOfCardTiles.sendOut();
+                DirPokerTiles dirPokerTiles = getPokerTiles(dir);
+                dirPokerTiles.faPai(pokerTile, 17);
+                SleepUtils.sleep(30);
+            }
+        }
+
+        SleepUtils.sleep(700);
+        packOfCardTiles.tidy();//展开剩余的三张牌
+    }
+
+    public void sortAndShowHumanPokersFront() {
+        outsidePokers.sortAndMakeFront();
+        leftPokers.sortAndMakeFront();
+        rightPokers.sortAndMakeFront();
+    }
+
+    public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
+        packOfCardTiles.showLeftThree();
+
+        DirPokerTiles loaderShouPai = getPokerTiles(loaderDir);
+
+        PokerTile[] remainThree = new PokerTile[3];
+        for (int i = 0; i < 3; i++) {
+            remainThree[i] = packOfCardTiles.sendOut();
+        }
+
+        loaderShouPai.faPaiRemainThree(remainThree);
+
+        SleepUtils.sleep(500);
+    }
+
+    public void showRobLoaderButtons() {
+
+        Bitmap normal = Res.getBitmap(R.drawable.by_button_1);
+        Bitmap pressed = Res.getBitmap(R.drawable.by_button_2);
+        passBtn = new Button(normal, pressed);
+        passBtn.setPos(500, 500);
+
+        normal = Res.getBitmap(R.drawable.point1_button_1);
+        pressed = Res.getBitmap(R.drawable.point1_button_2);
+        oneBtn = new Button(normal, pressed);
+        oneBtn.setPos(600, 500);
+
+        normal = Res.getBitmap(R.drawable.point2_button_1);
+        pressed = Res.getBitmap(R.drawable.point2_button_2);
+        twoBtn = new Button(normal, pressed);
+        twoBtn.setPos(700, 500);
+
+        normal = Res.getBitmap(R.drawable.point3_button_1);
+        pressed = Res.getBitmap(R.drawable.point3_button_2);
+        threeBtn = new Button(normal, pressed);
+        twoBtn.setPos(800, 500);
+
+        addChildren(passBtn, oneBtn, twoBtn, threeBtn);
+    }
+
+    public void hideRobLoaderButtons() {
+        passBtn.setRemovable(true);
+        oneBtn.setRemovable(true);
+        twoBtn.setRemovable(true);
+        threeBtn.setRemovable(true);
+    }
+
+    public void showD_G_F(int what) {
+        Bitmap normal = null, pressed = null;
+
+        switch (what) {
+            case SELECT_DAO:
+                normal = Res.getBitmap(R.drawable.dao_button_1);
+                pressed = Res.getBitmap(R.drawable.dao_button_2);
+                break;
+            case SELECT_GEN:
+                normal = Res.getBitmap(R.drawable.gen_button_1);
+                pressed = Res.getBitmap(R.drawable.gen_button_2);
+                break;
+            case SELECT_FAN:
+                normal = Res.getBitmap(R.drawable.fan_button_1);
+                pressed = Res.getBitmap(R.drawable.fan_button_2);
+                break;
+        }
+
+        d_g_fBtn = new Button(normal, pressed);
+        d_g_fBtn.setPos(500, 500);
+
+        normal = Res.getBitmap(R.drawable.by_button_1);
+        pressed = Res.getBitmap(R.drawable.by_button_2);
+        d_g_fPassBtn = new Button(normal, pressed);
+        d_g_fBtn.setPos(600, 500);
+
+        addChildren(d_g_fBtn, d_g_fPassBtn);
+    }
+
+    public void hideD_G_FBttons() {
+        remove(d_g_fBtn);
+        remove(d_g_fPassBtn);
+    }
+
+    public void showChuPaiBtns(boolean jiePai) {
+
+        if (jiePai) {
+            if (suggestBtn == null) {
+                Bitmap normal = Res.getBitmap(R.drawable.tshi_button_1);
+                Bitmap pressed = Res.getBitmap(R.drawable.tshi_button_2);
+                suggestBtn = new Button(normal, pressed);
+                suggestBtn.setPos((WIDTH - normal.getWidth()) / 2, 500);
+
+                addChildren(suggestBtn);
+            }
+            else {
+                suggestBtn.setVisible(true);
+            }
+
+        }
+
+        if (chuPaiBtn == null) {
+            Bitmap normal = Res.getBitmap(R.drawable.chupai_button_1);
+            Bitmap pressed = Res.getBitmap(R.drawable.chupai_button_2);
+            chuPaiBtn = new Button(normal, pressed);
+            chuPaiBtn.setPos(800, 500);
+            // chuPaiBtn = new Button(normal, pressed, new Point(800, 500));
+
+            normal = Res.getBitmap(R.drawable.by_button_1);
+            pressed = Res.getBitmap(R.drawable.by_button_2);
+            chuPaiPassBtn = new Button(normal, pressed);
+            chuPaiPassBtn.setPos(100, 500);
+
+            addChildren(chuPaiBtn, chuPaiPassBtn);
+        }
+        else {
+            chuPaiBtn.setVisible(true);
+            chuPaiPassBtn.setVisible(true);
+        }
+
+    }
+
+    public DirPokerTiles getPokerTiles(Dir dir) {
+        switch (dir) {
+            case Left:
+                return leftPokers;
+            case Right:
+                return rightPokers;
+            case Outside:
+                return outsidePokers;
+        }
+        return null;
+    }
+
+    public abstract void showChuPai(Dir chuPaiPlayer, ColoredHand chuPai, boolean noShouPaiLeft);
+
+    public abstract void showJiePai(Dir jiePaiPlayer, ColoredHand jiePai, Dir chuPaiPlayer, boolean noShouPaiLeft);
+
+    public void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
+        TextureGrid buYaoTile = new TextureGrid(R.drawable.by_button_1);
+
+        Point pos = new Point();
+        switch (jiePaiDir) {
+            case Left:
+                pos.set(100, 100);
+                break;
+            case Outside:
+                pos.set((int) (WIDTH - buYaoTile.getWidth()) / 2, 600);
+                break;
+            case Right:
+                pos.set(800, 100);
+                break;
+        }
+        buYaoTile.setPos(pos.x, pos.y);
+        addChild(buYaoTile);
+        buYaoTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        SleepUtils.sleep(1000);
+    }
+
+    public void showSuggestion(List<ColoredPoker> suggestion) {
+
+        List<ColoredPoker> currentSelect = outsidePokers.getSelectedPokers();
+
+        if (currentSelect.size() > 0) {
+            outsidePokers.tidyShouPai(70);
+            currentSelect.clear();
+            SleepUtils.sleep(100);
+        }
+
+        outsidePokers.setSelectedPokers(new ArrayList<ColoredPoker>(suggestion));
+        outsidePokers.showSelectedPokers(suggestion);
+    }
+
+
+    public void showSettle(SettleTool.Result result) {
+
+        showDetailBoard(result);
+
+        showScores(result);
+
+    }
+
+    private void showDetailBoard(SettleTool.Result result) {
+        addChild(settleBoard = new SettleBoard(result));
+    }
+
+    private void showScores(SettleTool.Result result) {
+        List<Drawable> tiles = new ArrayList<Drawable>(result.winScores.size());
+
+        for (final Dir dir : result.winScores.keySet()) {
+            final int winScore = result.winScores.get(dir);
+
+            final Point pos = new Point();
+            RoleTile roleTile = null;
+
+            switch (dir) {
+                case Left:
+                    pos.set(100, 100);
+                    roleTile = roleInfoLeft;
+                    break;
+                case Right:
+                    pos.set(800, 100);
+                    roleTile = roleInfoRight;
+                    break;
+                case Outside:
+                    pos.set(500, 600);
+                    roleTile = roleInfoOutside;
+                    break;
+            }
+
+            final RoleTile theRoleTile = roleTile;
+
+            TextureGrid scoreTile = new TextureGrid(LoadRes.createDigitBitmap(winScore), pos);
+            scoreTile.setVisible(false);
+
+            AlphaAnimation fadeOut = AlphaAnimation.createFadeOut(4000);
+
+            fadeOut.setListener(new Animation.Listener() {
+                @Override
+                public void onAnimationEnd(Drawable drawable) {
+                    theRoleTile.update(winScore);
+                }
+            });
+
+            tiles.add(scoreTile);
+
+            scoreTile.startAnimation(fadeOut);
+        }
+
+        addChildren(tiles);
+    }
+
+
+    public Button getPassBtn() {
+        return passBtn;
+    }
+
+    public Button getOneBtn() {
+        return oneBtn;
+    }
+
+    public Button getTwoBtn() {
+        return twoBtn;
+    }
+
+    public Button getThreeBtn() {
+        return threeBtn;
+    }
+
+    public Button getD_g_fBtn() {
+        return d_g_fBtn;
+    }
+
+    public Button getD_g_fPassBtn() {
+        return d_g_fPassBtn;
+    }
+
+    public Button getChuPaiBtn() {
+        return chuPaiBtn;
+    }
+
+    public Button getChuPaiPassBtn() {
+        return chuPaiPassBtn;
+    }
+
+    public Button getSuggestBtn() {
+        return suggestBtn;
+    }
+
+    private SettleBoard settleBoard;
+
+    private SliceTile sliceTile;
+
+    private Button passBtn;
+    private Button oneBtn;
+    private Button twoBtn;
+    private Button threeBtn;
+
+    private Button d_g_fBtn;
+
+    private Button d_g_fPassBtn;
+    private Button chuPaiBtn;
+    private Button chuPaiPassBtn;
+    private Button suggestBtn;
+
+
+    private RoleTile roleInfoLeft;
+    private RoleTile roleInfoRight;
+    private RoleTile roleInfoOutside;
+    private Message msg;
+    private Game game;
+}

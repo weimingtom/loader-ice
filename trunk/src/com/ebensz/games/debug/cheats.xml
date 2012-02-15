@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="gbk"?>
+
+
+<!-- 给指定玩家配牌，一家有17张牌 -->
+
+
+<loader_debug>
+
+
+    <!-- dir 属性指定给哪方配牌 可取的值有 Outside, Right, Left -->
+
+
+    <!-- card 可取的值如下  _3, _4,_5,_6,_7,_8,_9,_10,J,Q,K,A,_2,XiaoWang, DaWang;-->
+
+
+    <config dir="Outside">
+
+        <poker>_3</poker>
+        <poker>_3</poker>
+        <poker>_3</poker>
+        <poker>_3</poker>
+    </config>
+
+
+    <config dir="Left">
+        <poker>_4</poker>
+        <poker>_4</poker>
+        <poker>_4</poker>
+        <poker>_4</poker>
+    </config>
+
+
+</loader_debug>
+
+
+
+
+
+
+
