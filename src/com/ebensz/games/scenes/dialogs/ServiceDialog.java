@@ -71,7 +71,7 @@ public class ServiceDialog extends ConfirmDialog {
 
         TranslateAnimation translate = new TranslateAnimation(1000, -getWidth(), 0, 0, 0);
 
-        translate.setListener(new Animation.AnimationListener() {
+        translate.setListener(new Animation.Listener() {
             @Override
             public void onAnimationEnd(Drawable tile) {
                 comesMoreTextBox.setTexts(new String[]{welcomeText});
