@@ -58,18 +58,18 @@ public class MainSceneBase extends Scene {
 
         this.normalEntry.setPos(
                 width / 2 - margin - this.normalEntry.getWidth(),
-                (height + this.normalEntry.getHeight()) / 2
+                (height - this.normalEntry.getHeight()) / 2
         );
 
 
         loaderEntry.setPos(
                 (width - loaderEntry.getWidth()) / 2,
-                (height + loaderEntry.getHeight()) / 2
+                (height - loaderEntry.getHeight()) / 2
         );
 
         superEntry.setPos(
                 width / 2 + margin,
-                (height + superEntry.getHeight()) / 2
+                (height - superEntry.getHeight()) / 2
         );
 
         radioGroup = new RadioGroup(this.normalEntry, loaderEntry, superEntry);
