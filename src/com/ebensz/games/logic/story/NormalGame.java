@@ -20,7 +20,7 @@ import com.ebensz.games.model.Role.RoleCenter;
 import com.ebensz.games.model.poker.PokersInfo;
 import com.ebensz.games.scenes.GameScene;
 import com.ebensz.games.scenes.SimpleGameScene;
-import ice.node.widget.Button;
+import ice.node.widget.ButtonOverlay;
 import ice.res.Res;
 
 import java.util.HashMap;
@@ -61,11 +61,11 @@ public class NormalGame extends Game {
     protected void handleSelectContinueGame(final Message msg) {
         ((SimpleGameScene) scene).showSelectContinueGame();
 
-        Button continueBtn = ((SimpleGameScene) scene).getSelectContinueGameBtn();
+        ButtonOverlay continueBtn = ((SimpleGameScene) scene).getSelectContinueGameBtn();
 
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
-            public void onClick(Button btn) {
+            public void onClick(ButtonOverlay btn) {
 
                 msg.obj = Boolean.valueOf(true);
 

@@ -7,11 +7,12 @@ import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
-import ice.node.Drawable;
-import ice.node.widget.Button;
-import ice.node.widget.ColorBlock;
+import ice.engine.EngineContext;
+import ice.node.Overlay;
+import ice.node.widget.BitmapOverlay;
+import ice.node.widget.ButtonOverlay;
+import ice.node.widget.ColorOverlay;
 import ice.node.widget.ConfirmDialog;
-import ice.node.widget.TextureGrid;
 import ice.practical.ComesMoreTextBox;
 import ice.res.Res;
 
@@ -23,13 +24,9 @@ import ice.res.Res;
 public class ServiceDialog extends ConfirmDialog {
 
     public ServiceDialog() {
-        setPos(0, getHeight());
+        super(EngineContext.getAppWidth(), 150);
     }
 
-    @Override
-    public float getHeight() {
-        return super.getHeight() / 4;
-    }
 
     public void showMsg(String oneLine) {
         comesMoreTextBox.setTexts(new String[]{oneLine});
@@ -43,7 +40,7 @@ public class ServiceDialog extends ConfirmDialog {
     protected void onSetupComponent() {
         float width = getWidth();
         float height = getHeight();
-        colorBg = new ColorBlock(Color.RED, width, height);
+        colorBg = new ColorOverlay(Color.RED, width, height);
 
         comesMoreTextBox = new ComesMoreTextBox(800, 20, 1000);
 
@@ -53,9 +50,9 @@ public class ServiceDialog extends ConfirmDialog {
         );
 
         Bitmap girlBitmap = Res.getBitmap(R.drawable.service_girl);
-        girl = new TextureGrid(girlBitmap.getWidth() / 2, girlBitmap.getHeight() / 2, girlBitmap);
+        girl = new BitmapOverlay(girlBitmap.getWidth() / 2, girlBitmap.getHeight() / 2, girlBitmap);
 
-        confirmButton = new Button(R.drawable.start_game, R.drawable.start_game_press);
+        confirmButton = new ButtonOverlay(R.drawable.start_game, R.drawable.start_game_press);
 
         confirmButton.setPos(
                 (width - confirmButton.getWidth()) / 2,
@@ -73,7 +70,7 @@ public class ServiceDialog extends ConfirmDialog {
 
         translate.setListener(new Animation.Listener() {
             @Override
-            public void onAnimationEnd(Drawable tile) {
+            public void onAnimationEnd(Overlay tile) {
                 comesMoreTextBox.setTexts(new String[]{welcomeText});
                 comesMoreTextBox.startAnimation(AlphaAnimation.createFadeIn(1000));
             }
@@ -88,7 +85,7 @@ public class ServiceDialog extends ConfirmDialog {
         girl.startAnimation(rotate);
     }
 
-    private TextureGrid girl;
-    private ColorBlock colorBg;
+    private BitmapOverlay girl;
+    private ColorOverlay colorBg;
     private ComesMoreTextBox comesMoreTextBox;
 }

@@ -10,8 +10,8 @@ import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.ui.widget.DirPokerTiles;
 import com.ebensz.games.utils.SleepUtils;
 import ice.engine.EngineContext;
-import ice.node.widget.Button;
-import ice.node.widget.TextureGrid;
+import ice.node.widget.BitmapOverlay;
+import ice.node.widget.ButtonOverlay;
 import ice.res.Res;
 
 /**
@@ -25,7 +25,7 @@ public class SimpleGameScene extends GameScene {
     public SimpleGameScene(Game game) {
         super(game);
 
-        background = new TextureGrid(R.drawable.bg_game_1);
+        background = new BitmapOverlay(R.drawable.bg_game_1);
         addChild(background);
     }
 
@@ -78,15 +78,15 @@ public class SimpleGameScene extends GameScene {
                 550
         );
 
-        selectContinueGameBtn = new Button(normal, pressed);
+        selectContinueGameBtn = new ButtonOverlay(normal, pressed);
         selectContinueGameBtn.setPos(pos.x, pos.y);
         addChild(selectContinueGameBtn);
     }
 
-    public Button getSelectContinueGameBtn() {
+    public ButtonOverlay getSelectContinueGameBtn() {
         return selectContinueGameBtn;
     }
 
-    private Button selectContinueGameBtn;
-    private TextureGrid background;
+    private ButtonOverlay selectContinueGameBtn;
+    private BitmapOverlay background;
 }

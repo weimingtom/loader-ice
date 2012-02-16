@@ -4,10 +4,9 @@ import android.graphics.Bitmap;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.Role.Role;
 import com.ebensz.games.res.LoadRes;
-import ice.node.Drawable;
-import ice.node.DrawableParent;
-import ice.node.widget.TextGrid;
-import ice.node.widget.TextureGrid;
+import ice.node.OverlayParent;
+import ice.node.widget.BitmapOverlay;
+import ice.node.widget.TextOverlay;
 
 import java.util.List;
 
@@ -16,22 +15,22 @@ import java.util.List;
  * Date: 11-12-14
  * Time: 上午11:15
  */
-public class RoleTile extends DrawableParent<Drawable> {
+public class RoleTile extends OverlayParent {
 
     public RoleTile(Dir dir, Role role) {
 
         List<Bitmap> headIcons = LoadRes.getHeadIcons();
 
         Bitmap head = headIcons.get(role.getIconIndex());
-        float width = getWidth();
-        headIconTile = new TextureGrid(head);
+        float width = 100;
+        headIconTile = new BitmapOverlay(head);
         headIconTile.setPos((width - head.getWidth()) / 2, 0);
 
-        nameTile = new TextGrid(width, 23);
+        nameTile = new TextOverlay(width, 23);
         //nameTile.setText(role.getName(), Color.WHITE, true);
         nameTile.setPos(0, 60);
 
-        wealthTile = new TextGrid(width, 23);
+        wealthTile = new TextOverlay(width, 23);
         currentScore = role.getWealth();
         //wealthTile.setText("" + currentScore, Color.WHITE, true);
         wealthTile.setPos(0, 90);
@@ -65,9 +64,9 @@ public class RoleTile extends DrawableParent<Drawable> {
     }
 
     private int currentScore;
-    private TextureGrid headIconTile;
-    private TextGrid nameTile;
-    private TextGrid wealthTile;
+    private BitmapOverlay headIconTile;
+    private TextOverlay nameTile;
+    private TextOverlay wealthTile;
 
 
 }

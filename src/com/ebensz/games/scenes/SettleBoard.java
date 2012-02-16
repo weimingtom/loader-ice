@@ -6,7 +6,7 @@ import com.ebensz.games.logic.settle.SettleTool;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.Role.Role;
 import ice.engine.EngineContext;
-import ice.node.widget.TextureGrid;
+import ice.node.widget.BitmapOverlay;
 import ice.res.Res;
 import ice.util.TextDrawer;
 
@@ -15,7 +15,7 @@ import ice.util.TextDrawer;
  * Date: 12-2-13
  * Time: 下午4:37
  */
-public class SettleBoard extends TextureGrid {
+public class SettleBoard extends BitmapOverlay {
 
     private static final int NAME_WIDTH = 160;
     private static final int LINE_HEIGHT = 26;
