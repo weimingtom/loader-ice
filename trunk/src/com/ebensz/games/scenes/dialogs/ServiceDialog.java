@@ -42,21 +42,21 @@ public class ServiceDialog extends ConfirmDialog {
         float height = getHeight();
         colorBg = new ColorOverlay(Color.RED, width, height);
 
-        comesMoreTextBox = new ComesMoreTextBox(800, 20, 1000);
+        comesMoreTextBox = new ComesMoreTextBox(800, 30, 1000);
 
         comesMoreTextBox.setPos(
-                100,
-                0
+                200,
+                getHeight() - 30
         );
 
         Bitmap girlBitmap = Res.getBitmap(R.drawable.service_girl);
-        girl = new BitmapOverlay(girlBitmap.getWidth() / 2, girlBitmap.getHeight() / 2, girlBitmap);
+        girl = new BitmapOverlay(girlBitmap);
 
         confirmButton = new ButtonOverlay(R.drawable.start_game, R.drawable.start_game_press);
 
         confirmButton.setPos(
                 (width - confirmButton.getWidth()) / 2,
-                130
+                50
         );
 
         confirmButton.setVisible(false);
