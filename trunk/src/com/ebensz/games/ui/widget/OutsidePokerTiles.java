@@ -18,7 +18,7 @@ import ice.animation.Interpolator.LinearInterpolator;
 import ice.animation.ScaleAnimation;
 import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
-import ice.node.Drawable;
+import ice.node.Overlay;
 
 import java.util.*;
 
@@ -87,7 +87,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
             //enlarge.setOffsetTime(10);
 //            enlarge.setListener(new Animation.Listener() {
 //                @Override
-//                public void onAnimationEnd(Drawable drawable) {
+//                public void onAnimationEnd(Overlay drawable) {
 //                    drawable.enableHover(); //明牌后才允许悬浮效果
 //                    drawable.setOnHoverListener(pokerHoverHandler);
 //                }
@@ -95,7 +95,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
             scale.setListener(new Animation.Listener() {
                 @Override
-                public void onAnimationEnd(Drawable drawable) {
+                public void onAnimationEnd(Overlay drawable) {
                     drawable.setVisible(false);
                     PokerTile pokerTile = (PokerTile) drawable;
                     Bitmap bitmap = LoadRes.getFrontPoker(pokerTile.getColoredPoker());
@@ -194,7 +194,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
         scale.setListener(new Animation.Listener() {
             @Override
-            public void onAnimationEnd(Drawable drawable) {
+            public void onAnimationEnd(Overlay drawable) {
                 PokerTile poker = (PokerTile) drawable;
                 poker.setBitmap(LoadRes.getBitmap(R.drawable.poker_back_large));
             }

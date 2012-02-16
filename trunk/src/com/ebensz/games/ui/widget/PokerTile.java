@@ -3,7 +3,7 @@ package com.ebensz.games.ui.widget;
 import android.graphics.Bitmap;
 import com.ebensz.games.model.poker.ColoredPoker;
 import ice.animation.TranslateAnimation;
-import ice.node.widget.TextureGrid;
+import ice.node.widget.BitmapOverlay;
 
 import static com.ebensz.games.ui.widget.OutsidePokerTiles.STAND_UP_Y;
 
@@ -13,7 +13,7 @@ import static com.ebensz.games.ui.widget.OutsidePokerTiles.STAND_UP_Y;
  * Date: 11-11-29
  * Time: 上午10:40
  */
-public class PokerTile extends TextureGrid implements Cloneable, Comparable<PokerTile> {
+public class PokerTile extends BitmapOverlay implements Cloneable, Comparable<PokerTile> {
 
     public PokerTile(ColoredPoker coloredPoker, Bitmap pokerBitmap) {
         super(pokerBitmap);

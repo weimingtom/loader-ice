@@ -4,9 +4,9 @@ import android.graphics.Bitmap;
 import com.ebensz.games.R;
 import com.ebensz.games.scenes.dialogs.ServiceDialog;
 import ice.engine.Scene;
-import ice.node.widget.RadioButton;
+import ice.node.widget.BitmapOverlay;
+import ice.node.widget.RadioButtonOverlay;
 import ice.node.widget.RadioGroup;
-import ice.node.widget.TextureGrid;
 import ice.res.Res;
 
 public class MainSceneBase extends Scene {
@@ -18,8 +18,7 @@ public class MainSceneBase extends Scene {
 
     private void setupComponents() {
 
-        TextureGrid background = new TextureGrid(getWidth(), getHeight(), R.drawable.bg);
-        background.setPos(0, getHeight());
+        BitmapOverlay background = new BitmapOverlay(getWidth(), getHeight(), R.drawable.bg);
 
         ControllerBar controllerBar = new ControllerBar();
 
@@ -37,19 +36,19 @@ public class MainSceneBase extends Scene {
 
         Bitmap bitmap = Res.getBitmap(R.drawable.normal_entry);
 
-        normalEntry = new RadioButton(
+        normalEntry = new RadioButtonOverlay(
                 R.drawable.normal_entry,
                 R.drawable.normal_entry_press,
                 0
         );
 
-        loaderEntry = new RadioButton(
+        loaderEntry = new RadioButtonOverlay(
                 R.drawable.loader_entry,
                 R.drawable.loader_entry_press,
                 R.drawable.loader_entry_disable
         );
 
-        superEntry = new RadioButton(
+        superEntry = new RadioButtonOverlay(
                 R.drawable.super_entry,
                 R.drawable.super_entry_press,
                 R.drawable.super_entry_disable
@@ -79,15 +78,15 @@ public class MainSceneBase extends Scene {
     }
 
 
-    public RadioButton getLoaderEntry() {
+    public RadioButtonOverlay getLoaderEntry() {
         return loaderEntry;
     }
 
-    public RadioButton getNormalEntry() {
+    public RadioButtonOverlay getNormalEntry() {
         return normalEntry;
     }
 
-    public RadioButton getSuperEntry() {
+    public RadioButtonOverlay getSuperEntry() {
         return superEntry;
     }
 
@@ -102,7 +101,7 @@ public class MainSceneBase extends Scene {
     private ServiceDialog serviceDialog;
 
     protected RadioGroup radioGroup;
-    protected RadioButton normalEntry;
-    protected RadioButton loaderEntry;
-    protected RadioButton superEntry;
+    protected RadioButtonOverlay normalEntry;
+    protected RadioButtonOverlay loaderEntry;
+    protected RadioButtonOverlay superEntry;
 }

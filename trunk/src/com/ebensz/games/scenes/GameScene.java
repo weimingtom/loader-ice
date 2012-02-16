@@ -18,9 +18,9 @@ import com.ebensz.games.ui.widget.*;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
-import ice.node.Drawable;
-import ice.node.widget.Button;
-import ice.node.widget.TextureGrid;
+import ice.node.Overlay;
+import ice.node.widget.BitmapOverlay;
+import ice.node.widget.ButtonOverlay;
 import ice.res.Res;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public abstract class GameScene extends GameSceneBase {
 
 
     @Override
-    protected boolean onDispatchTouch(Drawable child, MotionEvent event) {
+    protected boolean onDispatchTouch(Overlay child, MotionEvent event) {
         if (child instanceof PokerTile || child == sliceTile) { //避免一次touch 被分发两次
             return false;
         }
@@ -83,7 +83,7 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     @Override
-    public boolean onTouch(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
 
         sliceTile.onTouchEvent(event);
 
@@ -151,7 +151,7 @@ public abstract class GameScene extends GameSceneBase {
                 break;
         }
 
-        TextureGrid scoreTile = new TextureGrid(scoreBitmap, pos);
+        BitmapOverlay scoreTile = new BitmapOverlay(scoreBitmap, pos);
         addChild(scoreTile);
         scoreTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -172,7 +172,7 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        TextureGrid daoTile = new TextureGrid(daoBitmap, pos);
+        BitmapOverlay daoTile = new BitmapOverlay(daoBitmap, pos);
         addChild(daoTile);
         daoTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -193,7 +193,7 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        TextureGrid genTile = new TextureGrid(genBitmap, pos);
+        BitmapOverlay genTile = new BitmapOverlay(genBitmap, pos);
         addChild(genTile);
         genTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -214,7 +214,7 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        TextureGrid fanTile = new TextureGrid(fanBitmap, pos);
+        BitmapOverlay fanTile = new BitmapOverlay(fanBitmap, pos);
         addChild(fanTile);
         fanTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -226,7 +226,7 @@ public abstract class GameScene extends GameSceneBase {
                 (WIDTH - bitmap.getWidth()) / 2,
                 (HEIGHT - bitmap.getHeight()) / 2
         );
-        TextureGrid bitmapTile = new TextureGrid(bitmap, pos);
+        BitmapOverlay bitmapTile = new BitmapOverlay(bitmap, pos);
         addChild(bitmapTile);
         bitmapTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -274,22 +274,22 @@ public abstract class GameScene extends GameSceneBase {
 
         Bitmap normal = Res.getBitmap(R.drawable.by_button_1);
         Bitmap pressed = Res.getBitmap(R.drawable.by_button_2);
-        passBtn = new Button(normal, pressed);
+        passBtn = new ButtonOverlay(normal, pressed);
         passBtn.setPos(500, 500);
 
         normal = Res.getBitmap(R.drawable.point1_button_1);
         pressed = Res.getBitmap(R.drawable.point1_button_2);
-        oneBtn = new Button(normal, pressed);
+        oneBtn = new ButtonOverlay(normal, pressed);
         oneBtn.setPos(600, 500);
 
         normal = Res.getBitmap(R.drawable.point2_button_1);
         pressed = Res.getBitmap(R.drawable.point2_button_2);
-        twoBtn = new Button(normal, pressed);
+        twoBtn = new ButtonOverlay(normal, pressed);
         twoBtn.setPos(700, 500);
 
         normal = Res.getBitmap(R.drawable.point3_button_1);
         pressed = Res.getBitmap(R.drawable.point3_button_2);
-        threeBtn = new Button(normal, pressed);
+        threeBtn = new ButtonOverlay(normal, pressed);
         twoBtn.setPos(800, 500);
 
         addChildren(passBtn, oneBtn, twoBtn, threeBtn);
@@ -320,12 +320,12 @@ public abstract class GameScene extends GameSceneBase {
                 break;
         }
 
-        d_g_fBtn = new Button(normal, pressed);
+        d_g_fBtn = new ButtonOverlay(normal, pressed);
         d_g_fBtn.setPos(500, 500);
 
         normal = Res.getBitmap(R.drawable.by_button_1);
         pressed = Res.getBitmap(R.drawable.by_button_2);
-        d_g_fPassBtn = new Button(normal, pressed);
+        d_g_fPassBtn = new ButtonOverlay(normal, pressed);
         d_g_fBtn.setPos(600, 500);
 
         addChildren(d_g_fBtn, d_g_fPassBtn);
@@ -342,7 +342,7 @@ public abstract class GameScene extends GameSceneBase {
             if (suggestBtn == null) {
                 Bitmap normal = Res.getBitmap(R.drawable.tshi_button_1);
                 Bitmap pressed = Res.getBitmap(R.drawable.tshi_button_2);
-                suggestBtn = new Button(normal, pressed);
+                suggestBtn = new ButtonOverlay(normal, pressed);
                 suggestBtn.setPos((WIDTH - normal.getWidth()) / 2, 500);
 
                 addChildren(suggestBtn);
@@ -356,13 +356,13 @@ public abstract class GameScene extends GameSceneBase {
         if (chuPaiBtn == null) {
             Bitmap normal = Res.getBitmap(R.drawable.chupai_button_1);
             Bitmap pressed = Res.getBitmap(R.drawable.chupai_button_2);
-            chuPaiBtn = new Button(normal, pressed);
+            chuPaiBtn = new ButtonOverlay(normal, pressed);
             chuPaiBtn.setPos(800, 500);
-            // chuPaiBtn = new Button(normal, pressed, new Point(800, 500));
+            // chuPaiBtn = new ButtonOverlay(normal, pressed, new Point(800, 500));
 
             normal = Res.getBitmap(R.drawable.by_button_1);
             pressed = Res.getBitmap(R.drawable.by_button_2);
-            chuPaiPassBtn = new Button(normal, pressed);
+            chuPaiPassBtn = new ButtonOverlay(normal, pressed);
             chuPaiPassBtn.setPos(100, 500);
 
             addChildren(chuPaiBtn, chuPaiPassBtn);
@@ -391,7 +391,7 @@ public abstract class GameScene extends GameSceneBase {
     public abstract void showJiePai(Dir jiePaiPlayer, ColoredHand jiePai, Dir chuPaiPlayer, boolean noShouPaiLeft);
 
     public void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
-        TextureGrid buYaoTile = new TextureGrid(R.drawable.by_button_1);
+        BitmapOverlay buYaoTile = new BitmapOverlay(R.drawable.by_button_1);
 
         Point pos = new Point();
         switch (jiePaiDir) {
@@ -440,7 +440,7 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     private void showScores(SettleTool.Result result) {
-        List<Drawable> tiles = new ArrayList<Drawable>(result.winScores.size());
+        List<Overlay> tiles = new ArrayList<Overlay>(result.winScores.size());
 
         for (final Dir dir : result.winScores.keySet()) {
             final int winScore = result.winScores.get(dir);
@@ -465,14 +465,14 @@ public abstract class GameScene extends GameSceneBase {
 
             final RoleTile theRoleTile = roleTile;
 
-            TextureGrid scoreTile = new TextureGrid(LoadRes.createDigitBitmap(winScore), pos);
+            BitmapOverlay scoreTile = new BitmapOverlay(LoadRes.createDigitBitmap(winScore), pos);
             scoreTile.setVisible(false);
 
             AlphaAnimation fadeOut = AlphaAnimation.createFadeOut(4000);
 
             fadeOut.setListener(new Animation.Listener() {
                 @Override
-                public void onAnimationEnd(Drawable drawable) {
+                public void onAnimationEnd(Overlay drawable) {
                     theRoleTile.update(winScore);
                 }
             });
@@ -486,39 +486,39 @@ public abstract class GameScene extends GameSceneBase {
     }
 
 
-    public Button getPassBtn() {
+    public ButtonOverlay getPassBtn() {
         return passBtn;
     }
 
-    public Button getOneBtn() {
+    public ButtonOverlay getOneBtn() {
         return oneBtn;
     }
 
-    public Button getTwoBtn() {
+    public ButtonOverlay getTwoBtn() {
         return twoBtn;
     }
 
-    public Button getThreeBtn() {
+    public ButtonOverlay getThreeBtn() {
         return threeBtn;
     }
 
-    public Button getD_g_fBtn() {
+    public ButtonOverlay getD_g_fBtn() {
         return d_g_fBtn;
     }
 
-    public Button getD_g_fPassBtn() {
+    public ButtonOverlay getD_g_fPassBtn() {
         return d_g_fPassBtn;
     }
 
-    public Button getChuPaiBtn() {
+    public ButtonOverlay getChuPaiBtn() {
         return chuPaiBtn;
     }
 
-    public Button getChuPaiPassBtn() {
+    public ButtonOverlay getChuPaiPassBtn() {
         return chuPaiPassBtn;
     }
 
-    public Button getSuggestBtn() {
+    public ButtonOverlay getSuggestBtn() {
         return suggestBtn;
     }
 
@@ -526,17 +526,17 @@ public abstract class GameScene extends GameSceneBase {
 
     private SliceTile sliceTile;
 
-    private Button passBtn;
-    private Button oneBtn;
-    private Button twoBtn;
-    private Button threeBtn;
+    private ButtonOverlay passBtn;
+    private ButtonOverlay oneBtn;
+    private ButtonOverlay twoBtn;
+    private ButtonOverlay threeBtn;
 
-    private Button d_g_fBtn;
+    private ButtonOverlay d_g_fBtn;
 
-    private Button d_g_fPassBtn;
-    private Button chuPaiBtn;
-    private Button chuPaiPassBtn;
-    private Button suggestBtn;
+    private ButtonOverlay d_g_fPassBtn;
+    private ButtonOverlay chuPaiBtn;
+    private ButtonOverlay chuPaiPassBtn;
+    private ButtonOverlay suggestBtn;
 
 
     private RoleTile roleInfoLeft;

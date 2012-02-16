@@ -21,8 +21,8 @@ import com.ebensz.games.model.poker.PokersInfo;
 import com.ebensz.games.scenes.GameScene;
 import com.ebensz.games.ui.widget.OutsidePokerTiles;
 import com.ebensz.games.utils.SleepUtils;
-import ice.node.Drawable;
-import ice.node.widget.Button;
+import ice.node.Overlay;
+import ice.node.widget.ButtonOverlay;
 
 import java.util.*;
 
@@ -170,11 +170,11 @@ public abstract class Game implements Runnable, Feedback {
             case SELECT_JIE_PAI:
                 onJiePaiHandled(msg);
             case SELECT_CHU_PAI:
-                Drawable chuPaiBtn = scene.getChuPaiBtn();
+                Overlay chuPaiBtn = scene.getChuPaiBtn();
                 if (chuPaiBtn != null)
                     chuPaiBtn.setVisible(false);
 
-                Drawable passBtn = scene.getChuPaiPassBtn();
+                Overlay passBtn = scene.getChuPaiPassBtn();
                 if (passBtn != null)
                     passBtn.setVisible(false);
 
@@ -277,7 +277,7 @@ public abstract class Game implements Runnable, Feedback {
             outsidePokerTiles.setValidatedHand(null);
         }
 
-        Button chuPaiButton = scene.getChuPaiBtn();
+        ButtonOverlay chuPaiButton = scene.getChuPaiBtn();
         // chuPaiButton.setInteractive(!validated);
         chuPaiButton.setDisabled(validated);
     }
@@ -318,14 +318,14 @@ public abstract class Game implements Runnable, Feedback {
     private void handleRobLoader(final Message msg) {
         scene.showRobLoaderButtons();
 
-        final Button finalPassBtn = scene.getPassBtn();
-        final Button finalOneBtn = scene.getOneBtn();
-        final Button finalTwoBtn = scene.getTwoBtn();
-        final Button finalThreeBtn = scene.getThreeBtn();
+        final ButtonOverlay finalPassBtn = scene.getPassBtn();
+        final ButtonOverlay finalOneBtn = scene.getOneBtn();
+        final ButtonOverlay finalTwoBtn = scene.getTwoBtn();
+        final ButtonOverlay finalThreeBtn = scene.getThreeBtn();
 
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
-            public void onClick(Button btn) {
+            public void onClick(ButtonOverlay btn) {
                 if (btn == finalPassBtn) {
                     msg.obj = RobLoaderScore.Pass;
                 }
@@ -356,14 +356,14 @@ public abstract class Game implements Runnable, Feedback {
 
         scene.showChuPaiBtns(jiePai);
 
-        Button chuPaiButton = scene.getChuPaiBtn();
-        Button passButton = scene.getChuPaiPassBtn();
+        ButtonOverlay chuPaiButton = scene.getChuPaiBtn();
+        ButtonOverlay passButton = scene.getChuPaiPassBtn();
 
         if (chuPaiButton.getOnClickListener() == null)
             bindChuPaiBtnAction(chuPaiButton, passButton);
 
         if (jiePai) {
-            Button suggestButton = scene.getSuggestBtn();
+            ButtonOverlay suggestButton = scene.getSuggestBtn();
 
             if (suggestButton.getOnClickListener() == null)
                 suggestButton.setOnClickListener(suggestHandler);
@@ -429,10 +429,10 @@ public abstract class Game implements Runnable, Feedback {
         return true;
     }
 
-    private void bindChuPaiBtnAction(final Button chuPaiButton, Button passButton) {
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+    private void bindChuPaiBtnAction(final ButtonOverlay chuPaiButton, ButtonOverlay passButton) {
+        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
-            public void onClick(Button btn) {
+            public void onClick(ButtonOverlay btn) {
                 if (msg == null) return;
 
                 if (msg.what != SELECT_CHU_PAI && msg.what != SELECT_JIE_PAI) return;
@@ -494,11 +494,11 @@ public abstract class Game implements Runnable, Feedback {
     private void handleD_G_F(final Message msg) {
         scene.showD_G_F(msg.what);
 
-        final Button d_g_fBtn = scene.getD_g_fBtn();
-        final Button passBtn = scene.getD_g_fPassBtn();
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        final ButtonOverlay d_g_fBtn = scene.getD_g_fBtn();
+        final ButtonOverlay passBtn = scene.getD_g_fPassBtn();
+        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
-            public void onClick(Button btn) {
+            public void onClick(ButtonOverlay btn) {
                 msg.obj = (btn == d_g_fBtn);
                 noticeMsg(msg);
             }
@@ -745,10 +745,10 @@ public abstract class Game implements Runnable, Feedback {
         private List<Hand> jiePaiSuggestions;
     }
 
-    private class SuggestHandler implements Button.OnClickListener {
+    private class SuggestHandler implements ButtonOverlay.OnClickListener {
 
         @Override
-        public void onClick(Button btn) {
+        public void onClick(ButtonOverlay btn) {
 
             if (msg == null || msg.what != SELECT_JIE_PAI) return;
 

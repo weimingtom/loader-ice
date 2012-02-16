@@ -1,11 +1,9 @@
 package com.ebensz.games.ui.widget;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.view.MotionEvent;
-import ice.node.Drawable;
+import ice.node.Overlay;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -14,7 +12,7 @@ import javax.microedition.khronos.opengles.GL11;
  * Date: 12-2-13
  * Time: 上午9:54
  */
-public class SliceTile extends Drawable {
+public class SliceTile extends Overlay {
     public static final int DEFAULT_RECODE_POINT_SIZE = 20;
     private static final int DEFAULT_WIDTH = 1024;
     private static final int DEFAULT_HEIGHT = 768;
@@ -34,7 +32,7 @@ public class SliceTile extends Drawable {
     }
 
     @Override
-    public boolean onTouch(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         updateData(event);
 
         return false;

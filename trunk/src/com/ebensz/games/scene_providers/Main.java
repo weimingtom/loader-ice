@@ -10,8 +10,8 @@ import ice.engine.App;
 import ice.engine.EngineContext;
 import ice.engine.Scene;
 import ice.engine.SceneProvider;
-import ice.node.widget.Button;
-import ice.node.widget.RadioButton;
+import ice.node.widget.ButtonOverlay;
+import ice.node.widget.RadioButtonOverlay;
 import ice.node.widget.RadioGroup;
 import ice.res.Res;
 
@@ -84,10 +84,10 @@ public class Main extends SceneProvider {
 
     private void bindButtonAction(final boolean[] lockStates) {
 
-        RadioButton.OnToggledListener onToggledListener = new RadioButton.OnToggledListener() {
+        RadioButtonOverlay.OnToggledListener onToggledListener = new RadioButtonOverlay.OnToggledListener() {
 
             @Override
-            public void onToggled(RadioButton radioButton) {
+            public void onToggled(RadioButtonOverlay radioButton) {
                 handleToggleChange(radioButton);
             }
         };
@@ -97,14 +97,14 @@ public class Main extends SceneProvider {
 
         MainScene mainScene = (MainScene) scene;
 
-        final RadioButton normalEntry = mainScene.getNormalEntry();
-        final RadioButton loaderEntry = mainScene.getLoaderEntry();
-        final RadioButton superEntry = mainScene.getSuperEntry();
+        final RadioButtonOverlay normalEntry = mainScene.getNormalEntry();
+        final RadioButtonOverlay loaderEntry = mainScene.getLoaderEntry();
+        final RadioButtonOverlay superEntry = mainScene.getSuperEntry();
         final ServiceDialog serviceDialog = mainScene.getServiceDialog();
 
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
-            public void onClick(Button btn) {
+            public void onClick(ButtonOverlay btn) {
                 if (btn == normalEntry) {
                     serviceDialog.showMsg(Res.getText(R.string.normal_game_desc));
                 }
@@ -133,41 +133,41 @@ public class Main extends SceneProvider {
     }
 
     private void hideConfirmBtn(ServiceDialog serviceDialog) {
-        Button confirmButton = serviceDialog.getConfirmButton();
+        ButtonOverlay confirmButton = serviceDialog.getConfirmButton();
         if (confirmButton.isVisible()) {
             confirmButton.setVisible(false);
         }
     }
 
-    private void handleToggleChange(RadioButton radioButton) {
+    private void handleToggleChange(RadioButtonOverlay radioButton) {
 
         final MainScene mainScene = (MainScene) scene;
 
         final ServiceDialog serviceDialog = mainScene.getServiceDialog();
-        final Button confirmButton = serviceDialog.getConfirmButton();
+        final ButtonOverlay confirmButton = serviceDialog.getConfirmButton();
 
         if (!confirmButton.isVisible())
             confirmButton.startAnimation(new AlphaAnimation(500, 0, 1));
 
-        final RadioButton normalEntry = mainScene.getNormalEntry();
-        final RadioButton loaderEntry = mainScene.getLoaderEntry();
-        final RadioButton superEntry = mainScene.getSuperEntry();
+        final RadioButtonOverlay normalEntry = mainScene.getNormalEntry();
+        final RadioButtonOverlay loaderEntry = mainScene.getLoaderEntry();
+        final RadioButtonOverlay superEntry = mainScene.getSuperEntry();
 
-        Button.OnClickListener confirmBtnListener = null;
+        ButtonOverlay.OnClickListener confirmBtnListener = null;
 
         if (radioButton == normalEntry) {
-            confirmBtnListener = new Button.OnClickListener() {
+            confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
-                public void onClick(Button btn) {
+                public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
                     app.intent(GameEntry.class);
                 }
             };
         }
         else if (radioButton == loaderEntry) {
-            confirmBtnListener = new Button.OnClickListener() {
+            confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
-                public void onClick(Button btn) {
+                public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
                     app.intent(GameEntry.class);
                 }
@@ -175,9 +175,9 @@ public class Main extends SceneProvider {
 
         }
         else if (radioButton == superEntry) {
-            confirmBtnListener = new Button.OnClickListener() {
+            confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
-                public void onClick(Button btn) {
+                public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
                     app.intent(GameEntry.class);
                 }

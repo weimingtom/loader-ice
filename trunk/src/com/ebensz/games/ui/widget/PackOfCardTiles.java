@@ -10,7 +10,7 @@ import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.scenes.GameScene;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.TranslateAnimation;
-import ice.node.Drawable;
+import ice.node.Overlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class PackOfCardTiles {
     }
 
     public void show(GameScene gameScene) {
-        gameScene.addChildren(new ArrayList<Drawable>(allPokerTiles));
+        gameScene.addChildren(new ArrayList<Overlay>(allPokerTiles));
         SleepUtils.sleep(500);
     }
 
