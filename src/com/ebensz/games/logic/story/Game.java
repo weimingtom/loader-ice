@@ -77,7 +77,6 @@ public abstract class Game implements Runnable, Feedback {
 
     @Override
     public void run() {
-        Log.i(TAG, "startPixelUpdate");
 
         while (!stopFlag) {
 
