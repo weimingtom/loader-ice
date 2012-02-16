@@ -39,6 +39,8 @@ public abstract class GameScene extends GameSceneBase {
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 768;
 
+    public static final int ROB_SCORE_Y = 200;
+
     protected GameScene(Game game) {
         this.game = game;
         msg = new Message();
@@ -275,22 +277,22 @@ public abstract class GameScene extends GameSceneBase {
         Bitmap normal = Res.getBitmap(R.drawable.by_button_1);
         Bitmap pressed = Res.getBitmap(R.drawable.by_button_2);
         passBtn = new ButtonOverlay(normal, pressed);
-        passBtn.setPos(500, 500);
+        passBtn.setPos(500, ROB_SCORE_Y);
 
         normal = Res.getBitmap(R.drawable.point1_button_1);
         pressed = Res.getBitmap(R.drawable.point1_button_2);
         oneBtn = new ButtonOverlay(normal, pressed);
-        oneBtn.setPos(600, 500);
+        oneBtn.setPos(600, ROB_SCORE_Y);
 
         normal = Res.getBitmap(R.drawable.point2_button_1);
         pressed = Res.getBitmap(R.drawable.point2_button_2);
         twoBtn = new ButtonOverlay(normal, pressed);
-        twoBtn.setPos(700, 500);
+        twoBtn.setPos(700, ROB_SCORE_Y);
 
         normal = Res.getBitmap(R.drawable.point3_button_1);
         pressed = Res.getBitmap(R.drawable.point3_button_2);
         threeBtn = new ButtonOverlay(normal, pressed);
-        twoBtn.setPos(800, 500);
+        threeBtn.setPos(800, ROB_SCORE_Y);
 
         addChildren(passBtn, oneBtn, twoBtn, threeBtn);
     }
@@ -343,7 +345,7 @@ public abstract class GameScene extends GameSceneBase {
                 Bitmap normal = Res.getBitmap(R.drawable.tshi_button_1);
                 Bitmap pressed = Res.getBitmap(R.drawable.tshi_button_2);
                 suggestBtn = new ButtonOverlay(normal, pressed);
-                suggestBtn.setPos((WIDTH - normal.getWidth()) / 2, 500);
+                suggestBtn.setPos((WIDTH - normal.getWidth()) / 2, 200);
 
                 addChildren(suggestBtn);
             }
@@ -357,13 +359,13 @@ public abstract class GameScene extends GameSceneBase {
             Bitmap normal = Res.getBitmap(R.drawable.chupai_button_1);
             Bitmap pressed = Res.getBitmap(R.drawable.chupai_button_2);
             chuPaiBtn = new ButtonOverlay(normal, pressed);
-            chuPaiBtn.setPos(800, 500);
+            chuPaiBtn.setPos(800, 200);
             // chuPaiBtn = new ButtonOverlay(normal, pressed, new Point(800, 500));
 
             normal = Res.getBitmap(R.drawable.by_button_1);
             pressed = Res.getBitmap(R.drawable.by_button_2);
             chuPaiPassBtn = new ButtonOverlay(normal, pressed);
-            chuPaiPassBtn.setPos(100, 500);
+            chuPaiPassBtn.setPos(100, 200);
 
             addChildren(chuPaiBtn, chuPaiPassBtn);
         }
