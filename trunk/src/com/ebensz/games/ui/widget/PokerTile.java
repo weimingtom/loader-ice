@@ -57,13 +57,13 @@ public class PokerTile extends BitmapOverlay implements Cloneable, Comparable<Po
 
     public synchronized void standUp() {
         startAnimation(
-                TranslateAnimation.createMoveBy(100, 0, -STAND_UP_Y)
+                TranslateAnimation.createMoveBy(100, 0, STAND_UP_Y)
         );
     }
 
     public synchronized void sitDown() {
         startAnimation(
-                TranslateAnimation.createMoveBy(100, 0, STAND_UP_Y)
+                TranslateAnimation.createMoveBy(100, 0, -STAND_UP_Y)
         );
     }
 
