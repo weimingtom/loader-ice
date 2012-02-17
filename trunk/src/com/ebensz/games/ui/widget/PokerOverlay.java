@@ -36,8 +36,6 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     public PokerOverlay(ColoredPoker coloredPoker) {
         this.coloredPoker = coloredPoker;
 
-        enableDepthTestSwitch(true);
-
         Bitmap frontPoker = LoadRes.getFrontPoker(coloredPoker);
 
         front = new BitmapOverlay(frontPoker);

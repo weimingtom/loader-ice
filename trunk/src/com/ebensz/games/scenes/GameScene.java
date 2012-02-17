@@ -235,12 +235,16 @@ public abstract class GameScene extends GameSceneBase {
 
     public void showFaPai(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
         packOfCardTiles = new PackOfCardTiles(order, shouPaiMap, leftThree);
-        packOfCardTiles.show(this);
+
+        addChild(packOfCardTiles);
+
+        SleepUtils.sleep(500);
+
+        int index = packOfCardTiles.size() - 1;
 
         for (int i = 0; i < 17; i++) {
             for (Dir dir : order) {
-                PokerOverlay pokerOverlay = packOfCardTiles.pop();
-
+                PokerOverlay pokerOverlay = (PokerOverlay) packOfCardTiles.get(index--);
                 getPokerTiles(dir).faPai(i, pokerOverlay, 17);
             }
         }
@@ -265,7 +269,7 @@ public abstract class GameScene extends GameSceneBase {
 
         PokerOverlay[] remainThree = new PokerOverlay[3];
         for (int i = 0; i < 3; i++) {
-            remainThree[i] = packOfCardTiles.pop();
+            remainThree[i] = (PokerOverlay) packOfCardTiles.get(i);
         }
 
         loaderShouPai.faPaiRemainThree(remainThree);

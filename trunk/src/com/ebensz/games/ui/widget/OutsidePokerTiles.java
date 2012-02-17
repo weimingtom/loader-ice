@@ -87,41 +87,23 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     @Override
     public void faPaiRemainThree(PokerOverlay[] remainThree) {
-        List<PokerOverlay> remainThreeCopy = new ArrayList<PokerOverlay>(3);
 
-        for (int i = 0; i < remainThree.length; i++) {
-            //pokerOverlay.enableHover();
-            remainThreeCopy.add(remainThree[i]);
-        }
+        shouPai.addAll(Arrays.asList(remainThree));
 
-        shouPai.addAll(remainThreeCopy);
-
-
-        Collections.sort(remainThreeCopy);
         Collections.sort(shouPai);
 
-        for (int i = 2; i >= 0; i--) {
-            PokerOverlay newPoker = remainThreeCopy.get(i);
-            int sortIndex = Collections.binarySearch(shouPai, newPoker);
-            if (sortIndex == shouPai.size() - 1) {
-                gameScene.addChild(newPoker);
-            }
-            else {
-                PokerOverlay prePoker = shouPai.get(sortIndex + 1);
-                int insertIndex = gameScene.indexOf(prePoker) - 1;
-                //gameScene.addChild(insertIndex, newPoker);
-                gameScene.addChild(newPoker);
-            }
+        float totalZ = 10.0f;
 
-            Point point = posProvider.getShouPaiPos(sortIndex, 20);
+        int size = shouPai.size();
+        for (int i = size - 1; i >= 0; i--) {
+            PokerOverlay pokerOverlay = shouPai.get(i);
 
+            pokerOverlay.setPosZ(i);
 
-            newPoker.startAnimation(new TranslateAnimation(1000, point.x - newPoker.getPosX(), point.y - newPoker.getPosY()));
+            Point point = posProvider.getShouPaiPos(i, size);
 
-            // newPoker.setOnHoverListener(pokerHoverHandler);
+            pokerOverlay.startAnimation(new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY()));
         }
-
-        tidyShouPai(100);
     }
 
     @Override
