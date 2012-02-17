@@ -357,12 +357,7 @@ public abstract class GameScene extends GameSceneBase {
         }
 
         if (chuPaiBtn == null) {
-            chuPaiBtn = new ButtonOverlay(R.drawable.chupai_button_1, R.drawable.chupai_button_2){
-                @Override
-                public boolean onTouchEvent(MotionEvent event) {
-                    return super.onTouchEvent(event);    //To change body of overridden methods use File | Settings | File Templates.
-                }
-            };
+            chuPaiBtn = new ButtonOverlay(R.drawable.chupai_button_1, R.drawable.chupai_button_2);
             chuPaiBtn.setPos(600, 250);
 
             chuPaiPassBtn = new ButtonOverlay(R.drawable.by_button_1, R.drawable.by_button_2);

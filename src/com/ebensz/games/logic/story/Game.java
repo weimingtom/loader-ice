@@ -277,8 +277,7 @@ public abstract class Game implements Runnable, Feedback {
         }
 
         ButtonOverlay chuPaiButton = scene.getChuPaiBtn();
-        // chuPaiButton.setInteractive(!validated);
-        chuPaiButton.setDisabled(validated);
+        chuPaiButton.setDisabled(!validated);
     }
 
     private boolean isSame(ColoredHand lastValidated, List<ColoredPoker> selectPokers) {

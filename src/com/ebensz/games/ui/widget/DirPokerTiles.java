@@ -3,7 +3,6 @@ package com.ebensz.games.ui.widget;
 import android.graphics.Point;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
-import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.scenes.GameSceneBase;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
@@ -76,33 +75,32 @@ public abstract class DirPokerTiles {
 
 
     public void chuPai(ColoredHand chuPai) {
-        Poker[] pokers = chuPai.getHand().getPokers();
-        List<PokerOverlay> chuPaiOverlays = new ArrayList<PokerOverlay>(pokers.length);
         List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
+
+        int size = coloredPokers.size();
+
+        int index = 0;
 
         for (ColoredPoker coloredPoker : coloredPokers) {
 
-            for (PokerOverlay overlay : shouPai) {
+            for (Iterator<PokerOverlay> iterator = shouPai.iterator(); iterator.hasNext(); ) {
 
-                if (overlay.getColoredPoker().equals(coloredPoker)) {
-                    chuPaiOverlays.add(overlay);
+                PokerOverlay pokerOverlay = iterator.next();
+
+                if (pokerOverlay.getColoredPoker().equals(coloredPoker)) {
+                    iterator.remove();
+                    this.chuPai.add(pokerOverlay);
+
+                    Point point = posProvider.getChuPaiPos(index++, size);
+
+                    pokerOverlay.startAnimation(
+                            new TranslateAnimation(300, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY())
+                    );
+
+                    break;
                 }
 
             }
-
-        }
-
-        shouPai.removeAll(chuPaiOverlays);
-
-        for (int i = 0, size = chuPaiOverlays.size(); i < size; i++) {
-            PokerOverlay overlay = chuPaiOverlays.get(i);
-            this.chuPai.add(overlay);
-
-            Point point = posProvider.getChuPaiPos(i, size);
-
-            overlay.startAnimation(
-                    new TranslateAnimation(300, point.x - overlay.getPosX(), point.y - overlay.getPosY())
-            );
 
         }
 
