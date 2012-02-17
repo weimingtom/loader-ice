@@ -1,7 +1,6 @@
 package com.ebensz.games.ui.widget;
 
 import android.graphics.Point;
-import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.scenes.GameSceneBase;
 import ice.animation.AnimationGroup;
 import ice.animation.RotateAnimation;
@@ -19,7 +18,7 @@ public class RightPokerTiles extends DirPokerTiles {
     private static final int CHU_PAI_MARGIN = 40;
 
     private static final int CHU_PAI_CENTER_X = 700;
-    private static final int CHU_PAI_CENTER_Y = 300;
+    private static final int CHU_PAI_CENTER_Y = 500;
 
     public RightPokerTiles(GameSceneBase gameScene) {
         super(gameScene);
@@ -58,9 +57,8 @@ public class RightPokerTiles extends DirPokerTiles {
     }
 
     private Point calChuPaiPos(int index, int size) {
-        int eachWidth = LoadRes.getPokerWidth();
 
-        int totalWidth = (size - 1) * CHU_PAI_MARGIN + eachWidth;
+        int totalWidth = (size - 1) * CHU_PAI_MARGIN;
         int startX = CHU_PAI_CENTER_X - totalWidth / 2;
 
         return new Point(startX + index * CHU_PAI_MARGIN, CHU_PAI_CENTER_Y);
@@ -68,7 +66,6 @@ public class RightPokerTiles extends DirPokerTiles {
 
 
     private Point calShouPaiPos(int index, int size) {
-        int eachHeight = LoadRes.getPokerHeight();
 
         int totalHeight = (size - 1) * SHOU_PAI_MARGIN;
         int startY = (EngineContext.getAppHeight() - totalHeight) / 2;

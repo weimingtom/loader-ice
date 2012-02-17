@@ -367,9 +367,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
     }
 
     private Point calChuPaiPos(int index, int size) {
-        int eachWidth = LoadRes.getPokerWidth();
-
-        int totalWidth = (size - 1) * CHU_PAI_MARGIN + eachWidth;
+        int totalWidth = (size - 1) * CHU_PAI_MARGIN;
         int startX = (EngineContext.getAppWidth() - totalWidth) / 2;
         return new Point(startX + index * CHU_PAI_MARGIN, CHU_PAI_Y);
     }

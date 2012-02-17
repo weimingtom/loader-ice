@@ -8,8 +8,6 @@ import ice.graphic.projection.PerspectiveProjection;
 
 import javax.microedition.khronos.opengles.GL11;
 
-import static javax.microedition.khronos.opengles.GL11.*;
-
 /**
  * User: jason
  * Date: 12-2-17
@@ -29,8 +27,8 @@ public class LoaderView extends GameView {
 
             @Override
             protected void onInit(GL11 gl) {
-                gl.glEnable(GL_BLEND);
-                gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//                gl.glEnable(GL_BLEND);
+//                gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             }
 
         };
