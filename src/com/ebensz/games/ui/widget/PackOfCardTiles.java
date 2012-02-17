@@ -4,9 +4,10 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.poker.ColoredPoker;
-import com.ebensz.games.scenes.GameScene;
+import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.TranslateAnimation;
+import ice.node.OverlayParent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,13 @@ import java.util.Stack;
  * Date: 11-12-2
  * Time: 下午2:44
  */
-public class PackOfCardTiles {
+public class PackOfCardTiles extends OverlayParent {
+
     public static final int TOTAL_WIDTH = 800;
 
     public PackOfCardTiles(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
-        allPokerOverlays = new Stack<PokerOverlay>();
+        Stack<PokerOverlay> allPokerOverlays = new Stack<PokerOverlay>();
+
         Point center = new Point(1024 >> 1, 768 >> 1);
 
         for (ColoredPoker poker : leftThree) {
@@ -38,7 +41,6 @@ public class PackOfCardTiles {
             reverseOrder.add(order.get(i));
         }
 
-
         for (int i = 0; i < 17; i++) {
             for (Dir dir : reverseOrder) {
                 PokerOverlay pokerOverlay = new PokerOverlay(shouPaiMap.get(dir).get(i));
@@ -48,27 +50,14 @@ public class PackOfCardTiles {
             }
         }
 
-    }
+        addChildren(allPokerOverlays);
 
-    public void show(GameScene gameScene) {
-        gameScene.addChildren(allPokerOverlays);
-        SleepUtils.sleep(500);
-    }
-
-    public void clear() {
-        for (PokerOverlay pokerOverlay : allPokerOverlays) {
-            pokerOverlay.setRemovable(true);
-        }
-        allPokerOverlays.clear();
-    }
-
-    public PokerOverlay pop() {
-        return allPokerOverlays.pop();
+        // enableDepthTestSwitch(true);
     }
 
     public void showLeftThree() {
         for (int i = 0; i < 3; i++) {
-            PokerOverlay pokerOverlay = allPokerOverlays.get(i);
+            PokerOverlay pokerOverlay = (PokerOverlay) children.get(i);
             pokerOverlay.rotateToFront();
         }
 
@@ -76,26 +65,26 @@ public class PackOfCardTiles {
     }
 
     public void tidy() {
-        for (PokerOverlay overlay : allPokerOverlays) {
-            PointF point = calEachPos(overlay);
-            overlay.startAnimation(new TranslateAnimation(700, point.x - overlay.getPosX(), 0));
+
+        for (int i = 0; i < 3; i++) {
+            PokerOverlay pokerOverlay = (PokerOverlay) children.get(i);
+            PointF point = calEachPos(i, 3);
+            pokerOverlay.startAnimation(new TranslateAnimation(700, point.x - pokerOverlay.getPosX(), 0));
         }
     }
 
-    private PointF calEachPos(PokerOverlay pokerOverlay) {
-        float pokerWidth = pokerOverlay.getPokerWidth();
+    private PointF calEachPos(int index, int size) {
+        float pokerWidth = LoadRes.getPokerWidth();
         float maxMargin = pokerWidth;
         int margin = 1;
-        float totalWidth = (allPokerOverlays.size() - 1) * margin + pokerWidth;
+        float totalWidth = (size - 1) * margin + pokerWidth;
         while (totalWidth < TOTAL_WIDTH && margin <= maxMargin) {
             margin += 2;
-            totalWidth = (allPokerOverlays.size() - 1) * margin + pokerWidth;
+            totalWidth = (size - 1) * margin + pokerWidth;
         }
 
         float startX = (1024 - totalWidth) / 2;
-        int index = allPokerOverlays.indexOf(pokerOverlay);
-        return new PointF(startX + index * margin, pokerOverlay.getPosY());
+        return new PointF(startX + index * margin, 768 / 2);
     }
 
-    private Stack<PokerOverlay> allPokerOverlays;
 }

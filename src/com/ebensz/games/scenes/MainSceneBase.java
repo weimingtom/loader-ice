@@ -26,7 +26,7 @@ public class MainSceneBase extends Scene {
 
         ControllerBar controllerBar = new ControllerBar();
 
-        addChildren(background, controllerBar);
+        addChildren( controllerBar);
 
         addEntries();
 
