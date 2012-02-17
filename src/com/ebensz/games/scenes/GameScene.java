@@ -74,10 +74,9 @@ public abstract class GameScene extends GameSceneBase {
         this.msg = msg;
     }
 
-
     @Override
     protected boolean onDispatchTouch(Overlay child, MotionEvent event) {
-        if (child instanceof PokerTile || child == sliceTile) { //避免一次touch 被分发两次
+        if (child instanceof PokerOverlay || child == sliceTile) { //避免一次touch 被分发两次
             return false;
         }
 
@@ -240,15 +239,17 @@ public abstract class GameScene extends GameSceneBase {
 
         for (int i = 0; i < 17; i++) {
             for (Dir dir : order) {
-                PokerTile pokerTile = packOfCardTiles.sendOut();
-                DirPokerTiles dirPokerTiles = getPokerTiles(dir);
-                dirPokerTiles.faPai(pokerTile, 17);
-                SleepUtils.sleep(30);
+                PokerOverlay pokerOverlay = packOfCardTiles.pop();
+
+                getPokerTiles(dir).faPai(i, pokerOverlay, 17);
             }
         }
 
         SleepUtils.sleep(700);
+
         packOfCardTiles.tidy();//展开剩余的三张牌
+
+        SleepUtils.sleep(700);
     }
 
     public void sortAndShowHumanPokersFront() {
@@ -262,9 +263,9 @@ public abstract class GameScene extends GameSceneBase {
 
         DirPokerTiles loaderShouPai = getPokerTiles(loaderDir);
 
-        PokerTile[] remainThree = new PokerTile[3];
+        PokerOverlay[] remainThree = new PokerOverlay[3];
         for (int i = 0; i < 3; i++) {
-            remainThree[i] = packOfCardTiles.sendOut();
+            remainThree[i] = packOfCardTiles.pop();
         }
 
         loaderShouPai.faPaiRemainThree(remainThree);
@@ -356,16 +357,16 @@ public abstract class GameScene extends GameSceneBase {
         }
 
         if (chuPaiBtn == null) {
-            Bitmap normal = Res.getBitmap(R.drawable.chupai_button_1);
-            Bitmap pressed = Res.getBitmap(R.drawable.chupai_button_2);
-            chuPaiBtn = new ButtonOverlay(normal, pressed);
-            chuPaiBtn.setPos(800, 200);
-            // chuPaiBtn = new ButtonOverlay(normal, pressed, new Point(800, 500));
+            chuPaiBtn = new ButtonOverlay(R.drawable.chupai_button_1, R.drawable.chupai_button_2){
+                @Override
+                public boolean onTouchEvent(MotionEvent event) {
+                    return super.onTouchEvent(event);    //To change body of overridden methods use File | Settings | File Templates.
+                }
+            };
+            chuPaiBtn.setPos(600, 250);
 
-            normal = Res.getBitmap(R.drawable.by_button_1);
-            pressed = Res.getBitmap(R.drawable.by_button_2);
-            chuPaiPassBtn = new ButtonOverlay(normal, pressed);
-            chuPaiPassBtn.setPos(100, 200);
+            chuPaiPassBtn = new ButtonOverlay(R.drawable.by_button_1, R.drawable.by_button_2);
+            chuPaiPassBtn.setPos(300, 250);
 
             addChildren(chuPaiBtn, chuPaiPassBtn);
         }
@@ -428,7 +429,6 @@ public abstract class GameScene extends GameSceneBase {
         outsidePokers.showSelectedPokers(suggestion);
     }
 
-
     public void showSettle(SettleTool.Result result) {
 
         showDetailBoard(result);
@@ -486,7 +486,6 @@ public abstract class GameScene extends GameSceneBase {
 
         addChildren(tiles);
     }
-
 
     public ButtonOverlay getPassBtn() {
         return passBtn;

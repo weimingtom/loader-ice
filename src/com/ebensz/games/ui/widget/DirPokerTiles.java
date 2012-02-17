@@ -1,12 +1,9 @@
 package com.ebensz.games.ui.widget;
 
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import com.ebensz.games.R;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
-import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.scenes.GameSceneBase;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
@@ -25,8 +22,8 @@ public abstract class DirPokerTiles {
 
     public DirPokerTiles(GameSceneBase gameScene) {
         this.gameScene = gameScene;
-        shouPai = new ArrayList<PokerTile>();
-        chuPai = new ArrayList<PokerTile>();
+        shouPai = new ArrayList<PokerOverlay>();
+        chuPai = new ArrayList<PokerOverlay>();
 
         posProvider = onCreatePosProvider();
     }
@@ -34,38 +31,26 @@ public abstract class DirPokerTiles {
     protected abstract DirPositionProvider onCreatePosProvider();
 
     public void clearPokers() {
-        for (PokerTile pokerTile : shouPai) {
-            pokerTile.setRemovable(true);
+        for (PokerOverlay pokerOverlay : shouPai) {
+            pokerOverlay.setRemovable(true);
         }
         shouPai.clear();
 
-        for (PokerTile pokerTile : chuPai) {
-            pokerTile.setRemovable(true);
+        for (PokerOverlay pokerOverlay : chuPai) {
+            pokerOverlay.setRemovable(true);
         }
         chuPai.clear();
     }
 
-    public void faPai(PokerTile pokerTile, int maxSize) {
-        PokerTile copy = pokerTile.copy();
-        copy.setRemovable(false);
-        shouPai.add(copy);
-        gameScene.addChild(copy);
-
-        int size = shouPai.size();
-        Point point = posProvider.getShouPaiPos(size - 1, maxSize);
-
-        copy.startAnimation(
-                TranslateAnimation.createMoveBy(1000, point.x - copy.getPosX(), point.y - copy.getPosY())
-        );
-    }
+    public abstract void faPai(int index, PokerOverlay pokerOverlay, int maxSize);
 
 
-    public void faPaiRemainThree(PokerTile[] remainThree) {
-        Bitmap bitmap = LoadRes.getBitmap(R.drawable.poker_back_small);
-        for (PokerTile pokerTile : remainThree) {
-            PokerTile copy = pokerTile.copy();
-            copy.setBitmap(bitmap);
-            faPai(copy, 20);
+    public void faPaiRemainThree(PokerOverlay[] remainThree) {
+
+        int i = 17;
+
+        for (PokerOverlay pokerOverlay : remainThree) {
+            faPai(i++, pokerOverlay, 20);
             //copy.enableHover();
         }
 
@@ -75,52 +60,48 @@ public abstract class DirPokerTiles {
     public void tidyShouPai(long time) {
 
         for (int i = 0; i < shouPai.size(); i++) {
-            PokerTile tile = shouPai.get(i);
+            PokerOverlay overlay = shouPai.get(i);
 
-            Animation tileAnimation = tile.getAnimation();
+            Animation tileAnimation = overlay.getAnimation();
             if (tileAnimation != null) continue;
 
             Point point = posProvider.getShouPaiPos(i, shouPai.size());
 
-            float deltaX = point.x - tile.getPosX();
-            float deltaY = point.y - tile.getPosY();
+            float deltaX = point.x - overlay.getPosX();
+            float deltaY = point.y - overlay.getPosY();
 
-            tile.startAnimation(TranslateAnimation.createMoveBy(time, deltaX, deltaY));
+            overlay.startAnimation(new TranslateAnimation(time, deltaX, deltaY));
         }
     }
 
 
     public void chuPai(ColoredHand chuPai) {
         Poker[] pokers = chuPai.getHand().getPokers();
-        List<PokerTile> chuPaiTiles = new ArrayList<PokerTile>(pokers.length);
+        List<PokerOverlay> chuPaiOverlays = new ArrayList<PokerOverlay>(pokers.length);
         List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
 
         for (ColoredPoker coloredPoker : coloredPokers) {
 
-            for (PokerTile tile : shouPai) {
+            for (PokerOverlay overlay : shouPai) {
 
-                if (tile.getColoredPoker().equals(coloredPoker)) {
-                    chuPaiTiles.add(tile);
-                    tile.setRemovable(true);
+                if (overlay.getColoredPoker().equals(coloredPoker)) {
+                    chuPaiOverlays.add(overlay);
                 }
 
             }
 
         }
 
-        shouPai.removeAll(chuPaiTiles);
+        shouPai.removeAll(chuPaiOverlays);
 
-        for (int i = 0, size = chuPaiTiles.size(); i < size; i++) {
-            PokerTile tile = chuPaiTiles.get(i);
-            PokerTile tileCopy = tile.copy();
-
-            gameScene.addChild(tileCopy);
-            this.chuPai.add(tileCopy);
+        for (int i = 0, size = chuPaiOverlays.size(); i < size; i++) {
+            PokerOverlay overlay = chuPaiOverlays.get(i);
+            this.chuPai.add(overlay);
 
             Point point = posProvider.getChuPaiPos(i, size);
 
-            tileCopy.startAnimation(
-                    TranslateAnimation.createMoveBy(300, point.x - tileCopy.getPosX(), point.y - tileCopy.getPosY())
+            overlay.startAnimation(
+                    new TranslateAnimation(300, point.x - overlay.getPosX(), point.y - overlay.getPosY())
             );
 
         }
@@ -129,8 +110,8 @@ public abstract class DirPokerTiles {
     }
 
     public void hideLastChuPai() {
-        for (Iterator<PokerTile> iterator = this.chuPai.iterator(); iterator.hasNext(); ) {
-            PokerTile next = iterator.next();
+        for (Iterator<PokerOverlay> iterator = this.chuPai.iterator(); iterator.hasNext(); ) {
+            PokerOverlay next = iterator.next();
 
             next.startAnimation(AlphaAnimation.createFadeOut(300));
             iterator.remove();
@@ -146,7 +127,7 @@ public abstract class DirPokerTiles {
     }
 
     protected DirPositionProvider posProvider;
-    protected List<PokerTile> shouPai;
-    protected List<PokerTile> chuPai;
+    protected List<PokerOverlay> shouPai;
+    protected List<PokerOverlay> chuPai;
     protected GameSceneBase gameScene;
 }

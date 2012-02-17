@@ -1,13 +1,16 @@
 package com.ebensz.games.scenes;
 
-import android.graphics.Bitmap;
 import com.ebensz.games.R;
+import com.ebensz.games.model.poker.ColoredPoker;
+import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.scenes.dialogs.ServiceDialog;
+import com.ebensz.games.ui.widget.PokerOverlay;
+import ice.animation.Interpolator.LinearInterpolator;
+import ice.animation.RotateAnimation;
 import ice.engine.Scene;
 import ice.node.widget.BitmapOverlay;
 import ice.node.widget.RadioButtonOverlay;
 import ice.node.widget.RadioGroup;
-import ice.res.Res;
 
 public class MainSceneBase extends Scene {
 
@@ -19,6 +22,7 @@ public class MainSceneBase extends Scene {
     private void setupComponents() {
 
         BitmapOverlay background = new BitmapOverlay(getWidth(), getHeight(), R.drawable.bg);
+        background.setPos(getWidth() / 2, getHeight() / 2);
 
         ControllerBar controllerBar = new ControllerBar();
 
@@ -27,14 +31,24 @@ public class MainSceneBase extends Scene {
         addEntries();
 
         addChild(serviceDialog = new ServiceDialog());
+
+        PokerOverlay pokerOverlay = new PokerOverlay(new ColoredPoker(Poker._10, ColoredPoker.Color.Diamond));
+
+        pokerOverlay.setPos(getWidth() / 2, getHeight() / 2, 20);
+
+        RotateAnimation rotateAnimation = new RotateAnimation(10000, 0, 360);
+        rotateAnimation.setRotateVector(1, 1, 1);
+        rotateAnimation.setLoop(true);
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        pokerOverlay.startAnimation(rotateAnimation);
+
+        addChild(pokerOverlay);
     }
 
     private void addEntries() {
 
         float width = getWidth();
         float height = getHeight();
-
-        Bitmap bitmap = Res.getBitmap(R.drawable.normal_entry);
 
         normalEntry = new RadioButtonOverlay(
                 R.drawable.normal_entry,
@@ -57,19 +71,16 @@ public class MainSceneBase extends Scene {
         int margin = 150;
 
         this.normalEntry.setPos(
-                width / 2 - margin - this.normalEntry.getWidth(),
-                (height - this.normalEntry.getHeight()) / 2
+                width / 2 - margin - this.normalEntry.getWidth() / 2,
+                height / 2
         );
 
 
-        loaderEntry.setPos(
-                (width - loaderEntry.getWidth()) / 2,
-                (height - loaderEntry.getHeight()) / 2
-        );
+        loaderEntry.setPos(width / 2, height / 2);
 
         superEntry.setPos(
-                width / 2 + margin,
-                (height - superEntry.getHeight()) / 2
+                width / 2 + margin + this.normalEntry.getWidth() / 2,
+                height / 2
         );
 
         radioGroup = new RadioGroup(this.normalEntry, loaderEntry, superEntry);
