@@ -1,6 +1,5 @@
 package com.ebensz.games.scenes.dialogs;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import com.ebensz.games.R;
 import ice.animation.AlphaAnimation;
@@ -14,7 +13,6 @@ import ice.node.widget.ButtonOverlay;
 import ice.node.widget.ColorOverlay;
 import ice.node.widget.ConfirmDialog;
 import ice.practical.ComesMoreTextBox;
-import ice.res.Res;
 
 /**
  * User: jason
@@ -41,23 +39,21 @@ public class ServiceDialog extends ConfirmDialog {
         float width = getWidth();
         float height = getHeight();
         colorBg = new ColorOverlay(Color.RED, width, height);
+        colorBg.setPos(width / 2, height / 2);
 
         comesMoreTextBox = new ComesMoreTextBox(800, 30, 1000);
 
         comesMoreTextBox.setPos(
-                200,
+                width / 2,
                 getHeight() - 30
         );
 
-        Bitmap girlBitmap = Res.getBitmap(R.drawable.service_girl);
-        girl = new BitmapOverlay(girlBitmap);
+        girl = new BitmapOverlay(R.drawable.service_girl);
+        girl.setPos(girl.getWidth() / 2, girl.getHeight() / 2);
 
         confirmButton = new ButtonOverlay(R.drawable.start_game, R.drawable.start_game_press);
 
-        confirmButton.setPos(
-                (width - confirmButton.getWidth()) / 2,
-                50
-        );
+        confirmButton.setPos(width / 2, 50);
 
         confirmButton.setVisible(false);
 
@@ -79,8 +75,7 @@ public class ServiceDialog extends ConfirmDialog {
         colorBg.startAnimation(translate);
 
         RotateAnimation rotate = new RotateAnimation(1000, -90, 0);
-        rotate.setCenterOffset(girl.getWidth() / 2, -girl.getHeight(), 0);
-        // rotate.setOffsetTime(200);
+        rotate.setCenterOffset(0, -girl.getHeight(), 0);
         girl.setVisible(false);
         girl.startAnimation(rotate);
     }

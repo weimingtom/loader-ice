@@ -26,8 +26,8 @@ public class ControllerBar extends OverlayParent {
         addChildren(serviceBtn, soundBtn, exitBtn);
 
         setPos(
-                0.5f * EngineContext.getAppWidth(),
-                EngineContext.getAppHeight()
+                0.7f * EngineContext.getAppWidth(),
+                EngineContext.getAppHeight() - 50
         );
     }
 

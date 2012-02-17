@@ -1,16 +1,12 @@
 package com.ebensz.games.ui.widget;
 
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import com.ebensz.games.model.hand.ColoredHand;
-import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.scenes.GameSceneBase;
+import ice.animation.AnimationGroup;
+import ice.animation.RotateAnimation;
+import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * User: Mike.Hu
@@ -19,7 +15,8 @@ import java.util.List;
  */
 public class LeftPokerTiles extends DirPokerTiles {
     private static final int SHOU_PAI_MARGIN = 30;
-    private static final int SHOU_PAI_X = 0;
+    private static final int SHOU_PAI_X = 70;
+
     private static final int CHU_PAI_MARGIN = 40;
     private static final int CHU_PAI_CENTER_X = 400;
     private static final int CHU_PAI_CENTER_Y = 300;
@@ -31,37 +28,19 @@ public class LeftPokerTiles extends DirPokerTiles {
 
     public void sortAndMakeFront() {
 
-        List<PokerTile> copy = new ArrayList<PokerTile>(shouPai.size());
-        for (PokerTile pokerTile : shouPai) {
-            copy.add(pokerTile.copy());
-        }
-
-        Collections.sort(copy);
-
-        for (int i = 0; i < shouPai.size(); i++) {
-
-            PokerTile pokerTile = copy.get(i);
-
-            PokerTile shouPaiTile = shouPai.get(i);
-
-            shouPaiTile.setColoredPoker(pokerTile.getColoredPoker());
-            shouPaiTile.setBitmap(LoadRes.getFrontPoker(shouPaiTile.getColoredPoker()));
-        }
-
     }
 
     @Override
-    public void chuPai(ColoredHand chuPai) {
-        List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
+    public void faPai(int index, PokerOverlay pokerOverlay, int maxSize) {
+        shouPai.add(pokerOverlay);
 
-        for (PokerTile tile : shouPai) {
-            if (coloredPokers.contains(tile.getColoredPoker())) {
-                Bitmap bitmap = LoadRes.getFrontPoker(tile.getColoredPoker());
-                tile.setBitmap(bitmap);
-            }
-        }
+        Point point = posProvider.getShouPaiPos(index, maxSize);
 
-        super.chuPai(chuPai);
+        AnimationGroup group = new AnimationGroup();
+        group.add(new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY()));
+        group.add(new RotateAnimation(1000, 90));
+
+        pokerOverlay.startAnimation(group);
     }
 
     @Override
@@ -80,7 +59,7 @@ public class LeftPokerTiles extends DirPokerTiles {
     }
 
     private Point calChuPaiPos(int index, int size) {
-        int eachWidth = LoadRes.getOutsidePokerWidth();
+        int eachWidth = LoadRes.getPokerWidth();
 
         int totalWidth = (size - 1) * CHU_PAI_MARGIN + eachWidth;
         int startX = CHU_PAI_CENTER_X - totalWidth / 2;
@@ -89,9 +68,9 @@ public class LeftPokerTiles extends DirPokerTiles {
     }
 
     private Point calShouPaiPos(int index, int size) {
-        int eachHeight = LoadRes.getLeftShouPaiHeight();
+        int eachHeight = LoadRes.getPokerHeight();
 
-        int totalHeight = (size - 1) * SHOU_PAI_MARGIN + eachHeight;
+        int totalHeight = (size - 1) * SHOU_PAI_MARGIN;
         int startY = (EngineContext.getAppHeight() - totalHeight) / 2;
         return new Point(SHOU_PAI_X, startY + index * SHOU_PAI_MARGIN);
     }

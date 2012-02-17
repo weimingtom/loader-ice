@@ -23,8 +23,6 @@ public abstract class GameSceneBase extends Scene {
 
         if (packOfCardTiles != null)
             packOfCardTiles.clear();
-
-
     }
 
     protected PackOfCardTiles packOfCardTiles;

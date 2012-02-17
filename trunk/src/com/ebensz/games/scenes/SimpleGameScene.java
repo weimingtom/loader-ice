@@ -26,6 +26,7 @@ public class SimpleGameScene extends GameScene {
         super(game);
 
         background = new BitmapOverlay(R.drawable.bg_game_1);
+        background.setPos(background.getWidth() / 2, background.getHeight() / 2);
         addChild(background);
     }
 

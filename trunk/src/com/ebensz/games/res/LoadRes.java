@@ -97,20 +97,12 @@ public class LoadRes extends Res {
         return createDigitBitmap(digit, true);
     }
 
-    public static int getOutsidePokerWidth() {
+    public static int getPokerWidth() {
         return getBitmap(R.drawable.pai_30).getWidth();
     }
 
-    public static int getOutsidePokerHeight() {
+    public static int getPokerHeight() {
         return getBitmap(R.drawable.pai_30).getHeight();
-    }
-
-    public static int getLeftShouPaiWidth() {
-        return getBitmap(R.drawable.poker_back_small).getWidth();
-    }
-
-    public static int getLeftShouPaiHeight() {
-        return getBitmap(R.drawable.poker_back_small).getHeight();
     }
 
     public static List<Bitmap> getHeadIcons() {

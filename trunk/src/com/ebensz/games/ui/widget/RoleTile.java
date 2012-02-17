@@ -25,20 +25,19 @@ public class RoleTile extends OverlayParent {
         Bitmap head = headIcons.get(role.getIconIndex());
         float width = 200;
         headIconTile = new BitmapOverlay(head);
-        headIconTile.setPos((width - head.getWidth()) / 2, 0);
 
         nameTile = new TextOverlay(width, 23);
         nameTile.setText(role.getName(), Color.WHITE, true);
-        nameTile.setPos(0, -20);
+        nameTile.setPos(0, -40);
 
         wealthTile = new TextOverlay(width, 23);
         currentScore = role.getWealth();
         wealthTile.setText("" + currentScore, Color.WHITE, true);
-        wealthTile.setPos(0, -50);
+        wealthTile.setPos(0, -70);
 
         switch (dir) {
             case Left:
-                setPos(100, 650);
+                setPos(210, 650);
                 break;
             case Right:
                 setPos(800, 650);
