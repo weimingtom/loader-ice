@@ -6,6 +6,7 @@ import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.res.LoadRes;
 import ice.animation.Animation;
+import ice.animation.Interpolator.LinearInterpolator;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.graphic.texture.Texture;
@@ -41,8 +42,6 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         front = new BitmapOverlay(frontPoker);
         frontTextureMap.put(coloredPoker, front.getTexture());
 
-        front.setPos(0, 0, 1);
-
         if (backTexture == null) {
             back = new BitmapOverlay(R.drawable.poker_back_large);
             backTexture = back.getTexture();
@@ -55,7 +54,8 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
             back.setTexture(backTexture);
         }
 
-        back.setPos(0, 0, 0.9f);
+        //front.setPosZ(1);
+//        back.setPosZ(0.9f);
         back.setRotate(180, 0, 1, 0);
 
         addChildren(front, back);
@@ -128,7 +128,6 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     public void rotateToFront() {
         RotateAnimation rotateAnimation = new RotateAnimation(500, 0, 180);
         rotateAnimation.setRotateVector(0, 1, 0);
-        startAnimation(rotateAnimation);
 
         rotateAnimation.setListener(new Animation.Listener() {
             @Override
@@ -136,6 +135,8 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
                 overlay.setRotate(0, 0, 0, 0);
             }
         });
+
+        startAnimation(rotateAnimation);
     }
 
     public void setFront(boolean front) {
