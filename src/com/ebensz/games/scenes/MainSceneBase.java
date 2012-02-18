@@ -26,7 +26,7 @@ public class MainSceneBase extends Scene {
 
         ControllerBar controllerBar = new ControllerBar();
 
-        addChildren( controllerBar);
+        addChildren(background, controllerBar);
 
         addEntries();
 
@@ -35,6 +35,7 @@ public class MainSceneBase extends Scene {
         PokerOverlay pokerOverlay = new PokerOverlay(new ColoredPoker(Poker._10, ColoredPoker.Color.Diamond));
 
         pokerOverlay.setPos(getWidth() / 2, getHeight() / 2, 20);
+
 
         RotateAnimation rotateAnimation = new RotateAnimation(10000, 0, 360);
         rotateAnimation.setRotateVector(1, 1, 1);

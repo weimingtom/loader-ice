@@ -29,17 +29,10 @@ public class LoaderView extends GameView {
 
             @Override
             protected void onInit(GL11 gl) {
-
-                gl.glEnable(GL_DEPTH_TEST);
-
-                //gl.glDepthFunc(GL_GREATER);
-
+                /**不全局深度测试了，但会影响到其他开启局部深度测试的地方*/
+                //gl.glEnable(GL_DEPTH_TEST);
                 gl.glDepthFunc(GL_LEQUAL);
-                gl.glClearDepthf(1.0f);
-                gl.glClear(GL_DEPTH_BUFFER_BIT);
-
-//                gl.glEnable(GL_BLEND);
-//                gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                /**不全局深度测试了，但会影响到其他开启局部深度测试的地方*/
             }
 
         };

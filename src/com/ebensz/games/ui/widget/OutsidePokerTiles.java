@@ -95,10 +95,10 @@ public class OutsidePokerTiles extends DirPokerTiles {
         float totalZ = 10.0f;
 
         int size = shouPai.size();
-        for (int i = size - 1; i >= 0; i--) {
+        for (int i = 0; i < size; i++) {
             PokerOverlay pokerOverlay = shouPai.get(i);
 
-            pokerOverlay.setPosZ(i);
+            pokerOverlay.setPosZ(totalZ * i / size);
 
             Point point = posProvider.getShouPaiPos(i, size);
 

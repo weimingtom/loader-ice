@@ -52,7 +52,7 @@ public class PackOfCardTiles extends OverlayParent {
 
         addChildren(allPokerOverlays);
 
-        // enableDepthTestSwitch(true);
+        enableDepthTestSwitch(true);
     }
 
     public void showLeftThree() {
