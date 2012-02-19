@@ -55,10 +55,12 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         }
 
         //front.setPosZ(1);
-//        back.setPosZ(0.9f);
+        //back.setPosZ(0.9f);
         back.setRotate(180, 0, 1, 0);
 
         addChildren(front, back);
+
+        //enableDepthTestSwitch(false);
     }
 
     public ColoredPoker getColoredPoker() {
