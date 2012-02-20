@@ -68,9 +68,10 @@ public class OutsidePokerTiles extends DirPokerTiles {
             index++;
         }
 
+        SleepUtils.sleep(500);
+
         for (PokerOverlay pokerOverlay : shouPai) {
             pokerOverlay.rotateToFront();
-            SleepUtils.sleep(30);
         }
     }
 
@@ -79,6 +80,8 @@ public class OutsidePokerTiles extends DirPokerTiles {
         shouPai.add(pokerOverlay);
 
         Point point = posProvider.getShouPaiPos(index, maxSize);
+
+        pokerOverlay.setPosZ(index * 0.20f);
 
         TranslateAnimation animation = new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY());
 
@@ -92,13 +95,14 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
         Collections.sort(shouPai);
 
-        float totalZ = 10.0f;
+        for (int index = shouPai.size() - 1; index >= 0; index--) {
+            PokerOverlay pokerOverlay = shouPai.get(index);
+            pokerOverlay.setPosZ(index * 0.20f);
+        }
 
         int size = shouPai.size();
         for (int i = 0; i < size; i++) {
             PokerOverlay pokerOverlay = shouPai.get(i);
-
-            pokerOverlay.setPosZ(totalZ * i / size);
 
             Point point = posProvider.getShouPaiPos(i, size);
 
