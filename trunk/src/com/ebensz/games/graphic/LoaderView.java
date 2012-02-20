@@ -8,8 +8,6 @@ import ice.graphic.projection.PerspectiveProjection;
 
 import javax.microedition.khronos.opengles.GL11;
 
-import static javax.microedition.khronos.opengles.GL10.*;
-
 /**
  * User: jason
  * Date: 12-2-17
@@ -31,7 +29,7 @@ public class LoaderView extends GameView {
             protected void onInit(GL11 gl) {
                 /**不全局深度测试了，但会影响到其他开启局部深度测试的地方*/
                 //gl.glEnable(GL_DEPTH_TEST);
-                gl.glDepthFunc(GL_LEQUAL);
+                //gl.glDepthFunc(GL_LEQUAL);
                 /**不全局深度测试了，但会影响到其他开启局部深度测试的地方*/
             }
 

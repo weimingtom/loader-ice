@@ -83,10 +83,16 @@ public class ColoredPoker implements Comparable<ColoredPoker> {
     public int compareTo(ColoredPoker another) {
 
         int pokerSub = another.poker.ordinal() - poker.ordinal();
+
         if (pokerSub != 0)
             return pokerSub;
 
-        if (color == null) return 0;
+        if (another.color == null) {
+            return color == null ? 0 : 1;
+        }
+
+        if (color == null)
+            return -1;
 
         return another.color.ordinal() - color.ordinal();
     }

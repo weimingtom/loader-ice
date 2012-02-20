@@ -12,7 +12,6 @@ import ice.node.OverlayParent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * 一副牌的tiles
@@ -25,15 +24,15 @@ public class PackOfCardTiles extends OverlayParent {
     public static final int TOTAL_WIDTH = 800;
 
     public PackOfCardTiles(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
-        Stack<PokerOverlay> allPokerOverlays = new Stack<PokerOverlay>();
+        List<PokerOverlay> allPokerOverlays = new ArrayList<PokerOverlay>();
 
-        Point center = new Point(1024 >> 1, 768 >> 1);
+        Point center = new Point(1024 / 2, 768 / 2);
 
         for (ColoredPoker poker : leftThree) {
             PokerOverlay pokerOverlay = new PokerOverlay(poker);
             pokerOverlay.setPos(center.x, center.y);
             pokerOverlay.setFront(false);
-            allPokerOverlays.push(pokerOverlay);
+            allPokerOverlays.add(pokerOverlay);
         }
 
         List<Dir> reverseOrder = new ArrayList(order.size());
@@ -46,7 +45,7 @@ public class PackOfCardTiles extends OverlayParent {
                 PokerOverlay pokerOverlay = new PokerOverlay(shouPaiMap.get(dir).get(i));
                 pokerOverlay.setPos(center.x, center.y);
                 pokerOverlay.setFront(false);
-                allPokerOverlays.push(pokerOverlay);
+                allPokerOverlays.add(pokerOverlay);
             }
         }
 
@@ -78,12 +77,14 @@ public class PackOfCardTiles extends OverlayParent {
         float maxMargin = pokerWidth;
         int margin = 1;
         float totalWidth = (size - 1) * margin + pokerWidth;
+
         while (totalWidth < TOTAL_WIDTH && margin <= maxMargin) {
             margin += 2;
-            totalWidth = (size - 1) * margin + pokerWidth;
+            totalWidth = (size - 1) * margin;
         }
 
         float startX = (1024 - totalWidth) / 2;
+
         return new PointF(startX + index * margin, 768 / 2);
     }
 

@@ -6,12 +6,12 @@ import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.res.LoadRes;
 import ice.animation.Animation;
-import ice.animation.Interpolator.LinearInterpolator;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.OverlayParent;
+import ice.node.mesh.Mesh;
 import ice.node.widget.BitmapOverlay;
 
 import java.util.HashMap;
@@ -32,6 +32,7 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
 
     static {
         frontTextureMap = new HashMap<ColoredPoker, Texture>(Poker.values().length);
+        backTexture = new Texture(R.drawable.poker_back_large);
     }
 
     public PokerOverlay(ColoredPoker coloredPoker) {
@@ -42,25 +43,14 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         front = new BitmapOverlay(frontPoker);
         frontTextureMap.put(coloredPoker, front.getTexture());
 
-        if (backTexture == null) {
-            back = new BitmapOverlay(R.drawable.poker_back_large);
-            backTexture = back.getTexture();
-        }
-        else {
-            Bitmap bitmap = backTexture.getBitmap();
+        back = new BitmapOverlay(front.getWidth(), front.getHeight());
+        back.setTexture(backTexture);
 
-            back = new BitmapOverlay(bitmap.getWidth(), bitmap.getHeight());
+        back.enableFaceModeSwitch(Mesh.FaceMode.Back);
 
-            back.setTexture(backTexture);
-        }
-
-        //front.setPosZ(1);
-        //back.setPosZ(0.9f);
-        back.setRotate(180, 0, 1, 0);
+        front.setPosZ(1);
 
         addChildren(front, back);
-
-        //enableDepthTestSwitch(false);
     }
 
     public ColoredPoker getColoredPoker() {
