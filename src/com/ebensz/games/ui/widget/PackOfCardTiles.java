@@ -7,6 +7,7 @@ import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.TranslateAnimation;
+import ice.graphic.gl_status.DepthController;
 import ice.node.OverlayParent;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class PackOfCardTiles extends OverlayParent {
 
         addChildren(allPokerOverlays);
 
-        enableDepthTestSwitch(true);
+        addGlStatusController(new DepthController(true));
     }
 
     public void showLeftThree() {
