@@ -48,7 +48,6 @@ public class Main extends SceneProvider {
         serviceDialog.startEntryAnimation(Res.getText(R.string.welcome));
     }
 
-
     @Override
     protected boolean isEntry() {
         return true;
@@ -186,6 +185,4 @@ public class Main extends SceneProvider {
 
         confirmButton.setOnClickListener(confirmBtnListener);
     }
-
-
 }
