@@ -11,13 +11,13 @@ import ice.animation.TranslateAnimation;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.OverlayParent;
-import ice.node.mesh.Mesh;
 import ice.node.widget.BitmapOverlay;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.ebensz.games.ui.widget.OutsidePokerTiles.STAND_UP_Y;
+import static ice.graphic.gl_status.CullFaceController.FaceMode.Back;
 
 
 /**
@@ -46,7 +46,7 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         back = new BitmapOverlay(front.getWidth(), front.getHeight());
         back.setTexture(backTexture);
 
-        back.enableFaceModeSwitch(Mesh.FaceMode.Back);
+        back.setFaceMode(Back);
 
         front.setPosZ(1);
 
