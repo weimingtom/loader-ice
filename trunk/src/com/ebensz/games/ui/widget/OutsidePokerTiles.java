@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
-import com.ebensz.games.res.LoadRes;
 import com.ebensz.games.scenes.GameSceneBase;
 import com.ebensz.games.utils.SleepUtils;
 import com.ebensz.games.utils.SlideLineTool;
@@ -153,32 +152,25 @@ public class OutsidePokerTiles extends DirPokerTiles {
                         Math.max(selectStartPoint.y, selectEndPoint.y)
                 );
 
-                int pokerWidth = LoadRes.getPokerWidth();
-                int pokerHeight = LoadRes.getPokerHeight();
-
-                Rect pokerBounds = new Rect(-pokerWidth / 2, pokerHeight / 2, pokerWidth / 2, -pokerHeight / 2);
+                if (!validY()) return;
 
                 for (int i = shouPai.size() - 1; i >= 0; i--) {
 
-                    PokerOverlay pokerOverlay = shouPai.get(i);
+                    PokerOverlay pokerTile = shouPai.get(i);
 
-                    pokerBounds.offsetTo(
-                            (int) pokerOverlay.getPosX(),
-                            (int) pokerOverlay.getPosY()
-                    );
-
-                    boolean regionTest = selectRegion.intersect(pokerBounds);
+                    boolean regionTest = selectRegionTest(i, pokerTile);
 
                     if (regionTest)
-                        selectedPokerOverlays.add(pokerOverlay);
+                        selectedPokerOverlays.add(pokerTile);
 
-                    pokerOverlay.setSelected(regionTest);
+                    pokerTile.setSelected(regionTest);
                 }
 
                 break;
             case MotionEvent.ACTION_UP:
 
                 PokerOverlay pokerOverlay = findFromRightToLeft(x, y);
+
                 if (pokerOverlay != null && !selectedPokerOverlays.contains(pokerOverlay)) {
                     selectedPokerOverlays.add(pokerOverlay);
                 }
@@ -207,6 +199,42 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
                 postSelect(selectedPokerOverlays, containsSome && doNotContainAll);
                 break;
+        }
+
+    }
+
+
+    private boolean validY() {
+        for (int i = shouPai.size() - 1; i >= 0; i--) {
+
+            PokerOverlay pokerTile = shouPai.get(i);
+
+            float halfPokerHeight = pokerTile.getHeight() / 2;
+            float posY = pokerTile.getPosY();
+
+            if (selectRegion.top >= posY - halfPokerHeight && selectRegion.bottom <= posY + halfPokerHeight)
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean selectRegionTest(int i, PokerOverlay pokerTile) {
+        float pokerTileX = pokerTile.getPosX();
+        float halfPokerWidth = pokerTile.getWidth() / 2;
+
+        float pokerLeft = pokerTileX - halfPokerWidth;
+
+        if (i == shouPai.size() - 1) {
+            float pokerRight = pokerTileX + halfPokerWidth;
+
+            return (pokerLeft >= selectRegion.left && pokerLeft <= selectRegion.right)
+                    || (pokerRight >= selectRegion.left && pokerRight <= selectRegion.right)
+                    || (pokerLeft <= selectRegion.left && pokerRight >= selectRegion.right);
+        }
+        else {
+            return pokerLeft + SHOU_PAI_MARGIN >= selectRegion.left
+                    && pokerLeft <= selectRegion.right;
         }
 
     }

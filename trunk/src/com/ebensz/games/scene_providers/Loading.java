@@ -14,7 +14,7 @@ import ice.engine.SceneProvider;
  * Time: 上午11:51
  */
 public class Loading extends SceneProvider {
-    public static final long LOADING_TIME = 4000;
+    public static final long LOADING_TIME = 1000;
 
     @Override
     public void onCreate() {
