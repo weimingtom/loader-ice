@@ -36,7 +36,7 @@ public class PackOfCardTiles extends OverlayParent {
             allPokerOverlays.add(pokerOverlay);
         }
 
-        List<Dir> reverseOrder = new ArrayList(order.size());
+        List<Dir> reverseOrder = new ArrayList<Dir>(order.size());
         for (int i = order.size() - 1; i >= 0; i--) {
             reverseOrder.add(order.get(i));
         }
