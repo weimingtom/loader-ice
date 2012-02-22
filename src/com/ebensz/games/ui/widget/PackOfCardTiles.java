@@ -57,7 +57,7 @@ public class PackOfCardTiles extends OverlayParent {
 
     public void showLeftThree() {
         for (int i = 0; i < 3; i++) {
-            PokerOverlay pokerOverlay = (PokerOverlay) children.get(i);
+            PokerOverlay pokerOverlay = (PokerOverlay) get(i);
             pokerOverlay.rotateToFront();
         }
 
@@ -67,7 +67,7 @@ public class PackOfCardTiles extends OverlayParent {
     public void tidy() {
 
         for (int i = 0; i < 3; i++) {
-            PokerOverlay pokerOverlay = (PokerOverlay) children.get(i);
+            PokerOverlay pokerOverlay = (PokerOverlay) get(i);
             PointF point = calEachPos(i, 3);
             pokerOverlay.startAnimation(new TranslateAnimation(700, point.x - pokerOverlay.getPosX(), 0));
         }
