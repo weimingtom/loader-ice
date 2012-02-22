@@ -8,6 +8,7 @@ import com.ebensz.games.res.LoadRes;
 import ice.animation.Animation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
+import ice.graphic.gl_status.ColorController;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.OverlayParent;
@@ -28,11 +29,17 @@ import static ice.graphic.gl_status.CullFaceController.FaceMode.Back;
 public class PokerOverlay extends OverlayParent implements Cloneable, Comparable<PokerOverlay> {
 
     private static Texture backTexture;
+
     private static Map<ColoredPoker, Texture> frontTextureMap;
+
+    private static ColorController colorController;
+
+    private static final float[] SELECTED_COLOR = new float[]{0.5f, 0.5f, 1, 1};
 
     static {
         frontTextureMap = new HashMap<ColoredPoker, Texture>(Poker.values().length);
         backTexture = new Texture(R.drawable.poker_back_large);
+        colorController = new ColorController(SELECTED_COLOR);
     }
 
     public PokerOverlay(ColoredPoker coloredPoker) {
@@ -62,11 +69,11 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         front.setTexture(frontTextureMap.get(coloredPoker));
     }
 
-    public float getPokerWidth() {
+    public float getWidth() {
         return front.getWidth();
     }
 
-    public float getPokerHeight() {
+    public float getHeight() {
         return front.getHeight();
     }
 
@@ -79,8 +86,18 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
 //    }
 
     public void setSelected(boolean selected) {
+
         if (this.selected != selected) {
             this.selected = selected;
+
+            System.out.println("selected = " + selected);
+
+            if (selected) {
+                front.addGlStatusController(colorController);
+            }
+            else {
+                front.removeGlStatusController(colorController);
+            }
         }
     }
 
@@ -111,12 +128,6 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         return coloredPoker.compareTo(another.coloredPoker);
     }
 
-    private boolean selected;
-    private ColoredPoker coloredPoker;
-
-    private BitmapOverlay front;
-    private BitmapOverlay back;
-
     public void rotateToFront() {
         RotateAnimation rotateAnimation = new RotateAnimation(500, 0, 180);
         rotateAnimation.setRotateVector(0, 1, 0);
@@ -134,4 +145,10 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     public void setFront(boolean front) {
         setRotate(front ? 0 : 180, 0, 1, 0);
     }
+
+    private boolean selected;
+    private ColoredPoker coloredPoker;
+
+    private BitmapOverlay front;
+    private BitmapOverlay back;
 }
