@@ -21,9 +21,9 @@ public class LoadingOverlay extends OverlayParent {
 
         progressOverlay = new BitmapOverlay(
                 bg.getWidth() * 0.95f,
-                bg.getHeight() * 0.5f,
-                R.drawable.progress_now
+                bg.getHeight() * 0.5f
         );
+        progressOverlay.setBitmap(R.drawable.progress_now);
 
         controller = new ScissorController();
         progressOverlay.addGlStatusController(controller);

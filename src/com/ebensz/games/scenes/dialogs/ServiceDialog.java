@@ -8,7 +8,6 @@ import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
-import ice.node.mesh.Grid;
 import ice.node.widget.BitmapOverlay;
 import ice.node.widget.ButtonOverlay;
 import ice.node.widget.ConfirmDialog;
@@ -38,7 +37,8 @@ public class ServiceDialog extends ConfirmDialog {
     protected void onSetupComponent() {
         float width = getWidth();
         float height = getHeight();
-        bg = new BitmapOverlay(width, height, R.drawable.server_bg);
+        bg = new BitmapOverlay(width, height);
+        bg.setBitmap(R.drawable.server_bg);
 
         bg.getTexture().setParams(Texture.Params.LINEAR_REPEAT);
 
@@ -84,6 +84,6 @@ public class ServiceDialog extends ConfirmDialog {
     }
 
     private BitmapOverlay girl;
-    private Grid bg;
+    private BitmapOverlay bg;
     private ComesMoreTextBox comesMoreTextBox;
 }
