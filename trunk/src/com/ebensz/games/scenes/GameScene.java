@@ -152,7 +152,8 @@ public abstract class GameScene extends GameSceneBase {
                 break;
         }
 
-        BitmapOverlay scoreTile = new BitmapOverlay(scoreBitmap, pos);
+        BitmapOverlay scoreTile = new BitmapOverlay(scoreBitmap);
+        scoreTile.setPos(pos.x, pos.y);
         addChild(scoreTile);
         scoreTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -173,7 +174,8 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        BitmapOverlay daoTile = new BitmapOverlay(daoBitmap, pos);
+        BitmapOverlay daoTile = new BitmapOverlay(daoBitmap);
+        daoTile.setPos(pos.x, pos.y);
         addChild(daoTile);
         daoTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -194,7 +196,8 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        BitmapOverlay genTile = new BitmapOverlay(genBitmap, pos);
+        BitmapOverlay genTile = new BitmapOverlay(genBitmap);
+        genTile.setPos(pos.x, pos.y);
         addChild(genTile);
         genTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -215,7 +218,8 @@ public abstract class GameScene extends GameSceneBase {
                 pos.set(900, 100);
                 break;
         }
-        BitmapOverlay fanTile = new BitmapOverlay(fanBitmap, pos);
+        BitmapOverlay fanTile = new BitmapOverlay(fanBitmap);
+        fanTile.setPos(pos.x, pos.y);
         addChild(fanTile);
         fanTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -227,7 +231,8 @@ public abstract class GameScene extends GameSceneBase {
                 (WIDTH - bitmap.getWidth()) / 2,
                 (HEIGHT - bitmap.getHeight()) / 2
         );
-        BitmapOverlay bitmapTile = new BitmapOverlay(bitmap, pos);
+        BitmapOverlay bitmapTile = new BitmapOverlay(bitmap);
+        bitmapTile.setPos(pos.x, pos.y);
         addChild(bitmapTile);
         bitmapTile.startAnimation(AlphaAnimation.createFadeOut(1500));
         SleepUtils.sleep(1500);
@@ -466,7 +471,9 @@ public abstract class GameScene extends GameSceneBase {
 
             final RoleTile theRoleTile = roleTile;
 
-            BitmapOverlay scoreTile = new BitmapOverlay(LoadRes.createDigitBitmap(winScore), pos);
+            BitmapOverlay scoreTile = new BitmapOverlay(LoadRes.createDigitBitmap(winScore));
+            scoreTile.setPos(pos.x, pos.y);
+
             scoreTile.setVisible(false);
 
             AlphaAnimation fadeOut = AlphaAnimation.createFadeOut(4000);
