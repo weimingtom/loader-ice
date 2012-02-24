@@ -1,7 +1,6 @@
 package com.ebensz.games.ui.widget;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.Role.Role;
 import com.ebensz.games.res.LoadRes;
@@ -27,12 +26,12 @@ public class RoleTile extends OverlayParent {
         headIconTile = new BitmapOverlay(head);
 
         nameTile = new TextOverlay(width, 23);
-        nameTile.setText(role.getName(), Color.WHITE, true);
+        nameTile.setText(role.getName(), true);
         nameTile.setPos(0, -40);
 
         wealthTile = new TextOverlay(width, 23);
         currentScore = role.getWealth();
-        wealthTile.setText("" + currentScore, Color.WHITE, true);
+        wealthTile.setText("" + currentScore, true);
         wealthTile.setPos(0, -70);
 
         switch (dir) {
