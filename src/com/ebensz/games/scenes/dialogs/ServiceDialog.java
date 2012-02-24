@@ -3,7 +3,6 @@ package com.ebensz.games.scenes.dialogs;
 import com.ebensz.games.R;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
-import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 import ice.graphic.texture.Texture;
@@ -76,11 +75,6 @@ public class ServiceDialog extends ConfirmDialog {
         });
 
         bg.startAnimation(translate);
-
-        RotateAnimation rotate = new RotateAnimation(1000, -90, 0);
-        rotate.setCenterOffset(0, -girl.getHeight(), 0);
-        girl.setVisible(false);
-        girl.startAnimation(rotate);
     }
 
     private BitmapOverlay girl;
