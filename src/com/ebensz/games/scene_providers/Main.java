@@ -36,13 +36,13 @@ public class Main extends SceneProvider {
     protected void onResume() {
         super.onResume();
 
-        boolean[] states = validateEntryLock();
+        entryLockStatus = validateEntryLock();
 
         MainScene mainScene = (MainScene) scene;
 
-        mainScene.updateLockStates(states);
+        mainScene.updateLockStates(entryLockStatus);
 
-        bindButtonAction(states);
+        bindButtonAction(entryLockStatus);
 
         ServiceDialog serviceDialog = mainScene.getServiceDialog();
         serviceDialog.startEntryAnimation(Res.getText(R.string.welcome));
@@ -57,9 +57,6 @@ public class Main extends SceneProvider {
     protected Scene getScene() {
         return scene;
     }
-
-    private Scene scene;
-
 
     private boolean[] validateEntryLock() {
         boolean[] lockStates = new boolean[3];
@@ -93,42 +90,6 @@ public class Main extends SceneProvider {
 
         RadioGroup radioGroup = ((MainScene) scene).getRadioGroup();
         radioGroup.setOnToggledListener(onToggledListener);
-
-        MainScene mainScene = (MainScene) scene;
-
-        final RadioButtonOverlay normalEntry = mainScene.getNormalEntry();
-        final RadioButtonOverlay loaderEntry = mainScene.getLoaderEntry();
-        final RadioButtonOverlay superEntry = mainScene.getSuperEntry();
-        final ServiceDialog serviceDialog = mainScene.getServiceDialog();
-
-        ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
-            @Override
-            public void onClick(ButtonOverlay btn) {
-                if (btn == normalEntry) {
-                    serviceDialog.showMsg(Res.getText(R.string.normal_game_desc));
-                }
-                else if (btn == loaderEntry) {
-                    if (lockStates[1]) { //地主场仍处于锁定状态
-                        serviceDialog.showMsg(Res.getText(R.string.loader_game_desc));
-                    }
-
-                    hideConfirmBtn(serviceDialog);
-                }
-                else if (btn == superEntry) {
-                    if (lockStates[2]) { //极限场仍处于锁定状态
-                        serviceDialog.showMsg(Res.getText(R.string.super_game_desc));
-                    }
-
-                    hideConfirmBtn(serviceDialog);
-                }
-
-
-            }
-        };
-
-        normalEntry.setOnClickListener(onClickListener);
-        loaderEntry.setOnClickListener(onClickListener);
-        superEntry.setOnClickListener(onClickListener);
     }
 
     private void hideConfirmBtn(ServiceDialog serviceDialog) {
@@ -139,14 +100,13 @@ public class Main extends SceneProvider {
     }
 
     private void handleToggleChange(RadioButtonOverlay radioButton) {
-
         final MainScene mainScene = (MainScene) scene;
 
         final ServiceDialog serviceDialog = mainScene.getServiceDialog();
         final ButtonOverlay confirmButton = serviceDialog.getConfirmButton();
 
         if (!confirmButton.isVisible())
-            confirmButton.startAnimation(new AlphaAnimation(500, 0, 1));
+            confirmButton.startAnimation(AlphaAnimation.createFadeIn(200));
 
         final RadioButtonOverlay normalEntry = mainScene.getNormalEntry();
         final RadioButtonOverlay loaderEntry = mainScene.getLoaderEntry();
@@ -155,34 +115,52 @@ public class Main extends SceneProvider {
         ButtonOverlay.OnClickListener confirmBtnListener = null;
 
         if (radioButton == normalEntry) {
+            serviceDialog.showMsg(Res.getText(R.string.normal_game_desc));
+
+            if (entryLockStatus[0]) //地主场仍处于锁定状态
+                hideConfirmBtn(serviceDialog);
+
             confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
                 public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
-                    app.intent(GameEntry.class);
+                    app.intent(GameEntry.class, GameEntry.Mode.Normal);
                 }
             };
         }
         else if (radioButton == loaderEntry) {
+            serviceDialog.showMsg(Res.getText(R.string.loader_game_desc));
+
+            if (entryLockStatus[1])  //地主场仍处于锁定状态
+                hideConfirmBtn(serviceDialog);
+
             confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
                 public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
-                    app.intent(GameEntry.class);
+                    app.intent(GameEntry.class, GameEntry.Mode.Loader);
                 }
             };
 
         }
         else if (radioButton == superEntry) {
+            serviceDialog.showMsg(Res.getText(R.string.super_game_desc));
+
+            if (entryLockStatus[2])  //极限场仍处于锁定状态
+                hideConfirmBtn(serviceDialog);
+
             confirmBtnListener = new ButtonOverlay.OnClickListener() {
                 @Override
                 public void onClick(ButtonOverlay btn) {
                     App app = EngineContext.getInstance().getApp();
-                    app.intent(GameEntry.class);
+                    app.intent(GameEntry.class, GameEntry.Mode.Super);
                 }
             };
         }
 
         confirmButton.setOnClickListener(confirmBtnListener);
     }
+
+    private boolean[] entryLockStatus;
+    private Scene scene;
 }
