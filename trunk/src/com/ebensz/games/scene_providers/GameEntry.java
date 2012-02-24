@@ -51,7 +51,12 @@ public class GameEntry extends SceneProvider {
     private Game chooseMode() {
         Mode mode = null;
 
-        mode = Mode.Normal;
+        if (intentMsg == null) {
+            mode = Mode.Normal;
+        }
+        else {
+            mode = (Mode) intentMsg;
+        }
 
         switch (mode) {
 
