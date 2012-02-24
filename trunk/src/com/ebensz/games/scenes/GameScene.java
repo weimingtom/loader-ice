@@ -315,47 +315,45 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showD_G_F(int what) {
-        Bitmap normal = null, pressed = null;
+        int normal = 0, pressed = 0;
 
         switch (what) {
             case SELECT_DAO:
-                normal = Res.getBitmap(R.drawable.dao_button_1);
-                pressed = Res.getBitmap(R.drawable.dao_button_2);
+                normal = R.drawable.dao_button_1;
+                pressed = R.drawable.dao_button_2;
                 break;
             case SELECT_GEN:
-                normal = Res.getBitmap(R.drawable.gen_button_1);
-                pressed = Res.getBitmap(R.drawable.gen_button_2);
+                normal = R.drawable.gen_button_1;
+                pressed = R.drawable.gen_button_2;
                 break;
             case SELECT_FAN:
-                normal = Res.getBitmap(R.drawable.fan_button_1);
-                pressed = Res.getBitmap(R.drawable.fan_button_2);
+                normal = R.drawable.fan_button_1;
+                pressed = R.drawable.fan_button_2;
                 break;
         }
 
         d_g_fBtn = new ButtonOverlay(normal, pressed);
-        d_g_fBtn.setPos(500, 500);
+        d_g_fBtn.setPos(500, 400);
 
-        normal = Res.getBitmap(R.drawable.by_button_1);
-        pressed = Res.getBitmap(R.drawable.by_button_2);
-        d_g_fPassBtn = new ButtonOverlay(normal, pressed);
-        d_g_fBtn.setPos(600, 500);
+        d_g_fPassBtn = new ButtonOverlay(
+                R.drawable.by_button_1,
+                R.drawable.by_button_2
+        );
+        d_g_fBtn.setPos(600, 400);
 
         addChildren(d_g_fBtn, d_g_fPassBtn);
     }
 
     public void hideD_G_FBttons() {
-        remove(d_g_fBtn);
-        remove(d_g_fPassBtn);
+        remove(d_g_fBtn, d_g_fPassBtn);
     }
 
     public void showChuPaiBtns(boolean jiePai) {
 
         if (jiePai) {
             if (suggestBtn == null) {
-                Bitmap normal = Res.getBitmap(R.drawable.tshi_button_1);
-                Bitmap pressed = Res.getBitmap(R.drawable.tshi_button_2);
-                suggestBtn = new ButtonOverlay(normal, pressed);
-                suggestBtn.setPos((getWidth() - normal.getWidth()) / 2, 200);
+                suggestBtn = new ButtonOverlay(R.drawable.tshi_button_1, R.drawable.tshi_button_2);
+                suggestBtn.setPos(getWidth() / 2, 200);
 
                 addChildren(suggestBtn);
             }
