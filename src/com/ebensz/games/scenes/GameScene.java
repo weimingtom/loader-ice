@@ -18,7 +18,9 @@ import com.ebensz.games.ui.widget.*;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
+import ice.graphic.texture.Texture;
 import ice.node.Overlay;
+import ice.node.widget.AtlasOverlay;
 import ice.node.widget.BitmapOverlay;
 import ice.node.widget.ButtonOverlay;
 import ice.res.Res;
@@ -35,10 +37,6 @@ import static com.ebensz.games.logic.interactive.Message.*;
  * Time: 下午3:14
  */
 public abstract class GameScene extends GameSceneBase {
-
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 768;
-
     public static final int ROB_SCORE_Y = 200;
 
     protected GameScene(Game game) {
@@ -131,110 +129,112 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showRobLoader(Dir dir, RobLoaderScore score) {
-        Bitmap scoreBitmap;
+
+        BitmapOverlay scoreTile;
+
         if (score == RobLoaderScore.Pass) {
-            scoreBitmap = LoadRes.getBitmap(R.drawable.point0);
+            scoreTile = new BitmapOverlay(R.drawable.point0);
         }
         else {
-            scoreBitmap = LoadRes.createDigitBitmap(score.getMultiple(), false);
+            AtlasOverlay atlasOverlay = new AtlasOverlay(30, 40, 11);
+            atlasOverlay.setAtlasIndex(
+                    score.ordinal() + 1,
+                    new Texture(R.drawable.digit_positive)
+            );
+
+            scoreTile = atlasOverlay;
         }
 
-        PointF pos = new PointF();
         switch (dir) {
             case Left:
-                pos.set(100, 100);
+                scoreTile.setPos(100, 600);
                 break;
             case Outside:
-                pos.set(500, 500);
+                scoreTile.setPos(getWidth() / 2, 200);
                 break;
             case Right:
-                pos.set(900, 100);
+                scoreTile.setPos(900, 600);
                 break;
         }
 
-        BitmapOverlay scoreTile = new BitmapOverlay(scoreBitmap);
-        scoreTile.setPos(pos.x, pos.y);
-        addChild(scoreTile);
         scoreTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        addChild(scoreTile);
+
         SleepUtils.sleep(1500);
     }
 
     public void showDao(Dir loaderXiaJia) {
+        BitmapOverlay daoTile = new BitmapOverlay(R.drawable.dao_zi);
 
-        Bitmap daoBitmap = LoadRes.getBitmap(R.drawable.dao_zi);
-        PointF pos = new PointF();
         switch (loaderXiaJia) {
             case Left:
-                pos.set(100, 100);
+                daoTile.setPos(100, 600);
                 break;
             case Outside:
-                pos.set(500, 500);
+                daoTile.setPos(getWidth() / 2, 200);
                 break;
             case Right:
-                pos.set(900, 100);
+                daoTile.setPos(900, 600);
                 break;
         }
-        BitmapOverlay daoTile = new BitmapOverlay(daoBitmap);
-        daoTile.setPos(pos.x, pos.y);
-        addChild(daoTile);
+
         daoTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        addChild(daoTile);
         SleepUtils.sleep(1500);
     }
 
     public void showGen(Dir loaderShangJia) {
+        BitmapOverlay genTile = new BitmapOverlay(R.drawable.gen_zi);
 
-        Bitmap genBitmap = LoadRes.getBitmap(R.drawable.gen_zi);
-        PointF pos = new PointF();
         switch (loaderShangJia) {
             case Left:
-                pos.set(100, 100);
+                genTile.setPos(100, 600);
                 break;
             case Outside:
-                pos.set(500, 500);
+                genTile.setPos(getWidth() / 2, 200);
                 break;
             case Right:
-                pos.set(900, 100);
+                genTile.setPos(900, 600);
                 break;
         }
-        BitmapOverlay genTile = new BitmapOverlay(genBitmap);
-        genTile.setPos(pos.x, pos.y);
-        addChild(genTile);
+
         genTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        addChild(genTile);
         SleepUtils.sleep(1500);
     }
 
     public void showFan(Dir loaderDir) {
+        BitmapOverlay fanTile = new BitmapOverlay(R.drawable.fan_zi);
 
-        Bitmap fanBitmap = LoadRes.getBitmap(R.drawable.fan_zi);
-        PointF pos = new PointF();
         switch (loaderDir) {
             case Left:
-                pos.set(100, 100);
+                fanTile.setPos(100, 600);
                 break;
             case Outside:
-                pos.set(500, 500);
+                fanTile.setPos(getWidth() / 2, 200);
                 break;
             case Right:
-                pos.set(900, 100);
+                fanTile.setPos(900, 600);
                 break;
         }
-        BitmapOverlay fanTile = new BitmapOverlay(fanBitmap);
-        fanTile.setPos(pos.x, pos.y);
-        addChild(fanTile);
         fanTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        addChild(fanTile);
         SleepUtils.sleep(1500);
     }
 
     public void showRobLoaderFail() {
-        Bitmap bitmap = LoadRes.getBitmap(R.drawable.nobody_callscore);
-        PointF pos = new PointF(
-                (WIDTH - bitmap.getWidth()) / 2,
-                (HEIGHT - bitmap.getHeight()) / 2
-        );
-        BitmapOverlay bitmapTile = new BitmapOverlay(bitmap);
-        bitmapTile.setPos(pos.x, pos.y);
-        addChild(bitmapTile);
+        BitmapOverlay bitmapTile = new BitmapOverlay(R.drawable.nobody_callscore);
+
+        bitmapTile.setPos(getWidth() / 2, getHeight() / 2);
+
         bitmapTile.startAnimation(AlphaAnimation.createFadeOut(1500));
+
+        addChild(bitmapTile);
+
         SleepUtils.sleep(1500);
     }
 
@@ -355,7 +355,7 @@ public abstract class GameScene extends GameSceneBase {
                 Bitmap normal = Res.getBitmap(R.drawable.tshi_button_1);
                 Bitmap pressed = Res.getBitmap(R.drawable.tshi_button_2);
                 suggestBtn = new ButtonOverlay(normal, pressed);
-                suggestBtn.setPos((WIDTH - normal.getWidth()) / 2, 200);
+                suggestBtn.setPos((getWidth() - normal.getWidth()) / 2, 200);
 
                 addChildren(suggestBtn);
             }
@@ -400,13 +400,13 @@ public abstract class GameScene extends GameSceneBase {
     public void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
         BitmapOverlay buYaoTile = new BitmapOverlay(R.drawable.by_button_1);
 
-        Point pos = new Point();
+        PointF pos = new PointF();
         switch (jiePaiDir) {
             case Left:
                 pos.set(100, 100);
                 break;
             case Outside:
-                pos.set((int) (WIDTH - buYaoTile.getWidth()) / 2, 600);
+                pos.set((getWidth() - buYaoTile.getWidth()) / 2, 600);
                 break;
             case Right:
                 pos.set(800, 100);
