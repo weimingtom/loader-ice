@@ -15,7 +15,7 @@ public class ControllerBar extends OverlayParent {
 
     public ControllerBar() {
 
-        serviceBtn = new ButtonOverlay(R.drawable.service, R.drawable.service);
+        serviceBtn = new ButtonOverlay(R.drawable.service_title, R.drawable.service_title);
 
         soundBtn = new ButtonOverlay(R.drawable.sound, R.drawable.sound);
         soundBtn.setPos(100, 0);
