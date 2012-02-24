@@ -35,17 +35,22 @@ public class LoadingOverlay extends OverlayParent {
 
 
     public void updateProgress(float progress) {
-        float width = progressOverlay.getWidth();
-        float height = progressOverlay.getHeight();
+        if (progress >= 1) {
+            removeGlStatusController(controller);
+        }
+        else {
+            float width = progressOverlay.getWidth();
+            float height = progressOverlay.getHeight();
 
-        Point3F absolutePos = progressOverlay.getAbsolutePos();
+            Point3F absolutePos = progressOverlay.getAbsolutePos();
 
-        controller.set(
-                (int) (absolutePos.x - width / 2),
-                (int) (absolutePos.y - height / 2),
-                (int) (progress * width),
-                (int) height
-        );
+            controller.set(
+                    (int) (absolutePos.x - width / 2),
+                    (int) (absolutePos.y - height / 2),
+                    (int) (progress * width),
+                    (int) height
+            );
+        }
     }
 
     private ScissorController controller;
