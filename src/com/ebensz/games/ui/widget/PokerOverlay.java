@@ -9,6 +9,7 @@ import ice.animation.Animation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.graphic.gl_status.ColorController;
+import ice.graphic.gl_status.CullFaceController;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.OverlayParent;
@@ -53,7 +54,7 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         back = new BitmapOverlay(front.getWidth(), front.getHeight());
         back.setTexture(backTexture);
 
-        back.setFaceMode(Back);
+        back.addGlStatusController(new CullFaceController(Back));
 
         front.setPosZ(1);
 
