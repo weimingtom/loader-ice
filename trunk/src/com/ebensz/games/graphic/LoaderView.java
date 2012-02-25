@@ -32,6 +32,9 @@ public class LoaderView extends GameView {
                 gl.glEnable(GL_BLEND);
                 gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+//                gl.glShadeModel(GL_SMOOTH);
+//                gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
                 /**不全局深度测试了，但会影响到其他开启局部深度测试的地方*/
                 //gl.glEnable(GL_DEPTH_TEST);
                 //gl.glDepthFunc(GL_LEQUAL);
