@@ -19,8 +19,12 @@ public class GameControllerBar extends OverlayParent {
         BitmapOverlay controllerBg = new BitmapOverlay(Res.getBitmap(R.drawable.title));
         controllerBg.setPos(this.getPosX(), this.getPosY());
         addChild(controllerBg);
-
+        
         float componentHeight = this.getPosY() - 10;
+
+        venue = new BitmapOverlay(Res.getBitmap(R.drawable.normal_venue));
+        venue.setPos(this.getPosX(),componentHeight);
+        addChild(venue);
 
         Bitmap pointBgBitmap = Res.getBitmap(R.drawable.title_block_bg);
         BitmapOverlay pointBg = new BitmapOverlay(100, pointBgBitmap.getHeight());
@@ -68,6 +72,11 @@ public class GameControllerBar extends OverlayParent {
         return backButton;
     }
 
+    public BitmapOverlay getVenue() {
+        return venue;
+    }
+
+    private BitmapOverlay venue;
     private ButtonOverlay serviceButton;
     private ButtonOverlay soundButton;
     private ButtonOverlay backButton;
