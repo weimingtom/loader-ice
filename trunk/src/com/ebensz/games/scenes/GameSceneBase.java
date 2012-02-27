@@ -30,6 +30,10 @@ public abstract class GameSceneBase extends Scene {
             packOfCardTiles.clear();
     }
 
+    public GameControllerBar getGameControllerBar() {
+        return gameControllerBar;
+    }
+
     protected GameControllerBar gameControllerBar;
     protected PackOfCardTiles packOfCardTiles;
     protected OutsidePokerTiles outsidePokers;
