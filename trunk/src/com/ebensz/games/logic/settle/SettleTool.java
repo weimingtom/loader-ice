@@ -27,6 +27,7 @@ public interface SettleTool {
     public class Result {
 
         public Map<Dir, Integer> winScores;
+        public Map<Dir, Boolean> upgradeFlag;
 
         public Map<Dir, Role> roleMap;
 

@@ -5,6 +5,7 @@ import com.ebensz.games.model.DaoGenFan;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.Role.Role;
 import com.ebensz.games.model.Role.RoleCenter;
+import com.ebensz.games.model.values.LevelDefine;
 import ice.res.Res;
 
 import java.util.HashMap;
@@ -17,6 +18,8 @@ import java.util.Map;
  */
 public class NormalSettleTool implements SettleTool {
     public static final int BASE_SCORE = 10;
+    public static final int WIN_EXP = 300;
+    public static final int FAIL_EXP = 100;
 
     public NormalSettleTool(Map<Dir, Player> playerMap) {
         this.playerMap = playerMap;
@@ -56,6 +59,31 @@ public class NormalSettleTool implements SettleTool {
         result.winScores.put(shangJiaDir, shangJiaWinScore);
         result.winScores.put(xiaJiaDir, xiaJiaWinScore);
         result.winScores.put(input.loaderDir, loaderWinScore);
+
+        Role loaderRole = playerMap.get(input.loaderDir).getRole();
+        Role shangJiaRole = playerMap.get(shangJiaDir).getRole();
+        Role xiaJiaRole = playerMap.get(xiaJiaDir).getRole();
+
+        int loaderExp = loaderRole.getExp();
+        int shangJiaExp = shangJiaRole.getExp();
+        int xiaJiaExp = xiaJiaRole.getExp();
+        int loaderGrade = LevelDefine.getLevel(loaderExp);
+        int shangJiaGrade = LevelDefine.getLevel(shangJiaExp);
+        int xiaJiaGrade = LevelDefine.getLevel(xiaJiaExp);
+
+        boolean loaderWinFlag = loaderWinScore > 0;
+
+        loaderRole.setExp(loaderExp + (loaderWinFlag ? WIN_EXP : FAIL_EXP));
+        shangJiaRole.setExp(shangJiaExp + (loaderWinFlag ? FAIL_EXP : WIN_EXP));
+        xiaJiaRole.setExp(xiaJiaExp + (loaderWinFlag ? FAIL_EXP : WIN_EXP));
+        int settleLoaderGrade = LevelDefine.getLevel(loaderExp);
+        int settleShangJiaGrade = LevelDefine.getLevel(shangJiaExp);
+        int settleXiaJiaGrade = LevelDefine.getLevel(xiaJiaExp);
+
+        result.upgradeFlag = new HashMap<Dir, Boolean>(3);
+        result.upgradeFlag.put(input.loaderDir, loaderGrade == settleLoaderGrade);
+        result.upgradeFlag.put(shangJiaDir, shangJiaGrade == settleShangJiaGrade);
+        result.upgradeFlag.put(xiaJiaDir, xiaJiaGrade == settleXiaJiaGrade);
 
         result.roleMap = new HashMap<Dir, Role>(3);
         for (Dir dir : Dir.values()) {
