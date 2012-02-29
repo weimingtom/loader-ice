@@ -3,6 +3,7 @@ package com.ebensz.games.scenes;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 import com.ebensz.games.R;
 import com.ebensz.games.logic.interactive.Message;
@@ -39,6 +40,7 @@ import static com.ebensz.games.logic.interactive.Message.*;
  */
 public abstract class GameScene extends GameSceneBase {
     public static final int ROB_SCORE_Y = 200;
+    private static final String TAG = "GameScene";
 
     protected GameScene(Game game) {
         this.game = game;
@@ -359,9 +361,21 @@ public abstract class GameScene extends GameSceneBase {
 
     }
 
-    public abstract void showChuPai(Dir chuPaiPlayer, ColoredHand chuPai, boolean noShouPaiLeft);
+    public void showChuPai(Dir dir, ColoredHand chuPai, boolean noShouPaiLeft) {
+        pokersOverlay.showChuPai(dir, chuPai);
+        SleepUtils.sleep(noShouPaiLeft ? 2000 : 400);
+        Log.i(TAG, "showChuPai player: " + dir + "--" + chuPai);
+    }
 
-    public abstract void showJiePai(Dir jiePaiPlayer, ColoredHand jiePai, Dir chuPaiPlayer, boolean noShouPaiLeft);
+    public void showJiePai(Dir jiePaiDir, ColoredHand jiePai, Dir chuPaiDir, boolean noShouPaiLeft) {
+        pokersOverlay.hideLastChuPai(jiePaiDir);
+        SleepUtils.sleep(300);
+
+        showChuPai(jiePaiDir, jiePai, noShouPaiLeft);
+        SleepUtils.sleep(noShouPaiLeft ? 2000 : 400);
+
+        Log.i(TAG, "jiePai player: " + jiePaiDir + "--" + jiePai);
+    }
 
     public void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
         BitmapOverlay buYaoTile = new BitmapOverlay(R.drawable.by_button_1);

@@ -71,7 +71,41 @@ public class OutsidePokerTiles extends DirPokerTiles {
     }
 
     @Override
-    public void chuPai(ColoredHand chuPai) {
+    public void showChuPai(ColoredHand chuPai) {
+        sortChuPai(chuPai);
+
+        List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
+
+        for (int i = 0, size = size(); i < size; i++) {
+            PokerOverlay pokerOverlay = (PokerOverlay) get(i);
+            if (coloredPokers.contains(pokerOverlay.getColoredPoker())) {
+                this.chuPai.add(pokerOverlay);
+            }
+
+        }
+
+        for (int i = 0, size = this.chuPai.size(); i < size; i++) {
+            PokerOverlay poker = this.chuPai.get(i);
+
+            Point point = posProvider.getChuPaiPos(i, size);
+
+            poker.startAnimation(
+                    new TranslateAnimation(
+                            500,
+                            point.x - poker.getPosX(),
+                            point.y - poker.getPosY()
+                    )
+            );
+        }
+
+        List<Overlay> children = getChildren();
+        List<Overlay> copy = new ArrayList<Overlay>(children);
+        copy.removeAll(this.chuPai);
+
+        tidyShouPai(100, copy);
+    }
+
+    private void sortChuPai(ColoredHand chuPai) {
         Poker[] pokers = chuPai.getHand().getPokers();
 
         List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
@@ -85,8 +119,6 @@ public class OutsidePokerTiles extends DirPokerTiles {
         }
 
         chuPai.setColoredPokers(coloredPokersCopy);
-
-        super.chuPai(chuPai);
     }
 
     public void handlerSelectPokers(MotionEvent event) {
@@ -102,75 +134,68 @@ public class OutsidePokerTiles extends DirPokerTiles {
                 selectStartPoint.set(x, y);
                 selectedPokerOverlays.clear();
                 break;
-
             case MotionEvent.ACTION_MOVE:
                 selectedPokerOverlays.clear();
-
                 selectRegion.set(
                         Math.min(selectStartPoint.x, selectEndPoint.x),
                         Math.min(selectStartPoint.y, selectEndPoint.y),
                         Math.max(selectStartPoint.x, selectEndPoint.x),
                         Math.max(selectStartPoint.y, selectEndPoint.y)
                 );
-
-                if (!validY()) return;
-
-                for (int i = size() - 1; i >= 0; i--) {
-
-                    PokerOverlay pokerTile = (PokerOverlay) get(i);
-
-                    boolean regionTest = selectRegionTest(i, pokerTile);
-
-                    if (regionTest) {
-                        selectedPokerOverlays.add(pokerTile);
-                    }
-                    else {
-                        selectedPokerOverlays.remove(pokerTile);
-                    }
-
-
-                    pokerTile.setSelected(regionTest);
-                }
-
+                updateSelect();
                 break;
             case MotionEvent.ACTION_UP:
-
-                PokerOverlay pokerOverlay = findFromRightToLeft(x, y);
-
-                if (pokerOverlay != null)
-                    selectedPokerOverlays.add(pokerOverlay);
-
-                boolean containsSome = false;
-                boolean doNotContainAll = false;
-                if (selectedPokerOverlays.size() > 1) {
-                    for (PokerOverlay overlay : selectedPokerOverlays) {
-                        if (selectedPokers.contains(overlay.getColoredPoker())) {
-                            containsSome = true;
-                        }
-                        else {
-                            doNotContainAll = true;
-                        }
-
-                        if (containsSome && doNotContainAll) {
-                            for (PokerOverlay poker : selectedPokerOverlays) {
-                                poker.setSelected(false);
-                            }
-                            selectedPokerOverlays.clear();
-                            selectedPokers.clear();
-                            break;
-                        }
-                    }
-                }
-                else {
-
-                }
-
-                postSelect(selectedPokerOverlays, containsSome && doNotContainAll);
+                doFilter();
+                postSelect(selectedPokerOverlays);
                 break;
         }
 
     }
 
+    private void doFilter() {
+        if (selectedPokerOverlays.size() <= 1) return;
+
+        boolean containsSome = false;
+        boolean doNotContainAll = false;
+
+        for (PokerOverlay overlay : selectedPokerOverlays) {
+
+            if (selectedPokers.contains(overlay.getColoredPoker())) {
+                containsSome = true;
+            }
+            else {
+                doNotContainAll = true;
+            }
+
+            if (containsSome && doNotContainAll) {
+                selectedPokerOverlays.clear();
+                selectedPokers.clear();
+
+                tidyShouPai(50);
+                break;
+            }
+        }
+    }
+
+    private void updateSelect() {
+        if (!validY()) return;
+
+        for (int i = size() - 1; i >= 0; i--) {
+
+            PokerOverlay pokerTile = (PokerOverlay) get(i);
+
+            boolean regionTest = selectRegionTest(i, pokerTile);
+
+            if (regionTest) {
+                selectedPokerOverlays.add(pokerTile);
+            }
+            else {
+                selectedPokerOverlays.remove(pokerTile);
+            }
+
+            pokerTile.setSelected(regionTest);
+        }
+    }
 
     private boolean validY() {
         for (int i = size() - 1; i >= 0; i--) {
@@ -300,41 +325,31 @@ public class OutsidePokerTiles extends DirPokerTiles {
         return null;
     }
 
-    private void postSelect(Set<PokerOverlay> multiSelection, boolean tidyShouPai) {
+    private void postSelect(Set<PokerOverlay> multiSelection) {
 
-        if (multiSelection.size() == 0) {
-            if (tidyShouPai) //multiSelection size =0 点击非牌区域时也为0，此时不应该清掉选择的牌
-                tidyShouPai(100);
-        }
-        else {
-            for (int i = 0; i < size(); i++) {
-                PokerOverlay overlay = (PokerOverlay) get(i);
-                overlay.setSelected(false);
-            }
-
-            for (PokerOverlay pokerOverlay : multiSelection) {
-                ColoredPoker coloredPoker = pokerOverlay.getColoredPoker();
-
-                if (selectedPokers.contains(coloredPoker)) {
-                    selectedPokers.remove(coloredPoker);
-                    pokerOverlay.sitDown();
-                }
-                else {
-                    selectedPokers.add(coloredPoker);
-                    pokerOverlay.standUp();
-                }
-            }
+        for (int i = 0; i < size(); i++) {
+            PokerOverlay overlay = (PokerOverlay) get(i);
+            overlay.setSelected(false);
         }
 
-//        for (PokerOverlay pokerOverlay : shouPai) {
-//            pokerOverlay.setSelected(false);
-//        }
+        for (PokerOverlay pokerOverlay : multiSelection) {
+            ColoredPoker coloredPoker = pokerOverlay.getColoredPoker();
+
+            if (selectedPokers.contains(coloredPoker)) {
+                selectedPokers.remove(coloredPoker);
+                pokerOverlay.sitDown();
+            }
+            else {
+                selectedPokers.add(coloredPoker);
+                pokerOverlay.standUp();
+            }
+        }
     }
 
-    public void tidyShouPai(long time) {
-        for (int i = 0, size = size(); i < size; i++) {
+    public void tidyShouPai(long time, List<Overlay> pokers) {
+        for (int i = 0, size = pokers.size(); i < size; i++) {
             Point point = posProvider.getShouPaiPos(i, size);
-            Overlay overlay = get(i);
+            Overlay overlay = pokers.get(i);
 
             overlay.startAnimation(
                     new TranslateAnimation(
@@ -344,6 +359,10 @@ public class OutsidePokerTiles extends DirPokerTiles {
                     )
             );
         }
+    }
+
+    public void tidyShouPai(long time) {
+        tidyShouPai(time, getChildren());
     }
 
     private PokerOverlay findFromRightToLeft(int x, int y) {
