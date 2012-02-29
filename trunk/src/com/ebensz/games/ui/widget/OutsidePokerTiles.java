@@ -7,7 +7,9 @@ import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.utils.SlideLineTool;
+import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
+import ice.node.Overlay;
 
 import java.util.*;
 
@@ -58,17 +60,14 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     @Override
     public void faPaiRemainThree(List<ColoredPoker> remainThree) {
-        for (int i = 0, size = size(); i < size; i++) {
-            Point point = posProvider.getShouPaiPos(i, 20);
-            get(i).setPos(point.x, point.y);
-        }
-
         for (ColoredPoker coloredPoker : remainThree) {
             PokerOverlay poker = new PokerOverlay(coloredPoker);
             Point point = posProvider.getShouPaiPos(size(), 20);
             poker.setPos(point.x, point.y, size() * 0.2f);
             addChild(poker);
         }
+
+        tidyShouPai(300);
     }
 
     @Override
@@ -122,8 +121,13 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
                     boolean regionTest = selectRegionTest(i, pokerTile);
 
-                    if (regionTest)
+                    if (regionTest) {
                         selectedPokerOverlays.add(pokerTile);
+                    }
+                    else {
+                        selectedPokerOverlays.remove(pokerTile);
+                    }
+
 
                     pokerTile.setSelected(regionTest);
                 }
@@ -133,9 +137,8 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
                 PokerOverlay pokerOverlay = findFromRightToLeft(x, y);
 
-                if (pokerOverlay != null && !selectedPokerOverlays.contains(pokerOverlay)) {
+                if (pokerOverlay != null)
                     selectedPokerOverlays.add(pokerOverlay);
-                }
 
                 boolean containsSome = false;
                 boolean doNotContainAll = false;
@@ -149,6 +152,9 @@ public class OutsidePokerTiles extends DirPokerTiles {
                         }
 
                         if (containsSome && doNotContainAll) {
+                            for (PokerOverlay poker : selectedPokerOverlays) {
+                                poker.setSelected(false);
+                            }
                             selectedPokerOverlays.clear();
                             selectedPokers.clear();
                             break;
@@ -301,6 +307,11 @@ public class OutsidePokerTiles extends DirPokerTiles {
                 tidyShouPai(100);
         }
         else {
+            for (int i = 0; i < size(); i++) {
+                PokerOverlay overlay = (PokerOverlay) get(i);
+                overlay.setSelected(false);
+            }
+
             for (PokerOverlay pokerOverlay : multiSelection) {
                 ColoredPoker coloredPoker = pokerOverlay.getColoredPoker();
 
@@ -318,6 +329,21 @@ public class OutsidePokerTiles extends DirPokerTiles {
 //        for (PokerOverlay pokerOverlay : shouPai) {
 //            pokerOverlay.setSelected(false);
 //        }
+    }
+
+    public void tidyShouPai(long time) {
+        for (int i = 0, size = size(); i < size; i++) {
+            Point point = posProvider.getShouPaiPos(i, size);
+            Overlay overlay = get(i);
+
+            overlay.startAnimation(
+                    new TranslateAnimation(
+                            time,
+                            point.x - overlay.getPosX(),
+                            point.y - overlay.getPosY()
+                    )
+            );
+        }
     }
 
     private PokerOverlay findFromRightToLeft(int x, int y) {

@@ -41,10 +41,6 @@ public abstract class DirPokerTiles extends OverlayParent {
 
     }
 
-    public void tidyShouPai(long time) {
-
-    }
-
 
     public void chuPai(ColoredHand chuPai) {
 
