@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
+import com.ebensz.games.utils.SleepUtils;
 import com.ebensz.games.utils.SlideLineTool;
 import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
@@ -297,15 +298,13 @@ public class OutsidePokerTiles extends DirPokerTiles {
     }
 
     public void showSelectedPokers(List<ColoredPoker> pokers) {
+        for (int i = 0, size = size(); i < size; i++) {
+            PokerOverlay poker = (PokerOverlay) get(i);
 
-//        for (PokerOverlay pokerOverlay : shouPai) {
-//            ColoredPoker tilePoker = pokerOverlay.getColoredPoker();
-//
-//            if (pokers.contains(tilePoker) && pokerOverlay.getPosY() == SHOU_PAI_Y) {
-//                pokerOverlay.standUp();
-//            }
-//
-//        }
+            if (pokers.contains(poker.getColoredPoker()) && poker.getPosY() == SHOU_PAI_Y) {
+                poker.standUp();
+            }
+        }
     }
 
     public Set<PokerOverlay> getSelectedPokerOverlays() {
@@ -359,6 +358,8 @@ public class OutsidePokerTiles extends DirPokerTiles {
                     )
             );
         }
+
+        SleepUtils.sleep(time);
     }
 
     public void tidyShouPai(long time) {
@@ -401,6 +402,18 @@ public class OutsidePokerTiles extends DirPokerTiles {
         selectedPokers.clear();
     }
 
+
+    public void showSuggestion(List<ColoredPoker> suggestion) {
+
+        if (selectedPokers.size() > 0) {
+            selectedPokers.clear();
+            tidyShouPai(70);
+        }
+
+        selectedPokers = suggestion;
+        showSelectedPokers(suggestion);
+    }
+
     private Rect selectRegion;
     private Point selectStartPoint, selectEndPoint;
     private Set<PokerOverlay> selectedPokerOverlays;
@@ -408,5 +421,6 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     private ColoredHand validatedHand;
     private List<ColoredPoker> selectedPokers;
+
 
 }
