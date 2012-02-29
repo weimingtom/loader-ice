@@ -99,11 +99,11 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     }
 
     public synchronized void standUp() {
-        startAnimation(new TranslateAnimation(100, 0, STAND_UP_Y));
+        startAnimation(new TranslateAnimation(50, 0, STAND_UP_Y));
     }
 
     public synchronized void sitDown() {
-        startAnimation(new TranslateAnimation(100, 0, -STAND_UP_Y));
+        startAnimation(new TranslateAnimation(50, 0, -STAND_UP_Y));
     }
 
     @Override

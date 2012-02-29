@@ -142,7 +142,7 @@ public class DefaultRule implements Rule {
             return biggerHands;
 
         //X4-X2
-//        Poker bombPoker = validateBombSeries(chuPai);
+//        Poker bombPoker = validateBombSeries(showChuPai);
 //        if (bombPoker != null) {
 //
 //        }

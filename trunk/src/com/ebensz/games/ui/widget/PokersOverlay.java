@@ -2,6 +2,7 @@ package com.ebensz.games.ui.widget;
 
 import android.graphics.PointF;
 import com.ebensz.games.model.Dir;
+import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.res.LoadRes;
 import ice.animation.TranslateAnimation;
@@ -82,9 +83,21 @@ public class PokersOverlay extends OverlayParent {
         return outsidePokerTiles;
     }
 
+
+    public void showChuPai(Dir dir, ColoredHand chuPai) {
+        DirPokerTiles dirPoker = getDirPoker(dir);
+
+        if (dirPoker.getChuPai().size() != 0)
+            dirPoker.hideLastChuPai();
+
+        dirPoker.showChuPai(chuPai);
+    }
+
+    public void hideLastChuPai(Dir jiePaiDir) {
+        getDirPoker(jiePaiDir).hideLastChuPai();
+    }
+
     private OutsidePokerTiles outsidePokerTiles;
     private DirPokerTiles leftPokerTiles;
     private DirPokerTiles rightPokerTiles;
-
-
 }

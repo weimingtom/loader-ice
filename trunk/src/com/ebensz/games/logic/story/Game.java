@@ -757,7 +757,7 @@ public abstract class Game implements Runnable, Feedback {
 
             if (suggestHands == null) {
 
-//                if (!rule.checkExistBiggerHand(chuPai, shouPai)) {  // 要不起
+//                if (!rule.checkExistBiggerHand(showChuPai, shouPai)) {  // 要不起
 //                    jiePaiEvent.jiePai = ColoredHand.BU_YAO;
 //                    noticeMsg(msg);
 //                    return;

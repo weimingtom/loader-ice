@@ -80,7 +80,7 @@ public class Player {
      * @return 要出的牌
      */
     public ColoredHand chuPai(PokersInfo pokersInfo, Dir self, Dir loaderDir) {
-        System.out.println("chuPai  " + self);
+        System.out.println("showChuPai  " + self);
         return decisionMaker.chuPai(pokersInfo, self, loaderDir);
     }
 
