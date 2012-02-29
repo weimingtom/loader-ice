@@ -225,7 +225,8 @@ public abstract class Game implements Runnable, Feedback {
 
     public void onPokersSelected() {
         Rule rule = runtimeData.getRule();
-        OutsidePokerTiles outsidePokerTiles = (OutsidePokerTiles) scene.getPokerTiles(Dir.Outside);
+
+        OutsidePokerTiles outsidePokerTiles = scene.getPokersOverlay().getOutsidePokerTiles();
 
         List<ColoredPoker> selectPokers = outsidePokerTiles.getSelectedPokers();
 
@@ -435,7 +436,7 @@ public abstract class Game implements Runnable, Feedback {
 
                 if (msg.what != SELECT_CHU_PAI && msg.what != SELECT_JIE_PAI) return;
 
-                OutsidePokerTiles outsidePokerTiles = (OutsidePokerTiles) scene.getPokerTiles(Dir.Outside);
+                OutsidePokerTiles outsidePokerTiles = scene.getPokersOverlay().getOutsidePokerTiles();
                 List<ColoredPoker> selectedPokers = outsidePokerTiles.getSelectedPokers();
 
                 if (btn == chuPaiButton) {
@@ -471,7 +472,7 @@ public abstract class Game implements Runnable, Feedback {
 
     public void tryPostChuOrJie() {
 
-        OutsidePokerTiles outsidePokerTiles = (OutsidePokerTiles) scene.getPokerTiles(Dir.Outside);
+        OutsidePokerTiles outsidePokerTiles = scene.getPokersOverlay().getOutsidePokerTiles();
 
         ColoredHand validatedHand = outsidePokerTiles.getValidatedHand();
 
@@ -525,7 +526,7 @@ public abstract class Game implements Runnable, Feedback {
 
         if (jiePaiEvent.jiePaiDir == jiePaiEvent.chuPaiDir.shangJia() && jiePaiEvent.jiePai == ColoredHand.BU_YAO) {
             for (Dir dir : Dir.values()) {
-                scene.getPokerTiles(dir).hideLastChuPai();
+                scene.getPokersOverlay().getDirPoker(dir).hideLastChuPai();
             }
 
             SleepUtils.sleep(500);
@@ -573,7 +574,6 @@ public abstract class Game implements Runnable, Feedback {
         System.out.println("shouPaiMap = " + shouPaiMap);
 
         scene.showFaPai(order, shouPaiMap, allPokers);
-        scene.sortAndShowHumanPokersFront();
     }
 
     private RuntimeData recoverRuntime(SavedGame savedGame) {

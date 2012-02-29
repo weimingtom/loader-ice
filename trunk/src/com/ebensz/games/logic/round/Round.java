@@ -167,7 +167,7 @@ public class Round {
     private void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
         GameScene scene = game.getScene();
         scene.showBuYao(jiePaiDir, chuPaiDir);
-        scene.getPokerTiles(jiePaiDir).hideLastChuPai();
+        //scene.getPokerTiles(jiePaiDir).hideLastChuPai();
     }
 
     private void showChuPai(Dir chuPaiDir, ColoredHand chuPai, boolean noShouPaiLeft) {
