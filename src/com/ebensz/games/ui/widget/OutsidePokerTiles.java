@@ -21,7 +21,7 @@ import java.util.*;
  * Time: 下午12:08
  */
 public class OutsidePokerTiles extends DirPokerTiles {
-    private static final int SHOU_PAI_MARGIN = 35;
+    private static final int SHOU_PAI_MARGIN = 45;
     public static final int SHOU_PAI_Y = 80;
     private static final int CHU_PAI_Y = 400;
     private static final int CHU_PAI_MARGIN = 30;

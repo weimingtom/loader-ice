@@ -19,7 +19,7 @@ import com.ebensz.games.ui.widget.*;
 import com.ebensz.games.utils.SleepUtils;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
-import ice.animation.SpaceTranslateAnimation;
+import ice.animation.TranslateAnimation;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.widget.AtlasOverlay;
@@ -471,7 +471,7 @@ public abstract class GameScene extends GameSceneBase {
             final BitmapOverlay upgradeOverlay = new BitmapOverlay(R.drawable.update_grade);
             upgradeOverlay.setPos(this.getWidth() / 2, this.getHeight() / 3);
 
-            SpaceTranslateAnimation translateAnimation = new SpaceTranslateAnimation(1000, 0, 0, 200);
+            TranslateAnimation translateAnimation = new TranslateAnimation(1000, 0, 0, 200);
             translateAnimation.setListener(new Animation.Listener() {
                 @Override
                 public void onAnimationEnd(Overlay overlay) {
