@@ -78,14 +78,6 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         return front.getHeight();
     }
 
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
-//
-//        if (selected)
-//            canvas.drawARGB(125, 125, 255, 125);
-//    }
-
     public void setSelected(boolean selected) {
 
         if (this.selected != selected) {
