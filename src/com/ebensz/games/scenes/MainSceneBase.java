@@ -1,6 +1,5 @@
 package com.ebensz.games.scenes;
 
-import android.graphics.Bitmap;
 import com.ebensz.games.R;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
@@ -9,12 +8,9 @@ import com.ebensz.games.ui.widget.PokerOverlay;
 import ice.animation.Interpolator.LinearInterpolator;
 import ice.animation.RotateAnimation;
 import ice.engine.Scene;
-import ice.graphic.texture.Texture;
-import ice.node.widget.AtlasOverlay;
 import ice.node.widget.BitmapOverlay;
 import ice.node.widget.RadioButtonOverlay;
 import ice.node.widget.RadioGroup;
-import ice.res.Res;
 
 public class MainSceneBase extends Scene {
 
@@ -46,15 +42,6 @@ public class MainSceneBase extends Scene {
         rotateAnimation.setLoop(true);
         rotateAnimation.setInterpolator(new LinearInterpolator());
         pokerOverlay.startAnimation(rotateAnimation);
-
-        Bitmap bitmap = Res.getBitmap(R.drawable.digit_negative);
-        Texture digit = new Texture(bitmap);
-
-        AtlasOverlay atlasOverlay = new AtlasOverlay(bitmap.getWidth() / 11, bitmap.getHeight(), 11);
-        atlasOverlay.setPos(50, getHeight() / 2);
-        atlasOverlay.setAtlasIndex(10, digit);
-
-        addChild(atlasOverlay);
 
         addChild(pokerOverlay);
     }
