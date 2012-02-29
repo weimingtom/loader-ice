@@ -246,7 +246,7 @@ public abstract class GameScene extends GameSceneBase {
         for (int i = 0; i < 17; i++) {
             for (Dir dir : order) {
                 pokersOverlay.faPai(dir, shouPaiMap.get(dir).get(i));
-                SleepUtils.sleep(20);
+                SleepUtils.sleep(130);
             }
         }
 
@@ -257,9 +257,7 @@ public abstract class GameScene extends GameSceneBase {
 
     public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
 
-        DirPokerTiles loaderShouPai = pokersOverlay.getDirPoker(loaderDir);
-
-        loaderShouPai.faPaiRemainThree(leftThree);
+        pokersOverlay.showFaPaiLeftThree(loaderDir, leftThree);
 
         SleepUtils.sleep(500);
     }

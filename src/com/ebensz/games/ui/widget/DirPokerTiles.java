@@ -39,7 +39,7 @@ public abstract class DirPokerTiles extends OverlayParent {
     }
 
 
-    public void faPaiRemainThree(List<ColoredPoker> remainThree) {
+    public void faPaiRemainThree(List<PokerOverlay> remainThree) {
 
     }
 

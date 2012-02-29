@@ -8,6 +8,7 @@ import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.utils.SleepUtils;
 import com.ebensz.games.utils.SlideLineTool;
+import ice.animation.AlphaAnimation;
 import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 import ice.node.Overlay;
@@ -52,23 +53,84 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     @Override
     public void faPai(ColoredPoker coloredPoker) {
-        PokerOverlay poker = new PokerOverlay(coloredPoker);
-        Point point = posProvider.getShouPaiPos(size(), 17);
-        poker.setPos(point.x, point.y, size() * 0.2f);
+        PokerOverlay newPoker = new PokerOverlay(coloredPoker);
+        newPoker.setVisible(false);
 
-        addChild(poker);
+        int size = size();
+
+        if (size == 0) {
+            Point point = posProvider.getShouPaiPos(0, 17);
+            newPoker.setPos(point.x, point.y);
+            addChild(newPoker);
+            return;
+        }
+
+        List<PokerOverlay> copy = buildCopy();
+        copy.add(newPoker);
+        Collections.sort(copy);
+
+        int newPokerIndex = copy.indexOf(newPoker);
+        Point point = posProvider.getShouPaiPos(newPokerIndex, 17);
+        newPoker.setPos(point.x, point.y, newPokerIndex * 0.2f);
+
+        for (int i = 0; i < copy.size(); i++) {
+            PokerOverlay pokerOverlay = copy.get(i);
+
+            pokerOverlay.setPosZ(i * 0.2f);
+
+            point = posProvider.getShouPaiPos(i, 17);
+
+            TranslateAnimation translate = new TranslateAnimation(
+                    100,
+                    point.x - pokerOverlay.getPosX(),
+                    point.y - pokerOverlay.getPosY()
+            );
+            pokerOverlay.startAnimation(translate);
+        }
+
+        newPoker.startAnimation(AlphaAnimation.createFadeIn(100));
+
+        addChild(newPokerIndex, newPoker);
     }
 
     @Override
-    public void faPaiRemainThree(List<ColoredPoker> remainThree) {
-        for (ColoredPoker coloredPoker : remainThree) {
-            PokerOverlay poker = new PokerOverlay(coloredPoker);
-            Point point = posProvider.getShouPaiPos(size(), 20);
-            poker.setPos(point.x, point.y, size() * 0.2f);
-            addChild(poker);
+    public void faPaiRemainThree(List<PokerOverlay> remainThree) {
+
+        List<PokerOverlay> copy = buildCopy();
+        copy.addAll(remainThree);
+        Collections.sort(copy);
+
+        for (int i = 0; i < 3; i++) {
+            PokerOverlay overlay = remainThree.get(i);
+            addChild(copy.indexOf(overlay), overlay);
         }
 
-        tidyShouPai(300);
+        for (int i = 0; i < copy.size(); i++) {
+            Point point = posProvider.getShouPaiPos(i, 20);
+            PokerOverlay pokerOverlay = copy.get(i);
+
+            pokerOverlay.setPosZ(i * 0.2f);
+
+            TranslateAnimation translate = new TranslateAnimation(
+                    1000,
+                    point.x - pokerOverlay.getPosX(),
+                    point.y - pokerOverlay.getPosY()
+            );
+
+            pokerOverlay.startAnimation(translate);
+        }
+    }
+
+    private List<PokerOverlay> buildCopy() {
+        int size = size();
+
+        List<PokerOverlay> copy = new ArrayList<PokerOverlay>();
+
+        for (int i = 0; i < size; i++) {
+            copy.add((PokerOverlay) get(i));
+        }
+
+        return copy;
     }
 
     @Override
@@ -345,7 +407,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
         }
     }
 
-    public void tidyShouPai(long time, List<Overlay> pokers) {
+    public void tidyShouPai(long time, List<? extends Overlay> pokers) {
         for (int i = 0, size = pokers.size(); i < size; i++) {
             Point point = posProvider.getShouPaiPos(i, size);
             Overlay overlay = pokers.get(i);
