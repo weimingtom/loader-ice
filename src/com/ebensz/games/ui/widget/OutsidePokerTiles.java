@@ -6,10 +6,7 @@ import android.view.MotionEvent;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.model.poker.Poker;
-import com.ebensz.games.scenes.GameSceneBase;
-import com.ebensz.games.utils.SleepUtils;
 import com.ebensz.games.utils.SlideLineTool;
-import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 
 import java.util.*;
@@ -26,8 +23,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
     private static final int CHU_PAI_MARGIN = 30;
     public static final int STAND_UP_Y = 30;
 
-    public OutsidePokerTiles(GameSceneBase gameScene) {
-        super(gameScene);
+    public OutsidePokerTiles() {
         selectedPokers = new ArrayList<ColoredPoker>();
         selectStartPoint = new Point();
         selectEndPoint = new Point();
@@ -51,61 +47,27 @@ public class OutsidePokerTiles extends DirPokerTiles {
         };
     }
 
-    public void sortAndMakeFront() {
-        SleepUtils.sleep(500);
+    @Override
+    public void faPai(ColoredPoker coloredPoker) {
+        PokerOverlay poker = new PokerOverlay(coloredPoker);
+        Point point = posProvider.getShouPaiPos(size(), 17);
+        poker.setPos(point.x, point.y, size() * 0.2f);
 
-        List<ColoredPoker> pokerList = new ArrayList<ColoredPoker>(shouPai.size());
-        for (PokerOverlay pokerOverlay : shouPai) {
-            pokerList.add(pokerOverlay.getColoredPoker());
-        }
-
-        Collections.sort(pokerList);
-
-        int index = 0;
-        for (PokerOverlay pokerOverlay : shouPai) {
-            pokerOverlay.setColoredPoker(pokerList.get(index));
-            index++;
-        }
-
-        SleepUtils.sleep(500);
-
-        for (PokerOverlay pokerOverlay : shouPai) {
-            pokerOverlay.rotateToFront();
-        }
+        addChild(poker);
     }
 
     @Override
-    public void faPai(int index, PokerOverlay pokerOverlay, int maxSize) {
-        shouPai.add(pokerOverlay);
-
-        Point point = posProvider.getShouPaiPos(index, maxSize);
-
-        pokerOverlay.setPosZ(index * 0.20f);
-
-        TranslateAnimation animation = new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY());
-
-        pokerOverlay.startAnimation(animation);
-    }
-
-    @Override
-    public void faPaiRemainThree(PokerOverlay[] remainThree) {
-
-        shouPai.addAll(Arrays.asList(remainThree));
-
-        Collections.sort(shouPai);
-
-        for (int index = shouPai.size() - 1; index >= 0; index--) {
-            PokerOverlay pokerOverlay = shouPai.get(index);
-            pokerOverlay.setPosZ(index * 0.20f);
+    public void faPaiRemainThree(List<ColoredPoker> remainThree) {
+        for (int i = 0, size = size(); i < size; i++) {
+            Point point = posProvider.getShouPaiPos(i, 20);
+            get(i).setPos(point.x, point.y);
         }
 
-        int size = shouPai.size();
-        for (int i = 0; i < size; i++) {
-            PokerOverlay pokerOverlay = shouPai.get(i);
-
-            Point point = posProvider.getShouPaiPos(i, size);
-
-            pokerOverlay.startAnimation(new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY()));
+        for (ColoredPoker coloredPoker : remainThree) {
+            PokerOverlay poker = new PokerOverlay(coloredPoker);
+            Point point = posProvider.getShouPaiPos(size(), 20);
+            poker.setPos(point.x, point.y, size() * 0.2f);
+            addChild(poker);
         }
     }
 
@@ -154,9 +116,9 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
                 if (!validY()) return;
 
-                for (int i = shouPai.size() - 1; i >= 0; i--) {
+                for (int i = size() - 1; i >= 0; i--) {
 
-                    PokerOverlay pokerTile = shouPai.get(i);
+                    PokerOverlay pokerTile = (PokerOverlay) get(i);
 
                     boolean regionTest = selectRegionTest(i, pokerTile);
 
@@ -205,9 +167,9 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
 
     private boolean validY() {
-        for (int i = shouPai.size() - 1; i >= 0; i--) {
+        for (int i = size() - 1; i >= 0; i--) {
 
-            PokerOverlay pokerTile = shouPai.get(i);
+            PokerOverlay pokerTile = (PokerOverlay) get(i);
 
             float halfPokerHeight = pokerTile.getHeight() / 2;
             float posY = pokerTile.getPosY();
@@ -225,7 +187,7 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
         float pokerLeft = pokerTileX - halfPokerWidth;
 
-        if (i == shouPai.size() - 1) {
+        if (i == size() - 1) {
             float pokerRight = pokerTileX + halfPokerWidth;
 
             return (pokerLeft >= selectRegion.left && pokerLeft <= selectRegion.right)
@@ -236,7 +198,6 @@ public class OutsidePokerTiles extends DirPokerTiles {
             return pokerLeft + SHOU_PAI_MARGIN >= selectRegion.left
                     && pokerLeft <= selectRegion.right;
         }
-
     }
 
     public boolean handlerSlidePokers(MotionEvent event) {
@@ -306,14 +267,14 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     public void showSelectedPokers(List<ColoredPoker> pokers) {
 
-        for (PokerOverlay pokerOverlay : shouPai) {
-            ColoredPoker tilePoker = pokerOverlay.getColoredPoker();
-
-            if (pokers.contains(tilePoker) && pokerOverlay.getPosY() == SHOU_PAI_Y) {
-                pokerOverlay.standUp();
-            }
-
-        }
+//        for (PokerOverlay pokerOverlay : shouPai) {
+//            ColoredPoker tilePoker = pokerOverlay.getColoredPoker();
+//
+//            if (pokers.contains(tilePoker) && pokerOverlay.getPosY() == SHOU_PAI_Y) {
+//                pokerOverlay.standUp();
+//            }
+//
+//        }
     }
 
     public Set<PokerOverlay> getSelectedPokerOverlays() {
@@ -354,22 +315,22 @@ public class OutsidePokerTiles extends DirPokerTiles {
             }
         }
 
-        for (PokerOverlay pokerOverlay : shouPai) {
-            pokerOverlay.setSelected(false);
-        }
+//        for (PokerOverlay pokerOverlay : shouPai) {
+//            pokerOverlay.setSelected(false);
+//        }
     }
 
     private PokerOverlay findFromRightToLeft(int x, int y) {
-        int size = shouPai.size();
+        int size = size();
 
-        for (int i = size - 1; i >= 0; i--) {
-
-            PokerOverlay pokerOverlay = shouPai.get(i);
-
-            if (pokerOverlay.hitTest(x, y))
-                return pokerOverlay;
-
-        }
+//        for (int i = size - 1; i >= 0; i--) {
+//
+//            PokerOverlay pokerOverlay = shouPai.get(i);
+//
+//            if (pokerOverlay.hitTest(x, y))
+//                return pokerOverlay;
+//
+//        }
 
         return null;
     }
@@ -402,6 +363,5 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     private ColoredHand validatedHand;
     private List<ColoredPoker> selectedPokers;
-
 
 }

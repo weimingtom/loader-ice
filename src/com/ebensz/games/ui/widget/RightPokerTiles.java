@@ -1,10 +1,6 @@
 package com.ebensz.games.ui.widget;
 
 import android.graphics.Point;
-import com.ebensz.games.scenes.GameSceneBase;
-import ice.animation.AnimationGroup;
-import ice.animation.RotateAnimation;
-import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 
 /**
@@ -20,24 +16,8 @@ public class RightPokerTiles extends DirPokerTiles {
     private static final int CHU_PAI_CENTER_X = 700;
     private static final int CHU_PAI_CENTER_Y = 500;
 
-    public RightPokerTiles(GameSceneBase gameScene) {
-        super(gameScene);
-    }
 
     public void sortAndMakeFront() {
-    }
-
-    @Override
-    public void faPai(int index, PokerOverlay pokerOverlay, int maxSize) {
-        shouPai.add(pokerOverlay);
-
-        Point point = posProvider.getShouPaiPos(index, maxSize);
-
-        AnimationGroup group = new AnimationGroup();
-        group.add(new TranslateAnimation(1000, point.x - pokerOverlay.getPosX(), point.y - pokerOverlay.getPosY()));
-        group.add(new RotateAnimation(1000, -90));
-
-        pokerOverlay.startAnimation(group);
     }
 
 

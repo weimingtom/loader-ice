@@ -7,10 +7,8 @@ import com.ebensz.games.R;
 import com.ebensz.games.logic.story.Game;
 import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.hand.ColoredHand;
-import com.ebensz.games.ui.widget.DirPokerTiles;
 import com.ebensz.games.utils.SleepUtils;
 import ice.engine.EngineContext;
-import ice.node.widget.BitmapOverlay;
 import ice.node.widget.ButtonOverlay;
 import ice.res.Res;
 
@@ -24,11 +22,6 @@ public class SimpleGameScene extends GameScene {
 
     public SimpleGameScene(Game game) {
         super(game);
-
-        background = new BitmapOverlay(R.drawable.bg_game_1);
-        background.setPos(background.getWidth() / 2, background.getHeight() / 2);
-        addChild(background);
-        addChild(gameControllerBar);
     }
 
     @Override
@@ -43,7 +36,7 @@ public class SimpleGameScene extends GameScene {
     @Override
     public void showJiePai(Dir jiePaiDir, ColoredHand jiePai, Dir chuPaiDir, boolean noShouPaiLeft) {
 
-        getPokerTiles(jiePaiDir).hideLastChuPai();
+//        getPokerTiles(jiePaiDir).hideLastChuPai();
 
         SleepUtils.sleep(300);
 
@@ -54,21 +47,10 @@ public class SimpleGameScene extends GameScene {
     }
 
     private void showChuPai(Dir chuPaiDir, ColoredHand chuPai) {
-        DirPokerTiles shouPaiTiles = null;
-
-        switch (chuPaiDir) {
-            case Outside:
-                shouPaiTiles = outsidePokers;
-                break;
-            case Right:
-                shouPaiTiles = rightPokers;
-                break;
-            case Left:
-                shouPaiTiles = leftPokers;
-                break;
-        }
-
-        shouPaiTiles.chuPai(chuPai);
+//        DirPokerTiles shouPaiTiles = null;
+//
+//
+//        shouPaiTiles.chuPai(chuPai);
     }
 
     public void showSelectContinueGame() {
@@ -90,5 +72,4 @@ public class SimpleGameScene extends GameScene {
     }
 
     private ButtonOverlay selectContinueGameBtn;
-    private BitmapOverlay background;
 }

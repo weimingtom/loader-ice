@@ -44,12 +44,18 @@ public abstract class GameScene extends GameSceneBase {
         this.game = game;
         msg = new Message();
 
+        background = new BitmapOverlay(R.drawable.bg_game_1);
+        background.setPos(background.getWidth() / 2, background.getHeight() / 2);
+        addChild(background);
+        addChild(gameControllerBar);
+
         addChild(sliceTile = new SliceTile());
+
+        addChild(pokersOverlay = new PokersOverlay());
     }
 
-    @Override
     public void reset() {
-        super.reset();
+        pokersOverlay.clean();
 
         if (settleBoard != null) {
             settleBoard.setRemovable(true);
@@ -89,28 +95,22 @@ public abstract class GameScene extends GameSceneBase {
 
         boolean chu_or_jie = msg.what == SELECT_CHU_PAI || msg.what == SELECT_JIE_PAI;
 
-        if (chu_or_jie) {
+//        if (chu_or_jie) {
+//
+//            if (onSlideTouch(event)) {
+//                outsidePokers.clearSelectedPokers();
+//                return true;
+//            }
+//
+//        }
 
-            if (onSlideTouch(event)) {
-                outsidePokers.clearSelectedPokers();
-                return true;
-            }
-
-        }
-
+        OutsidePokerTiles outsidePokers = pokersOverlay.getOutsidePokerTiles();
         outsidePokers.handlerSelectPokers(event);
 
         if (chu_or_jie)
             game.onPokersSelected();
 
         return super.onTouchEvent(event);
-    }
-
-    private boolean onSlideTouch(MotionEvent event) {
-        boolean flag = outsidePokers.handlerSlidePokers(event);
-        if (flag == true)
-            game.tryPostChuOrJie();
-        return flag;
     }
 
     public void showPlayers(Map<Dir, Role> roleMap) {
@@ -240,45 +240,24 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showFaPai(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
-        packOfCardTiles = new PackOfCardTiles(order, shouPaiMap, leftThree);
-
-        addChild(packOfCardTiles);
-
-        SleepUtils.sleep(500);
-
-        int index = packOfCardTiles.size() - 1;
 
         for (int i = 0; i < 17; i++) {
             for (Dir dir : order) {
-                PokerOverlay pokerOverlay = (PokerOverlay) packOfCardTiles.get(index--);
-                getPokerTiles(dir).faPai(i, pokerOverlay, 17);
+                pokersOverlay.faPai(dir, shouPaiMap.get(dir).get(i));
+                SleepUtils.sleep(20);
             }
         }
 
-        SleepUtils.sleep(700);
-
-        packOfCardTiles.tidy();//展开剩余的三张牌
+        //展开剩余的三张牌
 
         SleepUtils.sleep(700);
-    }
-
-    public void sortAndShowHumanPokersFront() {
-        outsidePokers.sortAndMakeFront();
-        leftPokers.sortAndMakeFront();
-        rightPokers.sortAndMakeFront();
     }
 
     public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
-        packOfCardTiles.showLeftThree();
 
-        DirPokerTiles loaderShouPai = getPokerTiles(loaderDir);
+        DirPokerTiles loaderShouPai = pokersOverlay.getDirPoker(loaderDir);
 
-        PokerOverlay[] remainThree = new PokerOverlay[3];
-        for (int i = 0; i < 3; i++) {
-            remainThree[i] = (PokerOverlay) packOfCardTiles.get(i);
-        }
-
-        loaderShouPai.faPaiRemainThree(remainThree);
+        loaderShouPai.faPaiRemainThree(leftThree);
 
         SleepUtils.sleep(500);
     }
@@ -380,18 +359,6 @@ public abstract class GameScene extends GameSceneBase {
 
     }
 
-    public DirPokerTiles getPokerTiles(Dir dir) {
-        switch (dir) {
-            case Left:
-                return leftPokers;
-            case Right:
-                return rightPokers;
-            case Outside:
-                return outsidePokers;
-        }
-        return null;
-    }
-
     public abstract void showChuPai(Dir chuPaiPlayer, ColoredHand chuPai, boolean noShouPaiLeft);
 
     public abstract void showJiePai(Dir jiePaiPlayer, ColoredHand jiePai, Dir chuPaiPlayer, boolean noShouPaiLeft);
@@ -420,16 +387,16 @@ public abstract class GameScene extends GameSceneBase {
 
     public void showSuggestion(List<ColoredPoker> suggestion) {
 
-        List<ColoredPoker> currentSelect = outsidePokers.getSelectedPokers();
-
-        if (currentSelect.size() > 0) {
-            outsidePokers.tidyShouPai(70);
-            currentSelect.clear();
-            SleepUtils.sleep(100);
-        }
-
-        outsidePokers.setSelectedPokers(new ArrayList<ColoredPoker>(suggestion));
-        outsidePokers.showSelectedPokers(suggestion);
+//        List<ColoredPoker> currentSelect = outsidePokers.getSelectedPokers();
+//
+//        if (currentSelect.size() > 0) {
+//            outsidePokers.tidyShouPai(70);
+//            currentSelect.clear();
+//            SleepUtils.sleep(100);
+//        }
+//
+//        outsidePokers.setSelectedPokers(new ArrayList<ColoredPoker>(suggestion));
+//        outsidePokers.showSelectedPokers(suggestion);
     }
 
     public void showSettle(SettleTool.Result result) {
@@ -497,12 +464,12 @@ public abstract class GameScene extends GameSceneBase {
 
         Boolean upgradeFlag = result.upgradeFlag.get(Dir.Outside);
 
-        if(upgradeFlag == true){
+        if (upgradeFlag == true) {
 
             final BitmapOverlay upgradeOverlay = new BitmapOverlay(R.drawable.update_grade);
-            upgradeOverlay.setPos(this.getWidth()/2,this.getHeight()/3);
+            upgradeOverlay.setPos(this.getWidth() / 2, this.getHeight() / 3);
 
-            SpaceTranslateAnimation translateAnimation = new SpaceTranslateAnimation(1000,0,0,200);
+            SpaceTranslateAnimation translateAnimation = new SpaceTranslateAnimation(1000, 0, 0, 200);
             translateAnimation.setListener(new Animation.Listener() {
                 @Override
                 public void onAnimationEnd(Overlay overlay) {
@@ -551,6 +518,10 @@ public abstract class GameScene extends GameSceneBase {
         return suggestBtn;
     }
 
+    public PokersOverlay getPokersOverlay() {
+        return pokersOverlay;
+    }
+
     private SettleBoard settleBoard;
 
     private SliceTile sliceTile;
@@ -573,4 +544,8 @@ public abstract class GameScene extends GameSceneBase {
     private RoleTile roleInfoOutside;
     private Message msg;
     private Game game;
+
+    protected PokersOverlay pokersOverlay;
+
+    private BitmapOverlay background;
 }
