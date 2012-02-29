@@ -400,17 +400,7 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showSuggestion(List<ColoredPoker> suggestion) {
-
-//        List<ColoredPoker> currentSelect = outsidePokers.getSelectedPokers();
-//
-//        if (currentSelect.size() > 0) {
-//            outsidePokers.tidyShouPai(70);
-//            currentSelect.clear();
-//            SleepUtils.sleep(100);
-//        }
-//
-//        outsidePokers.setSelectedPokers(new ArrayList<ColoredPoker>(suggestion));
-//        outsidePokers.showSelectedPokers(suggestion);
+        pokersOverlay.getOutsidePokerTiles().showSuggestion(suggestion);
     }
 
     public void showSettle(SettleTool.Result result) {
