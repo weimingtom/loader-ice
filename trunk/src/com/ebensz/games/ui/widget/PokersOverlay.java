@@ -5,9 +5,15 @@ import com.ebensz.games.model.Dir;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.res.LoadRes;
+import com.ebensz.games.utils.SleepUtils;
 import ice.animation.TranslateAnimation;
+import ice.engine.EngineContext;
 import ice.graphic.gl_status.DepthController;
 import ice.node.OverlayParent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 一副牌的tiles
@@ -18,6 +24,7 @@ import ice.node.OverlayParent;
 public class PokersOverlay extends OverlayParent {
 
     public static final int TOTAL_WIDTH = 800;
+    private static final int MARGIN = 100;
 
     public PokersOverlay() {
         outsidePokerTiles = new OutsidePokerTiles();
@@ -30,9 +37,33 @@ public class PokersOverlay extends OverlayParent {
     }
 
     public void faPai(Dir dir, ColoredPoker coloredPoker) {
+        getDirPoker(dir).faPai(coloredPoker);
+        SleepUtils.sleep(50);
+    }
 
-        DirPokerTiles dirPokerTiles = getDirPoker(dir);
-        dirPokerTiles.faPai(coloredPoker);
+    public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
+
+        Collections.sort(leftThree);
+
+        List<PokerOverlay> threePokers = new ArrayList<PokerOverlay>(3);
+
+        int appWidth = EngineContext.getAppWidth();
+        int appHeight = EngineContext.getAppHeight();
+
+        for (int i = 0; i < 3; i++) {
+            ColoredPoker coloredPoker = leftThree.get(i);
+
+            PokerOverlay newPoker = new PokerOverlay(coloredPoker);
+            newPoker.setPos(
+                    (appWidth / 2 - MARGIN) + i * MARGIN,
+                    appHeight / 2,
+                    size() * 0.2f
+            );
+
+            threePokers.add(newPoker);
+        }
+
+        getDirPoker(loaderDir).faPaiRemainThree(threePokers);
     }
 
     public DirPokerTiles getDirPoker(Dir dir) {
