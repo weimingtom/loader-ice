@@ -315,37 +315,28 @@ public abstract class Game implements Runnable, Feedback {
     }
 
     private void handleRobLoader(final Message msg) {
-        scene.showRobLoaderButtons();
 
-        final ButtonOverlay finalPassBtn = scene.getPassBtn();
-        final ButtonOverlay finalOneBtn = scene.getOneBtn();
-        final ButtonOverlay finalTwoBtn = scene.getTwoBtn();
-        final ButtonOverlay finalThreeBtn = scene.getThreeBtn();
+        RobLoaderScore lastHightestScore = (RobLoaderScore) msg.obj;
+
+        final HashMap<RobLoaderScore, ButtonOverlay> btnMap = scene.showRobLoaderButtons(lastHightestScore);
 
         ButtonOverlay.OnClickListener onClickListener = new ButtonOverlay.OnClickListener() {
             @Override
             public void onClick(ButtonOverlay btn) {
-                if (btn == finalPassBtn) {
-                    msg.obj = RobLoaderScore.Pass;
-                }
-                else if (btn == finalOneBtn) {
-                    msg.obj = RobLoaderScore.One;
-                }
-                else if (btn == finalTwoBtn) {
-                    msg.obj = RobLoaderScore.Two;
-                }
-                else if (btn == finalThreeBtn) {
-                    msg.obj = RobLoaderScore.Three;
-                }
 
+                for (RobLoaderScore score : RobLoaderScore.values()) {
+                    if (btnMap.get(score) == btn) {
+                        msg.obj = score;
+                        break;
+                    }
+                }
                 noticeMsg(msg);
             }
         };
 
-        finalPassBtn.setOnClickListener(onClickListener);
-        finalOneBtn.setOnClickListener(onClickListener);
-        finalTwoBtn.setOnClickListener(onClickListener);
-        finalThreeBtn.setOnClickListener(onClickListener);
+        for (Iterator<ButtonOverlay> iterator = btnMap.values().iterator(); iterator.hasNext(); ) {
+            iterator.next().setOnClickListener(onClickListener);
+        }
     }
 
     private void handleSelectPokers(boolean jiePai) {

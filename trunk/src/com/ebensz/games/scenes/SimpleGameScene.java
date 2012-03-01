@@ -25,8 +25,8 @@ public class SimpleGameScene extends GameScene {
         Bitmap pressed = Res.getBitmap(R.drawable.start_game_press);
 
         Point pos = new Point(
-                (EngineContext.getAppWidth() - normal.getWidth()) / 2,
-                550
+                EngineContext.getAppWidth() / 2,
+                300
         );
 
         selectContinueGameBtn = new ButtonOverlay(normal, pressed);
