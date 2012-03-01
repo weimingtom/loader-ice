@@ -9,17 +9,16 @@ import ice.animation.Animation;
 import ice.animation.RotateAnimation;
 import ice.animation.TranslateAnimation;
 import ice.graphic.gl_status.ColorController;
-import ice.graphic.gl_status.CullFaceController;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.OverlayParent;
 import ice.node.widget.BitmapOverlay;
+import ice.node.widget.Grid;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.ebensz.games.ui.widget.OutsidePokerTiles.STAND_UP_Y;
-import static ice.graphic.gl_status.CullFaceController.FaceMode.Back;
 
 
 /**
@@ -63,9 +62,10 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
 
         if (enableBack) {
             if (back == null) {
-                back = new BitmapOverlay(front.getWidth(), front.getHeight());
+                back = new Grid(front.getWidth(), front.getHeight(), false);
                 back.setTexture(backTexture);
-                back.addGlStatusController(new CullFaceController(Back));
+                //back.setRotate(180, 0, 1, 0);
+                //back.addGlStatusController(new CullFaceController(Back));
             }
 
             if (!containsChild(back))
@@ -162,5 +162,5 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     private ColoredPoker coloredPoker;
 
     private BitmapOverlay front;
-    private BitmapOverlay back;
+    private Grid back;
 }
