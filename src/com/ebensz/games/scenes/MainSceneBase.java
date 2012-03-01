@@ -33,7 +33,7 @@ public class MainSceneBase extends Scene {
         addChild(serviceDialog = new ServiceDialog());
 
         PokerOverlay pokerOverlay = new PokerOverlay(new ColoredPoker(Poker._10, ColoredPoker.Color.Diamond));
-
+        pokerOverlay.setBack(true);
         pokerOverlay.setPos(getWidth() / 2, getHeight() / 2, 20);
 
 

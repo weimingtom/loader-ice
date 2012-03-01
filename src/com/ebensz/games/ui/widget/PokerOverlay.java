@@ -51,14 +51,31 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         front = new BitmapOverlay(frontPoker);
         frontTextureMap.put(coloredPoker, front.getTexture());
 
-        back = new BitmapOverlay(front.getWidth(), front.getHeight());
-        back.setTexture(backTexture);
-
-        back.addGlStatusController(new CullFaceController(Back));
-
         front.setPosZ(1);
 
-        addChildren(front, back);
+        addChildren(front);
+    }
+
+    public void setBack(boolean enableBack) {
+        if (this.enableBack == enableBack) return;
+
+        this.enableBack = enableBack;
+
+        if (enableBack) {
+            if (back == null) {
+                back = new BitmapOverlay(front.getWidth(), front.getHeight());
+                back.setTexture(backTexture);
+                back.addGlStatusController(new CullFaceController(Back));
+            }
+
+            if (!containsChild(back))
+                addChild(back);
+        }
+        else {
+            if (back != null) {
+                remove(back);
+            }
+        }
     }
 
     public ColoredPoker getColoredPoker() {
@@ -138,6 +155,8 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
     public void setFront(boolean front) {
         setRotate(front ? 0 : 180, 0, 1, 0);
     }
+
+    private boolean enableBack;
 
     private boolean selected;
     private ColoredPoker coloredPoker;
