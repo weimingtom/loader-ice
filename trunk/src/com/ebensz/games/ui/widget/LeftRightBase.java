@@ -18,11 +18,6 @@ import java.util.List;
 public abstract class LeftRightBase extends DirPokerTiles {
 
     @Override
-    protected DirPositionProvider onCreatePosProvider() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public void faPai(ColoredPoker coloredPoker) {
         if (remainingPokerNum == null) {
             remainingPokerNum = new AtlasSequence(50, 40, 20);
@@ -32,7 +27,7 @@ public abstract class LeftRightBase extends DirPokerTiles {
             addChild(remainingPokerNum);
         }
         else {
-            remainingPokerNum.resetSequence();
+            remainingPokerNum.clear();
         }
 
         pokerNum++;
@@ -47,9 +42,7 @@ public abstract class LeftRightBase extends DirPokerTiles {
     }
 
     private void updatePokerNum(int pokerNum) {
-
-        char[] digits = String.format("%02d", pokerNum).toCharArray();
-
+        char[] digits = String.valueOf(pokerNum).toCharArray();
         int[] sequence = new int[digits.length];
 
         for (int i = 0; i < sequence.length; i++) {
@@ -62,7 +55,7 @@ public abstract class LeftRightBase extends DirPokerTiles {
     @Override
     public void reset() {
         if (remainingPokerNum != null)
-            remainingPokerNum.resetSequence();
+            remainingPokerNum.clear();
     }
 
     @Override
