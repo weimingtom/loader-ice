@@ -59,10 +59,12 @@ public abstract class GameScene extends GameSceneBase {
         for (int i = 0; i < size(); i++) {
             Overlay overlay = get(i);
 
-            if (overlay instanceof ButtonOverlay || overlay instanceof SettleBoard)
+            if (overlay instanceof ButtonOverlay)
                 remove(overlay);
         }
 
+        if (settleBoard != null)
+            remove(settleBoard);
     }
 
     public void update(Message msg) {
@@ -389,7 +391,7 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showBuYao(Dir jiePaiDir, Dir chuPaiDir) {
-        BitmapOverlay buYaoTile = new BitmapOverlay(R.drawable.by_button_1);
+        BitmapOverlay buYaoTile = new BitmapOverlay(R.drawable.jie_pai_pass);
 
         PointF pos = new PointF();
         switch (jiePaiDir) {
