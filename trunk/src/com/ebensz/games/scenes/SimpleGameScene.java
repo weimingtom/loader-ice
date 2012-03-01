@@ -26,7 +26,7 @@ public class SimpleGameScene extends GameScene {
 
         Point pos = new Point(
                 EngineContext.getAppWidth() / 2,
-                300
+                230
         );
 
         selectContinueGameBtn = new ButtonOverlay(normal, pressed);
