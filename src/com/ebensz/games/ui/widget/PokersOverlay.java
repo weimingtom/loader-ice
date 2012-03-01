@@ -14,6 +14,7 @@ import ice.node.OverlayParent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 一副牌的tiles
@@ -24,7 +25,7 @@ import java.util.List;
 public class PokersOverlay extends OverlayParent {
 
     public static final int TOTAL_WIDTH = 800;
-    private static final int MARGIN = 100;
+    private static final int MARGIN = 160;
 
     public PokersOverlay() {
         outsidePokerTiles = new OutsidePokerTiles();
@@ -34,18 +35,42 @@ public class PokersOverlay extends OverlayParent {
         addChildren(leftPokerTiles, outsidePokerTiles, rightPokerTiles);
 
         addGlStatusController(new DepthController(true));
+
+        threePokers = new ArrayList<PokerOverlay>(3);
     }
 
-    public void faPai(Dir dir, ColoredPoker coloredPoker) {
-        getDirPoker(dir).faPai(coloredPoker);
-        SleepUtils.sleep(50);
+    public void showFaPai(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
+
+        FaPaiAnimation faPaiAnimation = new FaPaiAnimation();
+
+        addChild(faPaiAnimation);
+
+        faPaiAnimation.start();
+
+        for (int i = 0; i < 17; i++) {
+
+            for (Dir dir : order) {
+
+                getDirPoker(dir).faPai(shouPaiMap.get(dir).get(i));
+
+                SleepUtils.sleep(100);
+
+            }
+
+        }
+
+        faPaiAnimation.stop();
+        remove(faPaiAnimation);
+
+        showThree(leftThree);
+
+        //展开剩余的三张牌
+        SleepUtils.sleep(700);
     }
 
-    public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
-
+    private void showThree(List<ColoredPoker> leftThree) {
+        threePokers.clear();
         Collections.sort(leftThree);
-
-        List<PokerOverlay> threePokers = new ArrayList<PokerOverlay>(3);
 
         int appWidth = EngineContext.getAppWidth();
         int appHeight = EngineContext.getAppHeight();
@@ -60,10 +85,29 @@ public class PokersOverlay extends OverlayParent {
                     size() * 0.2f
             );
 
+            newPoker.setUseBack(true);
+            newPoker.setFront(false);
+
             threePokers.add(newPoker);
         }
 
+        addChildren(threePokers);
+    }
+
+    public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {
+        showThreeFront();
+
+        remove(threePokers);
+
         getDirPoker(loaderDir).faPaiRemainThree(threePokers);
+    }
+
+    private void showThreeFront() {
+        for (PokerOverlay poker : threePokers) {
+            poker.rotateToFront();
+        }
+
+        SleepUtils.sleep(2000);
     }
 
     public DirPokerTiles getDirPoker(Dir dir) {
@@ -114,7 +158,6 @@ public class PokersOverlay extends OverlayParent {
         return outsidePokerTiles;
     }
 
-
     public void showChuPai(Dir dir, ColoredHand chuPai) {
         DirPokerTiles dirPoker = getDirPoker(dir);
 
@@ -127,6 +170,8 @@ public class PokersOverlay extends OverlayParent {
     public void hideLastChuPai(Dir jiePaiDir) {
         getDirPoker(jiePaiDir).hideLastChuPai();
     }
+
+    private List<PokerOverlay> threePokers;
 
     private OutsidePokerTiles outsidePokerTiles;
     private DirPokerTiles leftPokerTiles;
