@@ -56,7 +56,7 @@ public class PokerOverlay extends OverlayParent implements Cloneable, Comparable
         addChildren(front);
     }
 
-    public void setBack(boolean enableBack) {
+    public void setUseBack(boolean enableBack) {
         if (this.enableBack == enableBack) return;
 
         this.enableBack = enableBack;

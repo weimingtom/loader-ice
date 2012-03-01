@@ -9,6 +9,7 @@ import com.ebensz.games.model.poker.Poker;
 import com.ebensz.games.utils.SleepUtils;
 import com.ebensz.games.utils.SlideLineTool;
 import ice.animation.AlphaAnimation;
+import ice.animation.Animation;
 import ice.animation.TranslateAnimation;
 import ice.engine.EngineContext;
 import ice.node.Overlay;
@@ -116,6 +117,13 @@ public class OutsidePokerTiles extends DirPokerTiles {
                     point.x - pokerOverlay.getPosX(),
                     point.y - pokerOverlay.getPosY()
             );
+
+            translate.setListener(new Animation.Listener() {
+                @Override
+                public void onAnimationEnd(Overlay overlay) {
+                    ((PokerOverlay) overlay).setUseBack(false);
+                }
+            });
 
             pokerOverlay.startAnimation(translate);
         }

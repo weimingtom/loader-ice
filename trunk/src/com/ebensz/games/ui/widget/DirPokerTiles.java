@@ -49,5 +49,4 @@ public abstract class DirPokerTiles extends OverlayParent {
 
     protected DirPositionProvider posProvider;
     protected List<PokerOverlay> chuPai;
-
 }

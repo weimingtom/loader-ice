@@ -242,17 +242,7 @@ public abstract class GameScene extends GameSceneBase {
     }
 
     public void showFaPai(List<Dir> order, Map<Dir, List<ColoredPoker>> shouPaiMap, List<ColoredPoker> leftThree) {
-
-        for (int i = 0; i < 17; i++) {
-            for (Dir dir : order) {
-                pokersOverlay.faPai(dir, shouPaiMap.get(dir).get(i));
-                SleepUtils.sleep(130);
-            }
-        }
-
-        //展开剩余的三张牌
-
-        SleepUtils.sleep(700);
+        pokersOverlay.showFaPai(order, shouPaiMap, leftThree);
     }
 
     public void showFaPaiLeftThree(Dir loaderDir, List<ColoredPoker> leftThree) {

@@ -41,21 +41,15 @@ public abstract class LeftRightBase extends DirPokerTiles {
         updatePokerNum(pokerNum);
     }
 
-    private void updatePokerNum(int pokerNum) {
-        char[] digits = String.valueOf(pokerNum).toCharArray();
-        int[] sequence = new int[digits.length];
-
-        for (int i = 0; i < sequence.length; i++) {
-            sequence[i] = digits[sequence.length - i - 1] - '0' + 1;
-        }
-
-        remainingPokerNum.setSequence(sequence);
-    }
-
     @Override
     public void reset() {
+        pokerNum = 0;
+
         if (remainingPokerNum != null)
             remainingPokerNum.clear();
+
+        remove(chuPai);
+        chuPai.clear();
     }
 
     @Override
@@ -79,6 +73,17 @@ public abstract class LeftRightBase extends DirPokerTiles {
 
         pokerNum -= coloredPokers.size();
         updatePokerNum(pokerNum);
+    }
+
+    private void updatePokerNum(int pokerNum) {
+        char[] digits = String.valueOf(pokerNum).toCharArray();
+        int[] sequence = new int[digits.length];
+
+        for (int i = 0; i < sequence.length; i++) {
+            sequence[i] = digits[sequence.length - i - 1] - '0' + 1;
+        }
+
+        remainingPokerNum.setSequence(sequence);
     }
 
     private int pokerNum;
