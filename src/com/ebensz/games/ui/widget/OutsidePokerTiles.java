@@ -23,8 +23,8 @@ import java.util.*;
  */
 public class OutsidePokerTiles extends DirPokerTiles {
     private static final int SHOU_PAI_MARGIN = 45;
-    public static final int SHOU_PAI_Y = 80;
-    private static final int CHU_PAI_Y = 400;
+    public static final int SHOU_PAI_Y = 120;
+    private static final int CHU_PAI_Y = 380;
     private static final int CHU_PAI_MARGIN = 30;
     public static final int STAND_UP_Y = 30;
 

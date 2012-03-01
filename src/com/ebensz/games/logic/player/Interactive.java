@@ -53,7 +53,9 @@ public class Interactive extends DecisionMaker {
             return null;
 
         responseMsg = null;
-        feedback.onMessage(new Message(SELECT_ROB_LOADER));
+        Message msg = new Message(SELECT_ROB_LOADER);
+        msg.obj = lastHighestScore;
+        feedback.onMessage(msg);
 
         waitReply();
 

@@ -29,7 +29,7 @@ public class SettleBoard extends BitmapOverlay {
     public SettleBoard(SettleTool.Result result) {
         super(fillTextInfo(result));
 
-        setPos((EngineContext.getAppWidth() - getWidth()) / 2, (EngineContext.getAppHeight() + getHeight()) / 2);
+        setPos(EngineContext.getAppWidth() / 2, EngineContext.getAppHeight() / 2);
     }
 
     private static Bitmap fillTextInfo(SettleTool.Result result) {

@@ -1,6 +1,5 @@
 package com.ebensz.games.scenes;
 
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
@@ -20,16 +19,14 @@ import com.ebensz.games.utils.SleepUtils;
 import ice.animation.AlphaAnimation;
 import ice.animation.Animation;
 import ice.animation.TranslateAnimation;
+import ice.engine.EngineContext;
 import ice.graphic.texture.Texture;
 import ice.node.Overlay;
 import ice.node.widget.AtlasOverlay;
 import ice.node.widget.BitmapOverlay;
 import ice.node.widget.ButtonOverlay;
-import ice.res.Res;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.ebensz.games.logic.interactive.Message.*;
 
@@ -39,7 +36,7 @@ import static com.ebensz.games.logic.interactive.Message.*;
  * Time: 下午3:14
  */
 public abstract class GameScene extends GameSceneBase {
-    public static final int ROB_SCORE_Y = 200;
+    public static final int ROB_SCORE_Y = 250;
     private static final String TAG = "GameScene";
 
     protected GameScene(Game game) {
@@ -59,22 +56,13 @@ public abstract class GameScene extends GameSceneBase {
     public void reset() {
         pokersOverlay.clean();
 
-        if (settleBoard != null) {
-            settleBoard.setRemovable(true);
-            settleBoard = null;
+        for (int i = 0; i < size(); i++) {
+            Overlay overlay = get(i);
+
+            if (overlay instanceof ButtonOverlay || overlay instanceof SettleBoard)
+                remove(overlay);
         }
 
-        passBtn = null;
-        oneBtn = null;
-        twoBtn = null;
-        threeBtn = null;
-
-        d_g_fBtn = null;
-
-        d_g_fPassBtn = null;
-        chuPaiBtn = null;
-        chuPaiPassBtn = null;
-        suggestBtn = null;
     }
 
     public void update(Message msg) {
@@ -252,36 +240,72 @@ public abstract class GameScene extends GameSceneBase {
         SleepUtils.sleep(500);
     }
 
-    public void showRobLoaderButtons() {
+    public HashMap<RobLoaderScore, ButtonOverlay> showRobLoaderButtons(RobLoaderScore lastHightestScore) {
+        robScoreBtnMap = new HashMap<RobLoaderScore, ButtonOverlay>(4);
 
-        Bitmap normal = Res.getBitmap(R.drawable.by_button_1);
-        Bitmap pressed = Res.getBitmap(R.drawable.by_button_2);
-        passBtn = new ButtonOverlay(normal, pressed);
-        passBtn.setPos(500, ROB_SCORE_Y);
+        List<RobLoaderScore> allScores = Arrays.asList(RobLoaderScore.values());
+        List<RobLoaderScore> validScores = new ArrayList<RobLoaderScore>(allScores);
 
-        normal = Res.getBitmap(R.drawable.point1_button_1);
-        pressed = Res.getBitmap(R.drawable.point1_button_2);
-        oneBtn = new ButtonOverlay(normal, pressed);
-        oneBtn.setPos(600, ROB_SCORE_Y);
+        switch (lastHightestScore) {
+            case Pass:
+                break;
 
-        normal = Res.getBitmap(R.drawable.point2_button_1);
-        pressed = Res.getBitmap(R.drawable.point2_button_2);
-        twoBtn = new ButtonOverlay(normal, pressed);
-        twoBtn.setPos(700, ROB_SCORE_Y);
+            case Three:
+                throw new IllegalStateException("lastHightestScore" + lastHightestScore);
+            case Two:
+                validScores.remove(RobLoaderScore.Two);
+            case One:
+                validScores.remove(RobLoaderScore.One);
+                break;
+        }
 
-        normal = Res.getBitmap(R.drawable.point3_button_1);
-        pressed = Res.getBitmap(R.drawable.point3_button_2);
-        threeBtn = new ButtonOverlay(normal, pressed);
-        threeBtn.setPos(800, ROB_SCORE_Y);
 
-        addChildren(passBtn, oneBtn, twoBtn, threeBtn);
+        for (RobLoaderScore validScore : validScores) {
+            int normalId = 0;
+            int pressedId = 0;
+
+            switch (validScore) {
+                case Pass:
+                    normalId = R.drawable.by_button_1;
+                    pressedId = R.drawable.by_button_2;
+                    break;
+                case One:
+                    normalId = R.drawable.point1_button_1;
+                    pressedId = R.drawable.point1_button_2;
+                    break;
+                case Two:
+                    normalId = R.drawable.point2_button_1;
+                    pressedId = R.drawable.point2_button_2;
+                    break;
+                case Three:
+                    normalId = R.drawable.point3_button_1;
+                    pressedId = R.drawable.point3_button_2;
+                    break;
+            }
+
+            robScoreBtnMap.put(validScore, new ButtonOverlay(normalId, pressedId));
+        }
+
+        int eachWidth = 99;
+        int margin = 20;
+        float totalWidth = validScores.size() * eachWidth + (validScores.size() - 1) * margin;
+        float mostLeft = EngineContext.getAppWidth() / 2 - totalWidth / 2 + eachWidth / 2;
+
+        Collections.sort(validScores);
+
+        for (int i = 0; i < validScores.size(); i++) {
+            ButtonOverlay button = robScoreBtnMap.get(validScores.get(i));
+            button.setPos(mostLeft + i * (eachWidth + margin), ROB_SCORE_Y);
+        }
+
+        addChildren(robScoreBtnMap.values());
+
+        return robScoreBtnMap;
     }
 
     public void hideRobLoaderButtons() {
-        passBtn.setRemovable(true);
-        oneBtn.setRemovable(true);
-        twoBtn.setRemovable(true);
-        threeBtn.setRemovable(true);
+        remove(robScoreBtnMap.values());
+        robScoreBtnMap.clear();
     }
 
     public void showD_G_F(int what) {
@@ -323,22 +347,21 @@ public abstract class GameScene extends GameSceneBase {
         if (jiePai) {
             if (suggestBtn == null) {
                 suggestBtn = new ButtonOverlay(R.drawable.tshi_button_1, R.drawable.tshi_button_2);
-                suggestBtn.setPos(getWidth() / 2, 200);
+                suggestBtn.setPos(getWidth() / 2, 250);
 
                 addChildren(suggestBtn);
             }
             else {
                 suggestBtn.setVisible(true);
             }
-
         }
 
         if (chuPaiBtn == null) {
             chuPaiBtn = new ButtonOverlay(R.drawable.chupai_button_1, R.drawable.chupai_button_2);
-            chuPaiBtn.setPos(600, 250);
+            chuPaiBtn.setPos(getWidth() / 2 + 200, 250);
 
             chuPaiPassBtn = new ButtonOverlay(R.drawable.by_button_1, R.drawable.by_button_2);
-            chuPaiPassBtn.setPos(300, 250);
+            chuPaiPassBtn.setPos(getWidth() / 2 - 200, 250);
 
             addChildren(chuPaiBtn, chuPaiPassBtn);
         }
@@ -371,13 +394,13 @@ public abstract class GameScene extends GameSceneBase {
         PointF pos = new PointF();
         switch (jiePaiDir) {
             case Left:
-                pos.set(100, 100);
+                pos.set(100, 400);
                 break;
             case Outside:
-                pos.set((getWidth() - buYaoTile.getWidth()) / 2, 600);
+                pos.set(getWidth() / 2, 300);
                 break;
             case Right:
-                pos.set(800, 100);
+                pos.set(800, 400);
                 break;
         }
         buYaoTile.setPos(pos.x, pos.y);
@@ -474,22 +497,6 @@ public abstract class GameScene extends GameSceneBase {
         }
     }
 
-    public ButtonOverlay getPassBtn() {
-        return passBtn;
-    }
-
-    public ButtonOverlay getOneBtn() {
-        return oneBtn;
-    }
-
-    public ButtonOverlay getTwoBtn() {
-        return twoBtn;
-    }
-
-    public ButtonOverlay getThreeBtn() {
-        return threeBtn;
-    }
-
     public ButtonOverlay getD_g_fBtn() {
         return d_g_fBtn;
     }
@@ -514,14 +521,11 @@ public abstract class GameScene extends GameSceneBase {
         return pokersOverlay;
     }
 
+    private HashMap<RobLoaderScore, ButtonOverlay> robScoreBtnMap;
+
     private SettleBoard settleBoard;
 
     private SliceTile sliceTile;
-
-    private ButtonOverlay passBtn;
-    private ButtonOverlay oneBtn;
-    private ButtonOverlay twoBtn;
-    private ButtonOverlay threeBtn;
 
     private ButtonOverlay d_g_fBtn;
 
