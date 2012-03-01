@@ -168,6 +168,11 @@ public class OutsidePokerTiles extends DirPokerTiles {
         tidyShouPai(100, copy);
     }
 
+    @Override
+    public void reset() {
+        clear();
+    }
+
     private void sortChuPai(ColoredHand chuPai) {
         Poker[] pokers = chuPai.getHand().getPokers();
 
@@ -483,6 +488,4 @@ public class OutsidePokerTiles extends DirPokerTiles {
 
     private ColoredHand validatedHand;
     private List<ColoredPoker> selectedPokers;
-
-
 }

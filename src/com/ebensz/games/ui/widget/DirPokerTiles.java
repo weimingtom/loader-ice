@@ -1,6 +1,5 @@
 package com.ebensz.games.ui.widget;
 
-import android.graphics.Point;
 import com.ebensz.games.model.hand.ColoredHand;
 import com.ebensz.games.model.poker.ColoredPoker;
 import com.ebensz.games.utils.SleepUtils;
@@ -26,43 +25,13 @@ public abstract class DirPokerTiles extends OverlayParent {
 
     protected abstract DirPositionProvider onCreatePosProvider();
 
-    public void clearPokers() {
+    public abstract void faPai(ColoredPoker coloredPoker);
 
-        for (PokerOverlay pokerOverlay : chuPai) {
-            pokerOverlay.setRemovable(true);
-        }
-        chuPai.clear();
-    }
+    public abstract void faPaiRemainThree(List<PokerOverlay> remainThree);
 
-    public void faPai(ColoredPoker coloredPoker) {
+    public abstract void showChuPai(ColoredHand chuPai);
 
-    }
-
-
-    public void faPaiRemainThree(List<PokerOverlay> remainThree) {
-
-    }
-
-
-    public void showChuPai(ColoredHand chuPai) {
-
-        List<ColoredPoker> coloredPokers = chuPai.getColoredPokers();
-
-        for (int i = 0, size = coloredPokers.size(); i < size; i++) {
-
-            ColoredPoker coloredPoker = coloredPokers.get(i);
-
-            PokerOverlay poker = new PokerOverlay(coloredPoker);
-
-            Point point = posProvider.getChuPaiPos(i, coloredPokers.size());
-            poker.setPos(point.x, point.y, size() * 0.2f);
-
-            addChild(poker);
-            this.chuPai.add(poker);
-
-            poker.startAnimation(AlphaAnimation.createFadeIn(100));
-        }
-    }
+    public abstract void reset();
 
     public void hideLastChuPai() {
         for (Iterator<PokerOverlay> iterator = this.chuPai.iterator(); iterator.hasNext(); ) {
@@ -80,4 +49,5 @@ public abstract class DirPokerTiles extends OverlayParent {
 
     protected DirPositionProvider posProvider;
     protected List<PokerOverlay> chuPai;
+
 }
