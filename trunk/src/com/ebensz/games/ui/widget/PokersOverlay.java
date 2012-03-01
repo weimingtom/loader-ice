@@ -105,9 +105,9 @@ public class PokersOverlay extends OverlayParent {
     }
 
     public void clean() {
-        outsidePokerTiles.clear();
-        leftPokerTiles.clear();
-        rightPokerTiles.clear();
+        outsidePokerTiles.reset();
+        leftPokerTiles.reset();
+        rightPokerTiles.reset();
     }
 
     public OutsidePokerTiles getOutsidePokerTiles() {
